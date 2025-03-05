@@ -1,10 +1,9 @@
 import { Metadata, SourceStatus } from "./metadata"
 
-export enum ItemType {
-  WeaponMelee,
-  WeaponRanged,
-  Armour,
-  Equipment,
+export enum WeaponType {
+  Melee,
+  RangedNormal,
+  RangedBlackpowder,
 }
 
 export enum RestrictionType {
@@ -34,17 +33,19 @@ export interface SpecialRule {
 
 // Define a TS type for the data we'll be using
 
-export interface Item extends Metadata {
+interface Item extends Metadata {
   name: string
   description: string
   availability: Availability
   price: string // Will want to change this later to a string
-  type: ItemType
 }
 
 export interface Weapon extends Item {
   range: string
   strength: string
-  special_rules: SpecialRule[]
+  special_rules: string[] // List of IDs of special rules they relate to.
+  weapon_type: WeaponType
 }
 
+export interface Armour extends Item {}
+export interface MiscItem extends Item {}

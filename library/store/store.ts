@@ -5,6 +5,8 @@ import { combineReducers } from '@reduxjs/toolkit';
 
 import skillsReducer from './features/skillsSlice'
 import specialRulesReducer from './features/specialRulesSlice'
+import armourReducer from './features/armourSlice'
+import miscItemReducer from './features/miscItemSlice'
 
 const persistConfig = {
   key: "root",
@@ -16,6 +18,8 @@ const persistedReducer = persistReducer(
   combineReducers({
     skills: skillsReducer,
     specialRules: specialRulesReducer,
+    armours: armourReducer,
+    miscItems: miscItemReducer,
   })
 );
 

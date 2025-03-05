@@ -27,6 +27,7 @@ export interface Availability {
 }
 
 export interface SpecialRule {
+  id?: string
   name: string
   description: string
 }

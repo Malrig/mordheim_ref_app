@@ -40,9 +40,20 @@ const specialRulesSlice = createSlice({
   name: 'specialRules',
   initialState,
   reducers: {
-    specialRuleAdded(state, action: PayloadAction<SpecialRule>) {
-      if (!state.specialRules.find(specialRule => specialRule.name === action.payload.name)) {
-        state.specialRules.push(action.payload);
+    specialRuleAdded: {
+      reducer(state, action: PayloadAction<SpecialRule>) {
+        if (!state.specialRules.find(specialRule => specialRule.id === action.payload.id)) {
+          state.specialRules.push(action.payload);
+        }
+      },
+      prepare(name: string, description: string) {
+        return {
+          payload: {
+            id: nanoid(),
+            name: name,
+            description: description,
+          }
+        }
       }
     },
     specialRuleUpdated(state, action: PayloadAction<SpecialRule>) {
@@ -73,6 +84,9 @@ const specialRulesSlice = createSlice({
   },
   selectors: {
     selectAllSpecialRules: specialRulesState => specialRulesState.specialRules,
+    selectSpecialRuleById: (specialRulesState, specialRuleId: string) => {
+      return specialRulesState.specialRules.find(specialRule => specialRule.id === specialRuleId)
+    },
     selectSpecialRuleByName: (specialRulesState, specialRuleName: string) => {
       return specialRulesState.specialRules.find(specialRule => specialRule.name === specialRuleName)
     },
@@ -87,4 +101,4 @@ export default specialRulesSlice.reducer
 // Export all the actions
 export const { specialRuleAdded, specialRuleUpdated } = specialRulesSlice.actions
 // Export all the selectors
-export const { selectAllSpecialRules, selectSpecialRuleByName, selectSpecialRulesStatus, selectSpecialRulesError } = specialRulesSlice.selectors
+export const { selectAllSpecialRules, selectSpecialRuleById, selectSpecialRuleByName, selectSpecialRulesStatus, selectSpecialRulesError } = specialRulesSlice.selectors

@@ -1,8 +1,8 @@
-import { MiscItem, Armour, SpecialRule } from "../types/items";
+import { MiscItem, Armour, SpecialRule, Weapon } from "../types/items";
 import { SourceStatus } from "../types/metadata";
 
 export const initialSpecialRuleState: SpecialRule[] = [
-  {name: "Parry", description: "User may Parry as per normal rules."}
+  { name: "Parry", description: "User may Parry as per normal rules." }
 ]
 
 let misc_items: MiscItem[] = [
@@ -458,3 +458,4 @@ let armour_items: Armour[] = [
 
 export const initialArmourState: Armour[] = armour_items;
 export const initialMiscItemState: MiscItem[] = misc_items;
+export const initialWeaponState: Weapon[] = [];

@@ -1,9 +1,9 @@
 import { Text, View, FlatList } from "react-native";
 import { Link } from 'expo-router';
 import { useAppDispatch, useAppSelector } from "@/library/store/hooks";
-import { fetchArmours, selectAllArmours, selectArmoursError, selectArmoursStatus } from "@/library/store/features/armourSlice";
+import { fetchArmours, selectAllArmours, selectArmoursError, selectArmoursStatus } from "@/library/store/features/armoursSlice";
 import React from "react";
-import { selectAllMiscItems, selectMiscItemsStatus, selectMiscItemsError, fetchMiscItems } from "@/library/store/features/miscItemSlice";
+import { selectAllMiscItems, selectMiscItemsStatus, selectMiscItemsError, fetchMiscItems } from "@/library/store/features/miscItemsSlice";
 
 // What does this page do?
 // - Display all items available in the campaign.
@@ -45,7 +45,7 @@ export default function Items() {
   // } else if (armourStatus === "failed") {
   //   content = <Text>Loading armours failed</Text>
   // }
-  
+
   content =
     <View>
       <Text>This is where the items would go.</Text>

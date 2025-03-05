@@ -48,3 +48,28 @@ Join our community of developers creating universal apps.
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+
+## My Notes
+
+- There's potentially a bunch of other material things I want to install listed at https://mui.com/material-ui/getting-started/installation/. Currently I just have the minimum material stuff included.
+
+To get things running:
+
+```bash
+nvm use 22 # Or whatever version of node you have installed
+npx expo start
+```
+
+## Ideas
+
+- Have "profiles" which have different sets of favourites. So you can have different profiles per warband.
+  - Allow exporting / importing profiles.
+- Tools for rolling commonly done dice, need some way to record these as well. Integration with Discord would work (e.g. automatically post the results when rolled) e.g.:
+  - Exploration
+  - Level ups
+  - Deaths / injuries
+
+## Things to check out later
+
+https://react-hook-form.com/? - Looks good if I'm going to support making more interesting changes.
+https://redux.js.org/tutorials/essentials/part-5-async-logic - I played around and setup stuff for retrieving some data from an API but not for updating it. When I add that this will be a useful resource.

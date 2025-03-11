@@ -1,9 +1,12 @@
-import { Text, View, FlatList } from "react-native";
+import { Text, View, FlatList, ScrollView } from "react-native";
 import { Link } from 'expo-router';
 import { useAppDispatch, useAppSelector } from "@/library/store/hooks";
 import { fetchArmours, selectAllArmours, selectArmoursError, selectArmoursStatus } from "@/library/store/features/armoursSlice";
 import React from "react";
 import { selectAllMiscItems, selectMiscItemsStatus, selectMiscItemsError, fetchMiscItems } from "@/library/store/features/miscItemsSlice";
+import { fetchWeapons, selectAllWeapons, selectWeaponsError, selectWeaponsStatus } from "@/library/store/features/weaponSlice";
+import WeaponListItem from "@/components/weapons/list_item";
+import { fetchSpecialRules, selectSpecialRulesStatus } from "@/library/store/features/specialRulesSlice";
 
 // What does this page do?
 // - Display all items available in the campaign.
@@ -33,26 +36,42 @@ export default function Items() {
     }
   }, [miscItemStatus, dispatch])
 
+  const weapons = useAppSelector(selectAllWeapons);
+  const weaponsStatus = useAppSelector(selectWeaponsStatus);
+  const weaponsError = useAppSelector(selectWeaponsError);
+
+  React.useEffect(() => {
+    if (weaponsStatus === 'idle') {
+      dispatch(fetchWeapons())
+    }
+  }, [weaponsStatus, dispatch])
+
+  const specialRuleStatus = useAppSelector(selectSpecialRulesStatus);
+
+  React.useEffect(() => {
+    if (weaponsStatus === 'idle') {
+      dispatch(fetchSpecialRules())
+    }
+  }, [selectSpecialRulesStatus, dispatch])
+
   let content: React.ReactNode
 
-  // if (armourStatus === "pending") {
-  //   content = <Text>Loading</Text>
-  // } else if (armourStatus === "succeeded") {
-  //   content = <>
-  //     <Text>Armours List</Text>
-  //     <FlatList data={armours} renderItem={({ item }) => <><ArmourListItem armour={item} /></>} />
-  //   </>
-  // } else if (armourStatus === "failed") {
-  //   content = <Text>Loading armours failed</Text>
-  // }
+  if (weaponsStatus === "pending") {
+    content = <Text>Loading</Text>
+  } else if (weaponsStatus === "succeeded") {
+    content = <>
+      <Text>Weapons List</Text>
+      <FlatList contentContainerStyle={{
+        flexGrow: 1,
+      }} data={weapons} renderItem={({ item }) => <><WeaponListItem weapon={item} /></>} />
+    </>
 
-  content =
-    <View>
-      <Text>This is where the items would go.</Text>
-    </View>;
+  } else if (weaponsStatus === "failed") {
+    content = <Text>Loading weapons failed</Text>
+  }
 
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       {content}
     </View>
   );

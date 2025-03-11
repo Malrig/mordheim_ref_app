@@ -37,7 +37,7 @@ interface Item extends Metadata {
   name: string
   description: string
   availability: Availability
-  price: string // Will want to change this later to a string
+  price: string
 }
 
 export interface Weapon extends Item {
@@ -47,5 +47,5 @@ export interface Weapon extends Item {
   weapon_type: WeaponType
 }
 
-export interface Armour extends Item {}
-export interface MiscItem extends Item {}
+export interface Armour extends Item { }
+export interface MiscItem extends Item { }

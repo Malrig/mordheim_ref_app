@@ -45,7 +45,7 @@ export default function Skills() {
   }
 
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       {/* <NewSkill /> */}
       {content}
     </View>

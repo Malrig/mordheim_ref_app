@@ -2,7 +2,7 @@ import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit'
 
 import { SpecialRule } from '../../types/items'
 import { createAppAsyncThunk } from '../withTypes';
-import { initialSpecialRuleState } from '@/library/data/items';
+import { initialSpecialRuleState } from '@/library/data/weapons';
 
 interface SpecialRulesState {
   specialRules: SpecialRule[],
@@ -87,6 +87,9 @@ const specialRulesSlice = createSlice({
     selectSpecialRuleById: (specialRulesState, specialRuleId: string) => {
       return specialRulesState.specialRules.find(specialRule => specialRule.id === specialRuleId)
     },
+    selectSpecialRulesByIds: (specialRulesState, specialRuleIds: string[]) => {
+      return specialRulesState.specialRules.filter(specialRule => specialRule.id != null && specialRuleIds.includes(specialRule.id))
+    },
     selectSpecialRuleByName: (specialRulesState, specialRuleName: string) => {
       return specialRulesState.specialRules.find(specialRule => specialRule.name === specialRuleName)
     },
@@ -101,4 +104,4 @@ export default specialRulesSlice.reducer
 // Export all the actions
 export const { specialRuleAdded, specialRuleUpdated } = specialRulesSlice.actions
 // Export all the selectors
-export const { selectAllSpecialRules, selectSpecialRuleById, selectSpecialRuleByName, selectSpecialRulesStatus, selectSpecialRulesError } = specialRulesSlice.selectors
+export const { selectAllSpecialRules, selectSpecialRuleById, selectSpecialRulesByIds, selectSpecialRuleByName, selectSpecialRulesStatus, selectSpecialRulesError } = specialRulesSlice.selectors

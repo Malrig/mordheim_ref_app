@@ -2,8 +2,8 @@ import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit'
 
 import { Weapon, Availability, WeaponType } from '../../types/items'
 import { createAppAsyncThunk } from '../withTypes';
-import { initialWeaponState } from '@/library/data/items';
 import { SourceStatus } from '@/library/types/metadata';
+import { initialWeaponState } from '@/library/data/weapons';
 
 interface WeaponsState {
   weapons: Weapon[],
@@ -68,7 +68,7 @@ const weaponsSlice = createSlice({
     },
     weaponUpdated(state, action: PayloadAction<Weapon>) {
       const updatedWeapon = action.payload;
-      let existingWeapon = state.weapons.find(weapon => weapon.name === updatedWeapon.name);
+      let existingWeapon = state.weapons.find(weapon => weapon.id === updatedWeapon.id);
 
       if (existingWeapon) {
         Object.assign(existingWeapon, updatedWeapon);

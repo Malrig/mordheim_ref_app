@@ -9,7 +9,7 @@ import { store, persistor } from "@/library/store/store"
 
 export default function RootLayout() {
 
-  
+
   return <>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>

@@ -60,6 +60,14 @@ nvm use 22 # Or whatever version of node you have installed
 npx expo start
 ```
 
+To build web app into docker container:
+
+```bash
+npx expo export --platform web
+docker build -t mordheim_app .
+docker save mordheim_app -o mordheim_app_image.tgz
+```
+
 ## Ideas
 
 - Have "profiles" which have different sets of favourites. So you can have different profiles per warband.

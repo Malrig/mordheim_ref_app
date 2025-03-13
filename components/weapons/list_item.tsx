@@ -1,4 +1,4 @@
-import { Text, View, FlatList, Pressable } from "react-native";
+import { Text, View, FlatList, Pressable, StyleSheet } from "react-native";
 import { Link } from 'expo-router';
 import * as React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
@@ -10,6 +10,8 @@ import { skillUpdated } from "@/library/store/features/skillsSlice";
 import { Weapon } from "@/library/types/items";
 import { weaponUpdated } from "@/library/store/features/weaponSlice";
 import { selectSpecialRulesByIds } from "@/library/store/features/specialRulesSlice";
+import Divider from "../general/divider";
+import ColonText from "../general/colon_text";
 
 type Props = {
   weapon: Weapon
@@ -30,27 +32,44 @@ export default function WeaponListItem({ weapon }: Props) {
   }
 
   return (
-    <View>
-      <View style={[{ flexDirection: 'row', }]}>
-        <Pressable style={[{ flexDirection: 'row', }]} onPress={() => setExpanded(!expanded)}>
-          <FontAwesome name={expanded ? "chevron-up" : "chevron-down"} />
-          <Text>{weapon.name}</Text>
+    <Pressable style={styles.item} onPress={() => setExpanded(!expanded)}>
+      <View style={styles.header}>
+        <Pressable onPress={() => onFavouritePress()}>
+          <FontAwesome name={weapon.favourite ? "heart" : "heart-o"} />
         </Pressable>
-        <View style={[{ marginLeft: "auto" }]}>
-          <Pressable style={[{ flexDirection: 'row', }]} onPress={() => onFavouritePress()}>
-            <FontAwesome name={weapon.favourite ? "heart" : "heart-o"} />
-          </Pressable>
-        </View>
+        <Text> {weapon.name}</Text>
+        <FontAwesome style={[{ marginLeft: "auto" }]} name={expanded ? "chevron-up" : "chevron-down"} />
       </View>
       {expanded && <>
-        <Text>{weapon.description}</Text>
-        <Text>Range: {weapon.range}</Text>
-        <Text>Strength: {weapon.strength}</Text>
+        <Divider />
+        {/* <Text style={styles.description_text}>{weapon.description}</Text> */}
+        <ColonText before="Range" after={weapon.range} />
+        <ColonText before="Strength" after={weapon.strength} />
+        <Divider />
         <Text>Special Rules:</Text>
         <FlatList data={special_rules} renderItem={({ item }) => <>
-          <Text>{item.name}: {item.description}</Text>
+          <ColonText before={item.name} after={item.description} />
         </>} />
       </>}
-    </View>
+    </Pressable>
   );
 }
+
+const styles = StyleSheet.create({
+  item: {
+    flexDirection: 'column',
+    borderRadius: 10,
+    borderColor: '#000000',
+    borderWidth: 1,
+    padding: 3,
+    margin: 3,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: "center",
+  },
+  description_text: {
+    fontStyle: "italic",
+    fontSize: 12,
+  }
+});

@@ -1,4 +1,5 @@
 import { Metadata, SourceStatus } from "./metadata"
+import { Skill } from "./skills"
 
 export enum WeaponType {
   Melee,
@@ -49,3 +50,5 @@ export interface Weapon extends Item {
 
 export interface Armour extends Item { }
 export interface MiscItem extends Item { }
+
+export type Objects = Armour | MiscItem | Weapon | Skill

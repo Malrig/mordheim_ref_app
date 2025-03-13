@@ -1,13 +1,15 @@
-import { Text, View, FlatList, TextInput } from "react-native";
+import { Text, View, FlatList, TextInput, StyleSheet } from "react-native";
 import { Link } from 'expo-router';
 import * as React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useAppSelector, useAppDispatch } from '@/library/store/hooks'
 // import { Divider, List } from "react-native-paper";
 
-import SkillListItem from "@/components/skills/skill_list_item"
+import SkillListItem from "@/components/skills/list_item"
 import NewSkill from "@/components/skills/new_skill";
 import { fetchSkills, selectAllSkills, selectSkillsError, selectSkillsStatus } from "@/library/store/features/skillsSlice";
+import { Skill } from "@/library/types/skills";
+import ObjectList from "@/components/general/object_list";
 
 // What does this page do?
 // - Display all the skills we have in the campaign
@@ -37,8 +39,8 @@ export default function Skills() {
     content = <Text>Loading</Text>
   } else if (skillStatus === "succeeded") {
     content = <>
-      <Text>Skills List</Text>
-      <FlatList data={skills} renderItem={({ item }) => <><SkillListItem skill={item} /></>} />
+      <Text>TODO: Allow searching / filtering of skills.</Text>
+      <ObjectList<Skill> objects={skills} renderObject={(object) => <SkillListItem skill={object} />} />
     </>
   } else if (skillStatus === "failed") {
     content = <Text>Loading skills failed</Text>

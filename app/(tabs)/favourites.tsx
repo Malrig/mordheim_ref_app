@@ -1,6 +1,6 @@
 import { Text, View, FlatList } from "react-native";
 import { Link } from 'expo-router';
-import SkillListItem from "@/components/skills/skill_list_item";
+import SkillListItem from "@/components/skills/list_item";
 import { selectAllSkills, selectFavouriteSkills } from "@/library/store/features/skillsSlice";
 import { useAppSelector } from "@/library/store/hooks";
 
@@ -15,7 +15,7 @@ import { useAppSelector } from "@/library/store/hooks";
 //   - Mounted warriors rules
 //   - Misfire rules, etc.
 
-export default function QuickReference() {
+export default function Favourites() {
   const skills = useAppSelector(selectFavouriteSkills);
   return (
     <View>

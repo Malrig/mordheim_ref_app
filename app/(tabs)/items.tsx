@@ -106,7 +106,7 @@ export default function Items() {
     key: i,
     title: i,
     content: object_content(i),
-    ref: React.createRef(),
+    ref: React.createRef<View>(),
   }));
 
   let content: React.ReactNode

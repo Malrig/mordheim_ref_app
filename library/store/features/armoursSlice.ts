@@ -1,6 +1,6 @@
 import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit'
 
-import { Armour, Availability } from '../../types/items'
+import { Armour, Availability, ItemType } from '../../types/items'
 import { createAppAsyncThunk } from '../withTypes';
 import { initialArmourState } from '@/library/data/items';
 import { SourceStatus } from '@/library/types/metadata';
@@ -48,17 +48,20 @@ const armoursSlice = createSlice({
         }
       },
       prepare(name: string, description: string, availability: Availability, price: string, source?: string, source_type?: SourceStatus, favourite?: boolean) {
+        let payload: Armour = {
+          id: nanoid(),
+          name: name,
+          description: description,
+          availability: availability,
+          price: price,
+          source: source ?? "",
+          source_type: source_type ?? SourceStatus.Unknown,
+          favourite: favourite ?? false,
+          item_type: ItemType.Armour,
+        }
+        
         return {
-          payload: {
-            id: nanoid(),
-            name: name,
-            description: description,
-            availability: availability,
-            price: price,
-            source: source ?? "",
-            source_type: source_type ?? SourceStatus.Unknown,
-            favourite: favourite ?? false,
-          }
+          payload: payload
         }
       }
     },

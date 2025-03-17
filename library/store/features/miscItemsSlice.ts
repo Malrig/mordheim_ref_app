@@ -1,6 +1,6 @@
 import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit'
 
-import { MiscItem, Availability } from '../../types/items'
+import { MiscItem, Availability, ItemType } from '../../types/items'
 import { createAppAsyncThunk } from '../withTypes';
 import { initialMiscItemState } from '@/library/data/items';
 import { SourceStatus } from '@/library/types/metadata';
@@ -48,17 +48,19 @@ const miscItemsSlice = createSlice({
         }
       },
       prepare(name: string, description: string, availability: Availability, price: string, source?: string, source_type?: SourceStatus, favourite?: boolean) {
+        let payload: MiscItem = {
+          name: name,
+          description: description,
+          availability: availability,
+          price: price,
+          source: source ?? "",
+          source_type: source_type ?? SourceStatus.Unknown,
+          favourite: favourite ?? false,
+          item_type: ItemType.MiscItem,
+        }
+
         return {
-          payload: {
-            id: nanoid(),
-            name: name,
-            description: description,
-            availability: availability,
-            price: price,
-            source: source ?? "",
-            source_type: source_type ?? SourceStatus.Unknown,
-            favourite: favourite ?? false,
-          }
+          payload: payload
         }
       }
     },

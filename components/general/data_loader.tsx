@@ -2,32 +2,15 @@ import { Text, View, FlatList, Pressable } from "react-native";
 import { Link, Stack } from 'expo-router';
 import * as React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { selectArmoursStatus, selectArmoursError, fetchArmours } from "@/library/store/features/armoursSlice";
-import { selectMiscItemsStatus, selectMiscItemsError, fetchMiscItems } from "@/library/store/features/miscItemsSlice";
 import { selectSkillsStatus, selectSkillsError, fetchSkills } from "@/library/store/features/skillsSlice";
 import { fetchSpecialRules, selectSpecialRulesError, selectSpecialRulesStatus } from "@/library/store/features/specialRulesSlice";
-import { selectWeaponsStatus, selectWeaponsError, fetchWeapons } from "@/library/store/features/weaponSlice";
 import { useAppDispatch, useAppSelector } from "@/library/store/hooks";
+import { selectItemsStatus, selectItemsError, fetchItems } from "@/library/store/features/itemsSlice";
 // import { Divider, List } from "react-native-paper";
 
 type Props = React.PropsWithChildren<{}>
 
 const slices_to_load = {
-  armour: {
-    status: selectArmoursStatus,
-    error: selectArmoursError,
-    fetch: fetchArmours,
-  },
-  miscItem: {
-    status: selectMiscItemsStatus,
-    error: selectMiscItemsError,
-    fetch: fetchMiscItems,
-  },
-  weapon: {
-    status: selectWeaponsStatus,
-    error: selectWeaponsError,
-    fetch: fetchWeapons,
-  },
   skill: {
     status: selectSkillsStatus,
     error: selectSkillsError,
@@ -37,6 +20,11 @@ const slices_to_load = {
     status: selectSpecialRulesStatus,
     error: selectSpecialRulesError,
     fetch: fetchSpecialRules,
+  },
+  combinedItem: {
+    status: selectItemsStatus,
+    error: selectItemsError,
+    fetch: fetchItems,
   },
 }
 

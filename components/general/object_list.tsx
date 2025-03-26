@@ -1,7 +1,5 @@
-import { Text, View, FlatList, Pressable } from "react-native";
-import { Link } from 'expo-router';
+import { View, FlatList } from "react-native";
 import * as React from 'react';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 // import { Divider, List } from "react-native-paper";
 
 type Props<T> = {

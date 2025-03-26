@@ -4,18 +4,12 @@ import * as React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 // import { Divider, List } from "react-native-paper";
 
-import { Skill } from '@/library/types/skills';
 import { useAppDispatch, useAppSelector } from "@/library/store/hooks";
-import { skillUpdated } from "@/library/store/features/skillsSlice";
-import { MiscItem, Armour, ItemType } from "@/library/types/items";
-import { weaponUpdated } from "@/library/store/features/weaponSlice";
-import { selectSpecialRulesByIds } from "@/library/store/features/specialRulesSlice";
-import Divider from "../general/divider";
-import ColonText from "../general/colon_text";
-import { armourUpdated } from "@/library/store/features/armoursSlice";
-import { miscItemUpdated } from "@/library/store/features/miscItemsSlice";
+import { ItemType } from "@/library/types/items";
+import { NewArmour, NewMiscItem } from "@/library/types/new_items";
+import { itemUpdated } from "@/library/store/features/itemsSlice";
 
-type SupportedItems = Armour | MiscItem
+type SupportedItems = NewArmour | NewMiscItem
 
 type Props = {
   item: SupportedItems
@@ -24,7 +18,7 @@ type Props = {
 // Functions used to ensure that the switch statement is exhaustive.
 function ensureExhaustive(p: never): never;
 function ensureExhaustive(p: SupportedItems) {
-  throw new Error('Unknown pet kind: ' + p);
+  throw new Error('Unknown item type: ' + p.item_type);
 }
 
 export default function ItemListItem({ item }: Props) {
@@ -35,16 +29,7 @@ export default function ItemListItem({ item }: Props) {
     let updatedItem = { ...item };
     updatedItem.favourite = !updatedItem.favourite;
 
-    switch (item.item_type) {
-      case ItemType.Armour:
-        dispatch(armourUpdated(updatedItem as Armour));
-        break
-      case ItemType.MiscItem:
-        dispatch(miscItemUpdated(updatedItem as MiscItem));
-        break
-      default:
-        ensureExhaustive(item);
-    }
+    dispatch(itemUpdated(updatedItem));
   }
 
   return (

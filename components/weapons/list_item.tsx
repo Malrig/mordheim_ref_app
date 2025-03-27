@@ -5,14 +5,14 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 // import { Divider, List } from "react-native-paper";
 
 import { useAppDispatch, useAppSelector } from "@/library/store/hooks";
-import { NewWeapon } from "@/library/types/new_items";
+import { Weapon } from "@/library/types/items";
 import { selectSpecialRulesByIds } from "@/library/store/features/specialRulesSlice";
 import Divider from "../general/divider";
 import ColonText from "../general/colon_text";
 import { itemUpdated } from "@/library/store/features/itemsSlice";
 
 type Props = {
-  weapon: NewWeapon
+  weapon: Weapon
 }
 
 export default function WeaponListItem({ weapon }: Props) {
@@ -22,7 +22,7 @@ export default function WeaponListItem({ weapon }: Props) {
   const special_rules = useAppSelector(state => selectSpecialRulesByIds(state, weapon.special_rules || []));
 
   const onFavouritePress = () => {
-    let updatedWeapon: NewWeapon = { ...weapon };
+    let updatedWeapon: Weapon = { ...weapon };
     updatedWeapon.favourite = !updatedWeapon.favourite;
 
     dispatch(itemUpdated(updatedWeapon));

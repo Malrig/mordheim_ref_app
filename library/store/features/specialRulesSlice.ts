@@ -1,20 +1,22 @@
-import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, nanoid, PayloadAction, createEntityAdapter, EntityId, createSelector } from '@reduxjs/toolkit'
 
 import { SpecialRule } from '../../types/items'
 import { createAppAsyncThunk } from '../withTypes';
 import { initialSpecialRuleState } from '@/library/data/weapons';
 
+const specialRulesAdapter = createEntityAdapter<SpecialRule>({
+  sortComparer: (a, b) => a.name.localeCompare(b.name),
+});
+
 interface SpecialRulesState {
-  specialRules: SpecialRule[],
   status: "idle" | "pending" | "succeeded" | "failed"
   error: string | null
 }
 
-const initialState: SpecialRulesState = {
-  specialRules: [],
+const initialState = specialRulesAdapter.getInitialState<SpecialRulesState>({
   status: 'idle',
   error: null
-}
+});
 
 export const fetchSpecialRules = createAppAsyncThunk(
   "specialRules/fetchSpecialRules",
@@ -24,7 +26,6 @@ export const fetchSpecialRules = createAppAsyncThunk(
       .then(() => initialSpecialRuleState);
     return response;
   },
-  // Below prevents any new dispatches of this thunk if the condition is not met.
   {
     condition(arg, thunkApi) {
       const postsStatus = selectSpecialRulesStatus(thunkApi.getState())
@@ -35,16 +36,13 @@ export const fetchSpecialRules = createAppAsyncThunk(
   },
 )
 
-// Create the slice and pass in the initial state
 const specialRulesSlice = createSlice({
   name: 'specialRules',
   initialState,
   reducers: {
     specialRuleAdded: {
       reducer(state, action: PayloadAction<SpecialRule>) {
-        if (!state.specialRules.find(specialRule => specialRule.id === action.payload.id)) {
-          state.specialRules.push(action.payload);
-        }
+        specialRulesAdapter.addOne(state, action.payload);
       },
       prepare(name: string, description: string) {
         return {
@@ -57,14 +55,10 @@ const specialRulesSlice = createSlice({
       }
     },
     specialRuleUpdated(state, action: PayloadAction<SpecialRule>) {
-      const updatedSpecialRule = action.payload;
-      let existingSpecialRule = state.specialRules.find(specialRule => specialRule.name === updatedSpecialRule.name);
-
-      if (existingSpecialRule) {
-        Object.assign(existingSpecialRule, updatedSpecialRule);
-      }
-
-      // If SpecialRule does not already exist then don't do anything.
+      specialRulesAdapter.updateOne(state, {
+        id: action.payload.id,
+        changes: action.payload
+      });
     }
   },
   extraReducers(builder) {
@@ -74,8 +68,7 @@ const specialRulesSlice = createSlice({
       })
       .addCase(fetchSpecialRules.fulfilled, (state, action) => {
         state.status = 'succeeded'
-        // Add any fetched posts to the array
-        state.specialRules.push(...action.payload)
+        specialRulesAdapter.setAll(state, action.payload.map(rule => ({ ...rule, id: rule.id ?? nanoid() })))
       })
       .addCase(fetchSpecialRules.rejected, (state, action) => {
         state.status = 'failed'
@@ -83,25 +76,37 @@ const specialRulesSlice = createSlice({
       })
   },
   selectors: {
-    selectAllSpecialRules: specialRulesState => specialRulesState.specialRules,
-    selectSpecialRuleById: (specialRulesState, specialRuleId: string) => {
-      return specialRulesState.specialRules.find(specialRule => specialRule.id === specialRuleId)
-    },
-    selectSpecialRulesByIds: (specialRulesState, specialRuleIds: string[]) => {
-      return specialRulesState.specialRules.filter(specialRule => specialRule.id != null && specialRuleIds.includes(specialRule.id))
-    },
-    selectSpecialRuleByName: (specialRulesState, specialRuleName: string) => {
-      return specialRulesState.specialRules.find(specialRule => specialRule.name === specialRuleName)
-    },
-    selectSpecialRulesStatus: (specialRulesState) => specialRulesState.status,
-    selectSpecialRulesError: (specialRulesState) => specialRulesState.error,
+    selectAllSpecialRules: (state) => specialRulesAdapter.getSelectors().selectAll(state),
+    selectSpecialRuleById: (state, id: string) => specialRulesAdapter.getSelectors().selectById(state, id),
+    selectSpecialRuleIds: (state) => specialRulesAdapter.getSelectors().selectIds(state),
+    selectTotalSpecialRules: (state) => specialRulesAdapter.getSelectors().selectTotal(state),
+    selectSpecialRulesStatus: (state) => state.status,
+    selectSpecialRulesError: (state) => state.error,
+    selectSpecialRulesByIds: createSelector(
+      [(state) => state, (state, specialRuleIds: string[]) => specialRuleIds],
+      (state, specialRuleIds) =>
+        specialRuleIds
+          .map(id => specialRulesAdapter.getSelectors().selectById(state, id))
+          .filter((rule): rule is SpecialRule => rule !== undefined)
+    ),
+    selectSpecialRuleByName: (state, specialRuleName: string) =>
+      specialRulesAdapter.getSelectors().selectAll(state).find(specialRule => specialRule.name === specialRuleName),
   }
 })
-
 
 export default specialRulesSlice.reducer
 
 // Export all the actions
 export const { specialRuleAdded, specialRuleUpdated } = specialRulesSlice.actions
+
 // Export all the selectors
-export const { selectAllSpecialRules, selectSpecialRuleById, selectSpecialRulesByIds, selectSpecialRuleByName, selectSpecialRulesStatus, selectSpecialRulesError } = specialRulesSlice.selectors
+export const {
+  selectAllSpecialRules,
+  selectSpecialRuleById,
+  selectSpecialRuleIds,
+  selectTotalSpecialRules,
+  selectSpecialRulesStatus,
+  selectSpecialRulesError,
+  selectSpecialRulesByIds,
+  selectSpecialRuleByName,
+} = specialRulesSlice.selectors;

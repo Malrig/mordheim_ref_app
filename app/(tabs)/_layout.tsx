@@ -68,15 +68,6 @@ export default function RootLayout() {
           />
         )
       }} />
-      <Tabs.Screen name="newitems" options={{
-        title: "New Item Page", tabBarIcon: ({ color, focused }) => (
-          <Image
-            source={focused ? icons["items_selected"] : icons["items_default"]}
-            style={{ tintColor: color, width: 24, height: 24 }}
-          />
-        )
-      }} />
-
     </Tabs>
   </>;
 }

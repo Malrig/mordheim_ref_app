@@ -6,10 +6,10 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 import { useAppDispatch, useAppSelector } from "@/library/store/hooks";
 import { ItemType } from "@/library/types/items";
-import { NewArmour, NewMiscItem } from "@/library/types/new_items";
+import { Armour, MiscItem } from "@/library/types/items";
 import { itemUpdated } from "@/library/store/features/itemsSlice";
 
-type SupportedItems = NewArmour | NewMiscItem
+type SupportedItems = Armour | MiscItem
 
 type Props = {
   item: SupportedItems

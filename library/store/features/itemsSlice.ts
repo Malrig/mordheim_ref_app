@@ -1,4 +1,4 @@
-import { NewItem } from "@/library/types/new_items";
+import { Item } from "@/library/types/items";
 import { createSlice, PayloadAction, createEntityAdapter } from "@reduxjs/toolkit";
 import { nanoid } from "@reduxjs/toolkit";
 import { Availability, ItemType, WeaponType } from "@/library/types/items";
@@ -9,8 +9,8 @@ import { initialWeaponState } from "@/library/data/weapons";
 import { RootState } from "../store";
 
 // Create the entity adapter
-const itemsAdapter = createEntityAdapter<NewItem>({
-  // The id field is already defined in NewItem, so we don't need to specify it
+const itemsAdapter = createEntityAdapter<Item>({
+  // The id field is already defined in Item, so we don't need to specify it
   // If we needed to specify a different id field, we would use:
   // selectId: (item) => item.id,
 });
@@ -32,8 +32,8 @@ export const fetchItems = createAppAsyncThunk(
     const response = await new Promise(f =>
       setTimeout(f, 1000)) // Add in a delay to play around with Async
       .then(() => {
-        // Map existing items to NewItem type
-        const miscItems: NewItem[] = initialMiscItemState.map(item => ({
+        // Map existing items to Item type
+        const miscItems: Item[] = initialMiscItemState.map(item => ({
           ...item,
           id: item.id ?? nanoid(),
           range: null,
@@ -43,7 +43,7 @@ export const fetchItems = createAppAsyncThunk(
           item_type: ItemType.MiscItem
         }));
 
-        const armourItems: NewItem[] = initialArmourState.map(item => ({
+        const armourItems: Item[] = initialArmourState.map(item => ({
           ...item,
           id: item.id ?? nanoid(),
           range: null,
@@ -53,7 +53,7 @@ export const fetchItems = createAppAsyncThunk(
           item_type: ItemType.Armour
         }));
 
-        const weaponItems: NewItem[] = initialWeaponState.map(item => ({
+        const weaponItems: Item[] = initialWeaponState.map(item => ({
           ...item,
           id: item.id ?? nanoid(),
           range: item.range,
@@ -75,7 +75,7 @@ const itemsSlice = createSlice({
   initialState,
   reducers: {
     itemAdded: {
-      reducer(state, action: PayloadAction<NewItem>) {
+      reducer(state, action: PayloadAction<Item>) {
         itemsAdapter.addOne(state, action.payload);
       },
       prepare(name: string, description: string, availability: Availability, price: string, item_type: ItemType, source?: string, source_type?: SourceStatus, favourite?: boolean) {
@@ -94,11 +94,11 @@ const itemsSlice = createSlice({
             strength: null,
             special_rules: null,
             weapon_type: null
-          } as NewItem
+          } as Item
         }
       }
     },
-    itemUpdated(state, action: PayloadAction<NewItem>) {
+    itemUpdated(state, action: PayloadAction<Item>) {
       itemsAdapter.updateOne(state, {
         id: action.payload.id,
         changes: action.payload

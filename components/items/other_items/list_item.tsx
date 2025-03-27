@@ -5,49 +5,37 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 // import { Divider, List } from "react-native-paper";
 
 import { useAppDispatch, useAppSelector } from "@/library/store/hooks";
-import { Weapon } from "@/library/types/items";
-import { selectSpecialRulesByIds } from "@/library/store/features/specialRulesSlice";
-import Divider from "../general/divider";
-import ColonText from "../general/colon_text";
+import { ItemType } from "@/library/types/items";
+import { Armour, MiscItem } from "@/library/types/items";
 import { itemUpdated } from "@/library/store/features/itemsSlice";
 
+type SupportedItems = Armour | MiscItem
+
 type Props = {
-  weapon: Weapon
+  item: SupportedItems
 }
 
-export default function WeaponListItem({ weapon }: Props) {
+export default function OtherItemListItem({ item }: Props) {
   const [expanded, setExpanded] = React.useState(false);
   const dispatch = useAppDispatch();
-  // Get the special rule details for the weapon  
-  const special_rules = useAppSelector(state => selectSpecialRulesByIds(state, weapon.special_rules || []));
 
   const onFavouritePress = () => {
-    let updatedWeapon: Weapon = { ...weapon };
-    updatedWeapon.favourite = !updatedWeapon.favourite;
+    let updatedItem = { ...item };
+    updatedItem.favourite = !updatedItem.favourite;
 
-    dispatch(itemUpdated(updatedWeapon));
+    dispatch(itemUpdated(updatedItem));
   }
 
   return (
     <Pressable style={styles.item} onPress={() => setExpanded(!expanded)}>
       <View style={styles.header}>
         <Pressable onPress={() => onFavouritePress()}>
-          <FontAwesome name={weapon.favourite ? "heart" : "heart-o"} />
+          <FontAwesome name={item.favourite ? "heart" : "heart-o"} />
         </Pressable>
-        <Text> {weapon.name}</Text>
+        <Text> {item.name}</Text>
         <FontAwesome style={[{ marginLeft: "auto" }]} name={expanded ? "chevron-up" : "chevron-down"} />
       </View>
-      {expanded && <>
-        <Divider />
-        {/* <Text style={styles.description_text}>{weapon.description}</Text> */}
-        <ColonText before="Range" after={weapon.range?.toString() || ''} />
-        <ColonText before="Strength" after={weapon.strength?.toString() || ''} />
-        <Divider />
-        <Text>Special Rules:</Text>
-        <FlatList data={special_rules} renderItem={({ item }) => <>
-          <ColonText before={item.name} after={item.description} />
-        </>} />
-      </>}
+      {expanded && <>{item.description}</>}
     </Pressable>
   );
 }

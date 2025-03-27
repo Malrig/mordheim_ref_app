@@ -7,8 +7,8 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useAppDispatch, useAppSelector } from "@/library/store/hooks";
 import { Weapon } from "@/library/types/items";
 import { selectSpecialRulesByIds } from "@/library/store/features/specialRulesSlice";
-import Divider from "../general/divider";
-import ColonText from "../general/colon_text";
+import Divider from "../../general/divider";
+import ColonText from "../../general/colon_text";
 import { itemUpdated } from "@/library/store/features/itemsSlice";
 
 type Props = {

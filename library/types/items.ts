@@ -10,8 +10,8 @@ export enum ItemType {
 
 export enum WeaponType {
   Melee,
-  RangedNormal,
-  RangedBlackpowder,
+  Ranged,
+  Blackpowder,
 }
 
 export enum RestrictionType {

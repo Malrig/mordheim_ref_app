@@ -50,6 +50,7 @@ export default function ItemFilter({
           <Picker.Item label="Misc Items" value={ItemType.MiscItem} />
         </Picker>
       </View>
+      <Text>TODO: Include filtering on: tags, availability, source, price, rarity, etc.</Text>
     </View>
   );
 }

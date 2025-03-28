@@ -1,10 +1,17 @@
 import { Metadata, SourceStatus } from "./metadata"
 import { Skill } from "./skills"
 
+export enum ItemType {
+  Weapon,
+  MiscItem,
+  Armour,
+  // Possibly break things down further, e.g. herbs & potions, vehicles, etc.
+}
+
 export enum WeaponType {
   Melee,
-  RangedNormal,
-  RangedBlackpowder,
+  Ranged,
+  Blackpowder,
 }
 
 export enum RestrictionType {
@@ -27,28 +34,42 @@ export interface Availability {
 }
 
 export interface SpecialRule {
-  id?: string
+  id: string
   name: string
   description: string
 }
 
-// Define a TS type for the data we'll be using
-
-interface Item extends Metadata {
+interface ItemInterface extends Metadata {
   name: string
   description: string
-  availability: Availability
+  availability: Availability[]
   price: string
+  item_type: ItemType
+  // Fields specific to weapons
+  range: string | null
+  strength: string | null
+  special_rules: string[] | null // List of IDs of special rules they relate to. 
+  weapon_type: WeaponType | null
 }
 
-export interface Weapon extends Item {
-  range: string
-  strength: string
-  special_rules: string[] // List of IDs of special rules they relate to.
-  weapon_type: WeaponType
-}
+export type Item = ItemInterface;
 
-export interface Armour extends Item { }
-export interface MiscItem extends Item { }
+export type Weapon = Omit<ItemInterface, 'range' | 'strength' | 'special_rules' | 'weapon_type'> & Required<Pick<ItemInterface, 'range' | 'strength' | 'special_rules' | 'weapon_type'>>;
 
-export type Objects = Armour | MiscItem | Weapon | Skill
+export type Armour = Omit<ItemInterface, 'range' | 'strength' | 'special_rules' | 'weapon_type' | 'item_type'> & {
+  range: null;
+  strength: null;
+  special_rules: null;
+  weapon_type: null;
+  item_type: ItemType.Armour;
+};
+
+export type MiscItem = Omit<ItemInterface, 'range' | 'strength' | 'special_rules' | 'weapon_type' | 'item_type'> & {
+  range: null;
+  strength: null;
+  special_rules: null;
+  weapon_type: null;
+  item_type: ItemType.MiscItem;
+};
+
+export type AnyItem = Armour | MiscItem | Weapon

@@ -4,14 +4,12 @@ import * as React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 // import { Divider, List } from "react-native-paper";
 
-import { Skill } from '@/library/types/skills';
 import { useAppDispatch, useAppSelector } from "@/library/store/hooks";
-import { skillUpdated } from "@/library/store/features/skillsSlice";
 import { Weapon } from "@/library/types/items";
-import { weaponUpdated } from "@/library/store/features/weaponSlice";
 import { selectSpecialRulesByIds } from "@/library/store/features/specialRulesSlice";
-import Divider from "../general/divider";
-import ColonText from "../general/colon_text";
+import Divider from "../../general/divider";
+import ColonText from "../../general/colon_text";
+import { itemUpdated } from "@/library/store/features/itemsSlice";
 
 type Props = {
   weapon: Weapon
@@ -20,15 +18,14 @@ type Props = {
 export default function WeaponListItem({ weapon }: Props) {
   const [expanded, setExpanded] = React.useState(false);
   const dispatch = useAppDispatch();
-
   // Get the special rule details for the weapon  
-  const special_rules = useAppSelector(state => selectSpecialRulesByIds(state, weapon.special_rules));
+  const special_rules = useAppSelector(state => selectSpecialRulesByIds(state, weapon.special_rules || []));
 
   const onFavouritePress = () => {
     let updatedWeapon: Weapon = { ...weapon };
     updatedWeapon.favourite = !updatedWeapon.favourite;
 
-    dispatch(weaponUpdated(updatedWeapon));
+    dispatch(itemUpdated(updatedWeapon));
   }
 
   return (
@@ -43,8 +40,8 @@ export default function WeaponListItem({ weapon }: Props) {
       {expanded && <>
         <Divider />
         {/* <Text style={styles.description_text}>{weapon.description}</Text> */}
-        <ColonText before="Range" after={weapon.range} />
-        <ColonText before="Strength" after={weapon.strength} />
+        <ColonText before="Range" after={weapon.range?.toString() || ''} />
+        <ColonText before="Strength" after={weapon.strength?.toString() || ''} />
         <Divider />
         <Text>Special Rules:</Text>
         <FlatList data={special_rules} renderItem={({ item }) => <>

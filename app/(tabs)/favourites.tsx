@@ -3,6 +3,7 @@ import { Link } from 'expo-router';
 import SkillListItem from "@/components/skills/list_item";
 import { selectAllSkills, selectFavouriteSkills } from "@/library/store/features/skillsSlice";
 import { useAppSelector } from "@/library/store/hooks";
+import React from "react";
 
 // What does this page do?
 // - Displays all the information that people have chosen to appear here.

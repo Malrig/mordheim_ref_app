@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import { PersistGate } from "redux-persist/integration/react";
 
 import { store, persistor } from "@/library/store/store"
+import React from "react";
 
 const icons_path = "@/assets/images/icons/";
 
@@ -21,8 +22,6 @@ const icons = {
 }
 
 export default function RootLayout() {
-
-
   return <>
     <Tabs
       screenOptions={{

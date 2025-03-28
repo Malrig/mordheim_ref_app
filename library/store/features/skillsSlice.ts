@@ -1,21 +1,23 @@
-import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, nanoid, PayloadAction, createEntityAdapter, createSelector } from '@reduxjs/toolkit'
 
 import { Skill } from '../../types/skills'
 import { SourceStatus } from '../../types/metadata';
 import { createAppAsyncThunk } from '../withTypes';
 import { initialSkillState } from '@/library/data/skills';
 
+const skillsAdapter = createEntityAdapter<Skill>({
+  sortComparer: (a, b) => a.name.localeCompare(b.name),
+});
+
 interface SkillsState {
-  skills: Skill[],
   status: "idle" | "pending" | "succeeded" | "failed"
   error: string | null
 }
 
-const initialState: SkillsState = {
-  skills: [],
+const initialState = skillsAdapter.getInitialState<SkillsState>({
   status: 'idle',
   error: null
-}
+});
 
 export const fetchSkills = createAppAsyncThunk(
   "skills/fetchSkills",
@@ -25,7 +27,6 @@ export const fetchSkills = createAppAsyncThunk(
       .then(() => initialSkillState);
     return response;
   },
-  // Below prevents any new dispatches of this thunk if the condition is not met.
   {
     condition(arg, thunkApi) {
       const postsStatus = selectSkillsStatus(thunkApi.getState())
@@ -36,16 +37,13 @@ export const fetchSkills = createAppAsyncThunk(
   },
 )
 
-// Create the slice and pass in the initial state
 const skillsSlice = createSlice({
   name: 'skills',
   initialState,
   reducers: {
     skillAdded: {
       reducer(state, action: PayloadAction<Skill>) {
-        if (!state.skills.find(skill => skill.id === action.payload.id)) {
-          state.skills.push(action.payload);
-        }
+        skillsAdapter.addOne(state, action.payload);
       },
       prepare(name: string, description: string, group: string, source?: string, source_type?: SourceStatus, favourite?: boolean) {
         return {
@@ -62,14 +60,10 @@ const skillsSlice = createSlice({
       }
     },
     skillUpdated(state, action: PayloadAction<Skill>) {
-      const updatedSkill = action.payload;
-      let existingSkill = state.skills.find(skill => skill.id === updatedSkill.id);
-
-      if (existingSkill) {
-        Object.assign(existingSkill, updatedSkill);
-      }
-
-      // If Skill does not already exist then don't do anything.
+      skillsAdapter.updateOne(state, {
+        id: action.payload.id,
+        changes: action.payload
+      });
     }
   },
   extraReducers(builder) {
@@ -79,8 +73,7 @@ const skillsSlice = createSlice({
       })
       .addCase(fetchSkills.fulfilled, (state, action) => {
         state.status = 'succeeded'
-        // Add any fetched posts to the array
-        state.skills.push(...action.payload)
+        skillsAdapter.setAll(state, action.payload.map(skill => ({ ...skill, id: skill.id ?? nanoid() })))
       })
       .addCase(fetchSkills.rejected, (state, action) => {
         state.status = 'failed'
@@ -88,22 +81,37 @@ const skillsSlice = createSlice({
       })
   },
   selectors: {
-    selectAllSkills: skillsState => skillsState.skills,
-    selectSkillById: (skillsState, skillId: string) => {
-      return skillsState.skills.find(skill => skill.id === skillId)
-    },
-    selectFavouriteSkills: (skillsState) => {
-      return skillsState.skills.filter(skill => skill.favourite === true)
-    },
-    selectSkillsStatus: (skillsState) => skillsState.status,
-    selectSkillsError: (skillsState) => skillsState.error,
+    selectAllSkills: (state) => skillsAdapter.getSelectors().selectAll(state),
+    selectSkillById: (state, id: string) => skillsAdapter.getSelectors().selectById(state, id),
+    selectSkillIds: (state) => skillsAdapter.getSelectors().selectIds(state),
+    selectTotalSkills: (state) => skillsAdapter.getSelectors().selectTotal(state),
+    selectSkillsStatus: (state) => state.status,
+    selectSkillsError: (state) => state.error,
+    selectSkillsByIds: createSelector(
+      [(state) => state, (state, skillIds: string[]) => skillIds],
+      (state, skillIds) =>
+        skillIds
+          .map(id => skillsAdapter.getSelectors().selectById(state, id))
+          .filter((skill): skill is Skill => skill !== undefined)
+    ),
+    selectSkillByName: (state, skillName: string) =>
+      skillsAdapter.getSelectors().selectAll(state).find(skill => skill.name === skillName),
   }
 })
-
 
 export default skillsSlice.reducer
 
 // Export all the actions
 export const { skillAdded, skillUpdated } = skillsSlice.actions
+
 // Export all the selectors
-export const { selectAllSkills, selectSkillById, selectFavouriteSkills, selectSkillsStatus, selectSkillsError } = skillsSlice.selectors
+export const {
+  selectAllSkills,
+  selectSkillById,
+  selectSkillIds,
+  selectTotalSkills,
+  selectSkillsStatus,
+  selectSkillsError,
+  selectSkillsByIds,
+  selectSkillByName,
+} = skillsSlice.selectors;

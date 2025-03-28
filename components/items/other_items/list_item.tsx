@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from "@/library/store/hooks";
 import { ItemType } from "@/library/types/items";
 import { Armour, MiscItem } from "@/library/types/items";
 import { itemUpdated } from "@/library/store/features/itemsSlice";
+import RichText from "@/components/general/markdown_text";
 
 type SupportedItems = Armour | MiscItem
 
@@ -35,7 +36,7 @@ export default function OtherItemListItem({ item }: Props) {
         <Text> {item.name}</Text>
         <FontAwesome style={[{ marginLeft: "auto" }]} name={expanded ? "chevron-up" : "chevron-down"} />
       </View>
-      {expanded && <>{item.description}</>}
+      {expanded && <RichText text={item.description} />}
     </Pressable>
   );
 }

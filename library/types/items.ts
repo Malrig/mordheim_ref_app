@@ -42,7 +42,7 @@ export interface SpecialRule {
 interface ItemInterface extends Metadata {
   name: string
   description: string
-  availability: Availability
+  availability: Availability[]
   price: string
   item_type: ItemType
   // Fields specific to weapons

@@ -98,6 +98,7 @@ export default function SectionedItemList({ items }: Props) {
     sectionSelectionRef?.current?.scrollToIndex({
       index: sections.findIndex(s => s.sectionKey === viewableItems[0].section.sectionKey),
       animated: true,
+      viewPosition: 0.5,
     });
   }
 

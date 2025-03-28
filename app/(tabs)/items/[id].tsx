@@ -13,7 +13,9 @@ export function ItemDetail({ item }: { item: Item }) {
       <Text style={styles.detailDescription}>{item.description}</Text>
       <View style={styles.detailInfo}>
         <Text style={styles.detailText}>Price: {item.price}</Text>
-        <Text style={styles.detailText}>Availability: {item.availability.restrictions.length > 0 ? 'Restricted' : 'Common'}</Text>
+        <Text style={styles.detailText}>Availability: {item.availability.map(avail =>
+          avail.restrictions.length > 0 ? 'Restricted' : 'Common'
+        ).join(', ')}</Text>
         {item.item_type === ItemType.Weapon && (
           <>
             <Text style={styles.detailText}>Range: {item.range}</Text>

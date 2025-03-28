@@ -78,7 +78,7 @@ const itemsSlice = createSlice({
       reducer(state, action: PayloadAction<Item>) {
         itemsAdapter.addOne(state, action.payload);
       },
-      prepare(name: string, description: string, availability: Availability, price: string, item_type: ItemType, source?: string, source_type?: SourceStatus, favourite?: boolean) {
+      prepare(name: string, description: string, availability: Availability[], price: string, item_type: ItemType, source?: string, source_type?: SourceStatus, favourite?: boolean) {
         return {
           payload: {
             id: nanoid(),

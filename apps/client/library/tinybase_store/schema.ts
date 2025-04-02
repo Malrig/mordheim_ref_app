@@ -1,6 +1,6 @@
 import { SourceStatus } from '../types/metadata';
 import { Store } from "tinybase/store/with-schemas";
-import { createIndexes, createRelationships, Indexes, Relationships } from "tinybase/with-schemas";
+import { createIndexes, createQueries, createRelationships, Indexes, Queries, Relationships } from "tinybase/with-schemas";
 
 const metadata_schema = {
   metadata: {
@@ -55,6 +55,12 @@ const skill_schema = {
   }
 } as const;
 
+// Should add some listeners to ensure that the data is always valid. This can include:
+// - Checking that the availability is a valid array
+// - Checking that the special_rules is a valid array
+// - Checking that the weapon_type is a valid WeaponType
+// - Checking that the item_type is a valid ItemType
+
 export const TablesSchema = { ...metadata_schema, ...item_schema, ...special_rule_schema, ...skill_schema } as const;
 export const ValuesSchema = {};
 
@@ -103,4 +109,28 @@ export function createObjectStoreIndexes(store: Store<
   );
 
   return store_indexes;
+}
+
+export function createObjectStoreQueries(store: Store<
+  [typeof TablesSchema, typeof ValuesSchema]
+>): Queries<
+  [typeof TablesSchema, typeof ValuesSchema]
+> {
+  const store_queries = createQueries(store);
+
+  // This query is used to get all the items in a format that allows filtering. It also
+  // includes all the information required by the SectionedItemList component.
+  store_queries.setQueryDefinition(
+    "filterable_items",
+    "items",
+    ({ select }) => {
+      select("id");
+      select("name");
+      select("description");
+      select("item_type");
+      select("weapon_type");
+    }
+  );
+
+  return store_queries;
 }

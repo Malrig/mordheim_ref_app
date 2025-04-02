@@ -1,20 +1,10 @@
 import ItemFilter, { filterItems } from "@/components/items/item_filter";
-import ItemListItem from "@/components/items/sectioned_item_list";
-import OtherItemListItem from "@/components/items/other_items/list_item";
-import WeaponListItem from "@/components/items/weapons/list_item";
-import { selectAllItems, selectItemsStatus, selectItemsError } from "@/library/store/features/itemsSlice";
+import { selectAllItems } from "@/library/store/features/itemsSlice";
 import { useAppSelector } from "@/library/store/hooks";
-import { ItemType, WeaponType } from "@/library/types/items";
-import { Item, Armour, MiscItem } from "@/library/types/items";
-import React, { useState, useRef, useMemo } from "react";
-import { SectionList, Text, View, Pressable, ViewToken, FlatList, StyleSheet } from "react-native";
+import { ItemType } from "@/library/types/items";
+import React, { useState, useMemo } from "react";
+import { Text, View, StyleSheet } from "react-native";
 import SectionedItemList from "@/components/items/sectioned_item_list";
-
-type Section = {
-  title: string;
-  data: Item[];
-  type: ItemType;
-};
 
 export default function BrowseItems() {
   const items = useAppSelector(selectAllItems);

@@ -20,6 +20,7 @@ export const {
   RowView,
   useHasRow,
   useRowIds,
+  useRow,
   useAddRowCallback,
   useSliceIds,
   useCell,
@@ -27,5 +28,11 @@ export const {
   LocalRowsView,
   RowProps,
   useLocalRowIds,
-  useDelRowCallback
+  useRemoteRowId,
+  useDelRowCallback,  
+  useResultRowIds,
+  useResultRow,
+  useCreateQueries,
+  useQueries,
+  useResultTable,
 } = UiReactWithSchemas;

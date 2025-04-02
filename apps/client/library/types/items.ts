@@ -2,23 +2,23 @@ import { Metadata, SourceStatus } from "./metadata"
 import { Skill } from "./skills"
 
 export enum ItemType {
-  Weapon,
-  MiscItem,
-  Armour,
+  Weapon = "WEAPON",
+  MiscItem = "MISC_ITEM",
+  Armour = "ARMOUR",
   // Possibly break things down further, e.g. herbs & potions, vehicles, etc.
 }
 
 export enum WeaponType {
-  Melee,
-  Ranged,
-  Blackpowder,
+  Melee = "MELEE" ,
+  Ranged = "RANGED",
+  Blackpowder = "BLACKPOWDER",
 }
 
 export enum RestrictionType {
-  Warband,
-  WarbandGroup,
-  Unit,
-  Setting,
+  Warband = "WARBAND",
+  WarbandGroup = "WARBAND_GROUP",
+  Unit = "UNIT",
+  Setting = "SETTING",
 }
 
 export interface Restriction {

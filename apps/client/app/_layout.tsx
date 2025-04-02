@@ -10,27 +10,29 @@ import {
   TablesSchema,
   ValuesSchema,
   createObjectStoreRelationships,
-  createObjectStoreIndexes
+  createObjectStoreIndexes,
+  createObjectStoreQueries
 } from '../library/tinybase_store/schema';
-import { 
-  Provider, 
-  useCreatePersister, 
-  useCreateStore, 
-  useCreateIndexes, 
-  useCreateRelationships 
+import {
+  Provider,
+  useCreatePersister,
+  useCreateStore,
+  useCreateIndexes,
+  useCreateRelationships,
+  useCreateQueries
 } from '../library/tinybase_store/ui';
-import { InitialTableData, InitialValueData } from '../library/tinybase_store/initial_data';
+import { InitialData } from '../library/tinybase_store/initial_data';
 
 export default function RootLayout() {
   const store = useCreateStore(() => createStore().setTablesSchema(TablesSchema).setValuesSchema(ValuesSchema));
   useCreatePersister(
     store,
     (store) => {
-      return createIndexedDbPersister(store, "store");
+      return createIndexedDbPersister(store, "new");
     },
     [],
     async (persister) => {
-      await persister?.startAutoLoad([InitialTableData, InitialValueData]);
+      await persister?.startAutoLoad(InitialData);
       await persister?.startAutoSave();
     }
   );
@@ -41,9 +43,12 @@ export default function RootLayout() {
   const relationships = useCreateRelationships(store, (store) => {
     return createObjectStoreRelationships(store);
   });
+  const queries = useCreateQueries(store, (store) => {
+    return createObjectStoreQueries(store);
+  });
 
   return (
-    <Provider store={store} indexes={indexes} relationships={relationships}>
+    <Provider store={store} indexes={indexes} relationships={relationships} queries={queries}>
       <ReduxProvider store={redux_store}>
         <PersistGate loading={null} persistor={persistor}>
           <DataLoader>

@@ -2,12 +2,10 @@ import { Text, View, FlatList, Pressable, StyleSheet } from "react-native";
 import { Link } from 'expo-router';
 import * as React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-// import { Divider, List } from "react-native-paper";
-
-import { Skill } from '@/library/types/skills';
-import { useAppDispatch } from "@/library/store/hooks";
-import { skillUpdated } from "@/library/store/features/skillsSlice";
-import Divider from "../general/divider";
+import { Skill } from '../../library/types/skills';
+import { useAppDispatch } from '../../library/store/hooks';
+import { skillUpdated } from '../../library/store/features/skillsSlice';
+import Divider from '../general/divider';
 
 type Props = {
   skill: Skill

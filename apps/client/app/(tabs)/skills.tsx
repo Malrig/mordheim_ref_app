@@ -2,14 +2,14 @@ import { Text, View, FlatList, TextInput, StyleSheet } from "react-native";
 import { Link } from 'expo-router';
 import * as React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { useAppSelector, useAppDispatch } from '@/library/store/hooks'
+import { useAppSelector, useAppDispatch } from '../../library/store/hooks'
 // import { Divider, List } from "react-native-paper";
 
-import SkillListItem from "@/components/skills/list_item"
-import NewSkill from "@/components/skills/new_skill";
-import { fetchSkills, selectAllSkills, selectSkillsError, selectSkillsStatus } from "@/library/store/features/skillsSlice";
-import { Skill } from "@/library/types/skills";
-import ObjectList from "@/components/general/object_list";
+import SkillListItem from "../../components/skills/list_item"
+import NewSkill from "../../components/skills/new_skill";
+import { fetchSkills, selectAllSkills, selectSkillsError, selectSkillsStatus } from "../../library/store/features/skillsSlice";
+import { Skill } from "../../library/types/skills";
+import ObjectList from "../../components/general/object_list";
 
 // What does this page do?
 // - Display all the skills we have in the campaign

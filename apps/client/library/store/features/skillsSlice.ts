@@ -3,7 +3,7 @@ import { createSlice, nanoid, PayloadAction, createEntityAdapter, createSelector
 import { Skill } from '../../types/skills'
 import { SourceStatus } from '../../types/metadata';
 import { createAppAsyncThunk } from '../withTypes';
-import { initialSkillState } from '@/library/data/skills';
+import { initialSkillState } from '../../data/skills';
 
 const skillsAdapter = createEntityAdapter<Skill>({
   sortComparer: (a, b) => a.name.localeCompare(b.name),

@@ -1,5 +1,5 @@
 import { View, TextInput, StyleSheet, Text } from "react-native";
-import { Item, ItemType } from "@/library/types/items";
+import { Item, ItemType } from "../../library/types/items";
 import { Picker } from '@react-native-picker/picker';
 
 type Props = {

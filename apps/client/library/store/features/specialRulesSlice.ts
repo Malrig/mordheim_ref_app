@@ -2,7 +2,7 @@ import { createSlice, nanoid, PayloadAction, createEntityAdapter, EntityId, crea
 
 import { SpecialRule } from '../../types/items'
 import { createAppAsyncThunk } from '../withTypes';
-import { initialSpecialRuleState } from '@/library/data/weapons';
+import { initialSpecialRuleState } from '../../data/weapons';
 
 const specialRulesAdapter = createEntityAdapter<SpecialRule>({
   sortComparer: (a, b) => a.name.localeCompare(b.name),

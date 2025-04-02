@@ -2,14 +2,14 @@ import { Text, View, Pressable, TextInput } from "react-native";
 import { Link } from 'expo-router';
 import * as React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { useAppSelector } from '@/library/store/hooks'
+import { useAppSelector } from '../../library/store/hooks'
 // import { Divider, List } from "react-native-paper";
 import { nanoid } from '@reduxjs/toolkit'
 
-import { useAppDispatch } from '@/library/store/hooks'
-import { skillAdded } from '@/library/store/features/skillsSlice'
-import { type Skill } from '@/library/types/skills';
-import { SourceStatus } from "@/library/types/metadata";
+import { useAppDispatch } from '../../library/store/hooks'
+import { skillAdded } from '../../library/store/features/skillsSlice'
+import { type Skill } from '../../library/types/skills';
+import { SourceStatus } from "../../library/types/metadata";
 
 // What does this page do?
 // - Display all the skills we have in the campaign

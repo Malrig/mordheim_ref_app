@@ -1,11 +1,11 @@
-import { Item } from "@/library/types/items";
+import { Item } from "../../types/items";
 import { createSlice, PayloadAction, createEntityAdapter } from "@reduxjs/toolkit";
 import { nanoid } from "@reduxjs/toolkit";
-import { Availability, ItemType, WeaponType } from "@/library/types/items";
-import { SourceStatus } from "@/library/types/metadata";
+import { Availability, ItemType, WeaponType } from "../../types/items";
+import { SourceStatus } from "../../types/metadata";
 import { createAppAsyncThunk } from "../withTypes";
-import { initialMiscItemState, initialArmourState } from "@/library/data/items";
-import { initialWeaponState } from "@/library/data/weapons";
+import { initialMiscItemState, initialArmourState } from "../../data/items";
+import { initialWeaponState } from "../../data/weapons";
 import { RootState } from "../store";
 
 // Create the entity adapter

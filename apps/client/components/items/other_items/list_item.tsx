@@ -4,11 +4,10 @@ import * as React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 // import { Divider, List } from "react-native-paper";
 
-import { useAppDispatch, useAppSelector } from "@/library/store/hooks";
-import { ItemType } from "@/library/types/items";
-import { Armour, MiscItem } from "@/library/types/items";
-import { itemUpdated } from "@/library/store/features/itemsSlice";
-import RichText from "@/components/general/markdown_text";
+import { useAppDispatch } from "../../../library/store/hooks";
+import { Armour, MiscItem } from "../../../library/types/items";
+import { itemUpdated } from "../../../library/store/features/itemsSlice";
+import RichText from "../../../components/general/markdown_text";
 
 type SupportedItems = Armour | MiscItem
 

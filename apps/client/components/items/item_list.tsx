@@ -1,7 +1,7 @@
 
 import { Text } from "react-native";
 import * as React from 'react';
-import { AnyItem, Armour, ItemType, MiscItem } from "@/library/types/items";
+import { AnyItem, Armour, ItemType, MiscItem } from "../../library/types/items";
 import WeaponListItem from "./weapons/list_item";
 import OtherItemListItem from "./other_items/list_item";
 

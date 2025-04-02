@@ -2,10 +2,10 @@ import { Text, View, FlatList, Pressable } from "react-native";
 import { Link, Stack } from 'expo-router';
 import * as React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { selectSkillsStatus, selectSkillsError, fetchSkills } from "@/library/store/features/skillsSlice";
-import { fetchSpecialRules, selectSpecialRulesError, selectSpecialRulesStatus } from "@/library/store/features/specialRulesSlice";
-import { useAppDispatch, useAppSelector } from "@/library/store/hooks";
-import { selectItemsStatus, selectItemsError, fetchItems } from "@/library/store/features/itemsSlice";
+import { selectSkillsStatus, selectSkillsError, fetchSkills } from "../../library/store/features/skillsSlice";
+import { fetchSpecialRules, selectSpecialRulesError, selectSpecialRulesStatus } from "../../library/store/features/specialRulesSlice";
+import { useAppDispatch, useAppSelector } from "../../library/store/hooks";
+import { selectItemsStatus, selectItemsError, fetchItems } from "../../library/store/features/itemsSlice";
 // import { Divider, List } from "react-native-paper";
 
 type Props = React.PropsWithChildren<{}>

@@ -1,7 +1,7 @@
-import { Item, WeaponType } from "@/library/types/items";
+import { Item, WeaponType } from "../../library/types/items";
 import { Text, View, StyleSheet, FlatList, SectionList, Pressable, ViewToken, SectionListData } from "react-native";
 import * as React from 'react';
-import { ItemType } from "@/library/types/items";
+import { ItemType } from "../../library/types/items";
 import { useState } from "react";
 import ItemListItem from "./item_list";
 

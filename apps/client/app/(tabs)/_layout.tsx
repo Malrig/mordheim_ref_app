@@ -5,7 +5,7 @@ import { Button } from "react-native-paper";
 import { Provider } from 'react-redux';
 import { PersistGate } from "redux-persist/integration/react";
 
-import { store, persistor } from "@/library/store/store"
+import { store, persistor } from "../../library/store/store"
 import React from "react";
 
 const icons_path = "@/assets/images/icons/";

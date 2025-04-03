@@ -1,7 +1,4 @@
 import { Stack } from 'expo-router';
-import { Provider as ReduxProvider } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react';
-import { store as redux_store, persistor } from '../library/store/store';
 
 import { createStore } from "tinybase/with-schemas";
 import { createIndexedDbPersister } from "tinybase/persisters/persister-indexed-db/with-schemas";

@@ -1,7 +1,7 @@
 
 import { Skill } from '../types/skills'
 import { SourceStatus } from '../types/metadata';
-import { nanoid } from '@reduxjs/toolkit';
+import { nanoid } from 'nanoid';
 
 function QuickSkill(id: string, name: string, description: string, group: string): Skill {
   return {

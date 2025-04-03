@@ -1,4 +1,4 @@
-import { nanoid } from "@reduxjs/toolkit";
+import { nanoid } from 'nanoid';
 import { ItemType, SpecialRule, Weapon, WeaponType } from "../types/items";
 import { SourceStatus } from "../types/metadata";
 
@@ -107,7 +107,7 @@ let special_rules: SpecialRule[] = [
 ].map((item) => {
   return {
     ...item,
-    id: nanoid(), 
+    id: nanoid(),
   };
 });
 
@@ -159,7 +159,7 @@ let melee_weapons: Weapon[] = [
 ].map((item) => {
   return {
     ...item,
-    id: nanoid(), 
+    id: nanoid(),
     item_type: ItemType.Weapon,
     favourite: false,
     source: "",
@@ -190,7 +190,7 @@ let ranged_weapons: Weapon[] = [
 ].map((item) => {
   return {
     ...item,
-    id: nanoid(), 
+    id: nanoid(),
     item_type: ItemType.Weapon,
     favourite: false,
     source: "",
@@ -216,18 +216,19 @@ let blackpowder_weapons: Weapon[] = [
   { name: "Pocket Pistol", description: "A tiny one-barreled weapon, that can easily be concealed in a sleeve, hat, boot, or anywhere else. It's not much use in the middle of a fight, but has been known to get people OUT of them.", availability: [{ rarity: 4, restrictions: ["N/A"] }], price: "5", weapon_type: WeaponType.Blackpowder, favourite: false, source: "", source_type: SourceStatus.Unknown, range: "4\"", strength: "4", special_rules: [] },
   { name: "Sword-Pistol", description: "The Bretonnian pirate Ronald Blackhand liked engineering, and he liked blackpowder weapons, but he also had a love for tales of ancient Knights battling good and evil with swords and shields, and thus he invented the Sword-pistol! A sword incorporating a pistol quickly gained renown among the Ostlanders and some of the Tileans, however to the  resent date these weapons are still very rare.", availability: [{ rarity: 10, restrictions: ["Pirate Warbands"] }], price: "40", weapon_type: WeaponType.Blackpowder, favourite: false, source: "", source_type: SourceStatus.Unknown, range: "10\" / Close Combat", strength: "4 / As user", special_rules: [special_rules[95].id!, special_rules[96].id!, special_rules[9].id!, special_rules[81].id!, special_rules[66].id!, special_rules[97].id!, special_rules[73].id!, special_rules[98].id!] },
   { name: "Tufenk ", description: "This is a blowpipe that projects alchemical fire about eight feet causing burning damage.", availability: [{ rarity: 10, restrictions: ["Khemri setting only"] }], price: "15", weapon_type: WeaponType.Blackpowder, favourite: false, source: "", source_type: SourceStatus.Unknown, range: "8\"", strength: "2", special_rules: [special_rules[8].id!] },
-  { 
-    name: "Warplock Pistol/brace", 
-    description: "Warplock pistols are terrifying weapons, testimony to the mad genius of Clan Skryre engineers. Warplock pistols shoot ammunition made of magically treated warpstone and wounds caused by Warplock pistols are horrible to behold and often cause infections. ", 
-    availability: [{ rarity: 11, restrictions: ["Skaven warbands only"] }], 
-    price: "35/70", 
-    range: "8", 
-    strength: "5", 
-    special_rules: [special_rules[66].id!, special_rules[67].id!, special_rules[73].id!] },
+  {
+    name: "Warplock Pistol/brace",
+    description: "Warplock pistols are terrifying weapons, testimony to the mad genius of Clan Skryre engineers. Warplock pistols shoot ammunition made of magically treated warpstone and wounds caused by Warplock pistols are horrible to behold and often cause infections. ",
+    availability: [{ rarity: 11, restrictions: ["Skaven warbands only"] }],
+    price: "35/70",
+    range: "8",
+    strength: "5",
+    special_rules: [special_rules[66].id!, special_rules[67].id!, special_rules[73].id!]
+  },
 ].map((item) => {
   return {
     ...item,
-    id: nanoid(), 
+    id: nanoid(),
     item_type: ItemType.Weapon,
     favourite: false,
     source: "",

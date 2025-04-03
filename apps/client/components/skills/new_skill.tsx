@@ -2,12 +2,7 @@ import { Text, View, Pressable, TextInput } from "react-native";
 import { Link } from 'expo-router';
 import * as React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { useAppSelector } from '../../library/store/hooks'
-// import { Divider, List } from "react-native-paper";
-import { nanoid } from '@reduxjs/toolkit'
 
-import { useAppDispatch } from '../../library/store/hooks'
-import { skillAdded } from '../../library/store/features/skillsSlice'
 import { type Skill } from '../../library/types/skills';
 import { SourceStatus } from "../../library/types/metadata";
 
@@ -21,33 +16,33 @@ import { SourceStatus } from "../../library/types/metadata";
 
 
 
-export default function NewSkill() {
-  const [newSkillName, onChangeNewSkillName] = React.useState('');
-  const [newDescription, onChangeNewDescription] = React.useState('');
-  const [newGroup, onChangeNewGroup] = React.useState('');
+// export default function NewSkill() {
+//   const [newSkillName, onChangeNewSkillName] = React.useState('');
+//   const [newDescription, onChangeNewDescription] = React.useState('');
+//   const [newGroup, onChangeNewGroup] = React.useState('');
 
-  const dispatch = useAppDispatch();
+//   const dispatch = useAppDispatch();
 
-  return (
-    <View>
-      <View>
-        <Text>New Skill</Text>
-        <TextInput value={newSkillName} onChangeText={onChangeNewSkillName} placeholder="Skill Name" />
-        <TextInput value={newDescription} onChangeText={onChangeNewDescription} placeholder="Description" />
-        <TextInput value={newGroup} onChangeText={onChangeNewGroup} placeholder="Group name" />
-        <Pressable onPress={() => {
-          dispatch(skillAdded(
-            newSkillName,
-            newDescription,
-            newGroup
-          ));
-          onChangeNewSkillName("");
-          onChangeNewDescription("");
-          onChangeNewGroup("");
-        }}>
-          <Text>Add Skill</Text>
-        </Pressable>
-      </View>
-    </View>
-  );
-}
+//   return (
+//     <View>
+//       <View>
+//         <Text>New Skill</Text>
+//         <TextInput value={newSkillName} onChangeText={onChangeNewSkillName} placeholder="Skill Name" />
+//         <TextInput value={newDescription} onChangeText={onChangeNewDescription} placeholder="Description" />
+//         <TextInput value={newGroup} onChangeText={onChangeNewGroup} placeholder="Group name" />
+//         <Pressable onPress={() => {
+//           dispatch(skillAdded(
+//             newSkillName,
+//             newDescription,
+//             newGroup
+//           ));
+//           onChangeNewSkillName("");
+//           onChangeNewDescription("");
+//           onChangeNewGroup("");
+//         }}>
+//           <Text>Add Skill</Text>
+//         </Pressable>
+//       </View>
+//     </View>
+//   );
+// }

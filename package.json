@@ -1,6 +1,9 @@
 {
   "private": true,
   "name": "monorepo",
+  "description": "",
   "version": "1.0.0",
+  "author": "Malrig <g-a-b@hotmail.co.uk>",
+  "license": "MIT",
   "workspaces": ["apps/*", "packages/*"]
 }

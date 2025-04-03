@@ -4,10 +4,10 @@ import * as React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 // import { Divider, List } from "react-native-paper";
 
-import RichText from "../../general/markdown_text";
-import { Item } from "@/library/tinybase_store/objects/item";
-import { useSetPartialRowCallback } from "@/library/tinybase_store/ui";
-import Divider from "@/components/general/divider";
+import RichText from "../../../components/general/markdown_text";
+import { Item } from "../../../library/tinybase_store/objects/item";
+import { useSetPartialRowCallback } from "../../../library/tinybase_store/ui";
+import Divider from "../../../components/general/divider";
 
 interface Props {
   item: { id: string }

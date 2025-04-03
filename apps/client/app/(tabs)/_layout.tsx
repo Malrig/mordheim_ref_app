@@ -2,10 +2,6 @@ import { Text, View, Pressable, TextInput, Image } from "react-native";
 import { Stack, Tabs } from "expo-router";
 import { PaperProvider } from 'react-native-paper';
 import { Button } from "react-native-paper";
-import { Provider } from 'react-redux';
-import { PersistGate } from "redux-persist/integration/react";
-
-import { store, persistor } from "../../library/store/store"
 import React from "react";
 
 const icons_path = "@/assets/images/icons/";
@@ -37,7 +33,7 @@ export default function RootLayout() {
       }}
     >
       <Tabs.Screen name="index" options={{
-        title: "Home", tabBarIcon: ({ color, focused }) => (
+        title: "Home", tabBarIcon: ({ color, focused }: { color: string, focused: boolean }) => (
           <Image
             source={focused ? icons["home_selected"] : icons["home_default"]}
             style={{ tintColor: color, width: 24, height: 24 }}
@@ -45,7 +41,7 @@ export default function RootLayout() {
         )
       }} />
       <Tabs.Screen name="skills" options={{
-        title: "Skills", tabBarIcon: ({ color, focused }) => (
+        title: "Skills", tabBarIcon: ({ color, focused }: { color: string, focused: boolean }) => (
           <Image
             source={focused ? icons["skills_selected"] : icons["skills_default"]}
             style={{ tintColor: color, width: 24, height: 24 }}
@@ -53,7 +49,7 @@ export default function RootLayout() {
         )
       }} />
       <Tabs.Screen name="items" options={{
-        title: "Items", tabBarIcon: ({ color, focused }) => (
+        title: "Items", tabBarIcon: ({ color, focused }: { color: string, focused: boolean }) => (
           <Image
             source={focused ? icons["items_selected"] : icons["items_default"]}
             style={{ tintColor: color, width: 24, height: 24 }}
@@ -61,7 +57,7 @@ export default function RootLayout() {
         )
       }} />
       <Tabs.Screen name="favourites" options={{
-        title: "Favourites", tabBarIcon: ({ color, focused }) => (
+        title: "Favourites", tabBarIcon: ({ color, focused }: { color: string, focused: boolean }) => (
           <Image
             source={focused ? icons["favourites_selected"] : icons["favourites_default"]}
             style={{ tintColor: color, width: 24, height: 24 }}

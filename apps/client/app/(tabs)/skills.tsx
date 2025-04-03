@@ -1,13 +1,10 @@
 import { Text, View, FlatList, TextInput, StyleSheet } from "react-native";
 import { Link } from 'expo-router';
 import * as React from 'react';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 // import { Divider, List } from "react-native-paper";
 
 import SkillListItem from "../../components/skills/list_item"
-import ObjectList from "../../components/general/object_list";
-import { Skill } from "@/library/tinybase_store/objects/skill";
-import { useRowIds } from "@/library/tinybase_store/ui";
+import { useRowIds } from "../../library/tinybase_store/ui";
 import { Id } from "tinybase/with-schemas";
 // What does this page do?
 // - Display all the skills we have in the campaign

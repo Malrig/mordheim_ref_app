@@ -1,16 +1,12 @@
-import ItemFilter, { filterItems } from "@/components/items/item_filter";
-import { ItemType, WeaponType } from "@/library/types/items";
-import { Item as ItemInterface, Armour, MiscItem } from "@/library/types/items";
+import ItemFilter, { filterItems } from "../../../components/items/item_filter";
+import { ItemType, WeaponType } from "../../../library/types/items";
+import { Item as ItemInterface, Armour, MiscItem } from "../../../library/types/items";
 import React, { useState, useRef, useMemo } from "react";
 import { SectionList, Text, View, Pressable, ViewToken, FlatList, StyleSheet } from "react-native";
-import { useSetPartialRowCallback, useResultRowIds, useResultTable } from "@/library/tinybase_store/ui";
+import { useSetPartialRowCallback, useResultRowIds, useResultTable } from "../../../library/tinybase_store/ui";
 
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import ColonText from "@/components/general/colon_text";
-import Divider from "@/components/general/divider";
-import { Item } from "@/library/tinybase_store/objects/item";
-import ItemListItem from "@/components/items/item_list";
-import SectionedItemList from "@/components/items/sectioned_item_list";
+import ItemListItem from "../../../components/items/item_list";
+import SectionedItemList from "../../../components/items/sectioned_item_list";
 
 export default function BrowseItems() {
   const [searchedType, setSearchedType] = useState<ItemType | null>(null);

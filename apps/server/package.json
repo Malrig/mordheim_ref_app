@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "ts-node index.ts",
-    "build": "tsc"
+    "build": "tsc && docker build -t mordheim-server ."
   },
   "dependencies": {
     "tinybase": "^6.0.0",
@@ -13,7 +13,6 @@
     "yarn": "^1.22.22"
   },
   "devDependencies": {
-    "@flydotio/dockerfile": "^0.7.9",
     "@types/node": "^22.14.0",
     "@types/ws": "^8.18.0",
     "ts-node": "^10.9.2",

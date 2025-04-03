@@ -1,32 +1,38 @@
-import { createServer } from 'http';
+import { createServer } from 'https';
 import { createWsServer } from 'tinybase/synchronizers/synchronizer-ws-server';
 import { WebSocketServer } from 'ws';
+import { existsSync, mkdirSync, readFileSync } from 'fs';
+import { join } from 'path';
 
 // Something like this if you want to save Store state on the server:
-// import {createMergeableStore} from 'tinybase';
-// import {createFilePersister} from 'tinybase/persisters/persister-file';
+import { createMergeableStore } from 'tinybase';
+import { createFilePersister } from 'tinybase/persisters/persister-file';
 
-console.log('Starting WebSocket server on port 8043...');
-const wsServer = createWsServer(
-  new WebSocketServer({ port: 8043 }),
-  // Something like this if you want to save Store state on the server:
-  // (pathId) => createFilePersister(
-  //   createMergeableStore(),
-  //   pathId.replace(/[^a-zA-Z0-9]/g, '-') + '.json',
-  // ),
-);
-console.log('WebSocket server started successfully');
+const handle_error: (error: any) => void = (error) => {
+  console.error('Error:', error);
+}
 
-// -- Optional metrics handling hereon
+// Ensure data directory exists
+const dataDir = 'data';
+if (!existsSync(dataDir)) {
+  console.log('Creating data directory...');
+  mkdirSync(dataDir);
+}
 
-wsServer.addClientIdsListener(null, () => {
-  console.log('Client connections changed:', wsServer.getStats());
-  updatePeakStats();
-});
-const stats = { paths: 0, clients: 0 };
+// SSL configuration
+const sslDir = 'ssl';
+if (!existsSync(sslDir)) {
+  console.log('Creating SSL directory...');
+  mkdirSync(sslDir);
+}
 
-console.log('Starting HTTP server on port 8044...');
-createServer((request, response) => {
+const sslOptions = {
+  key: readFileSync(join(sslDir, 'private.key')),
+  cert: readFileSync(join(sslDir, 'certificate.crt')),
+};
+
+console.log('Starting secure WebSocket server on port 8043...');
+const httpsServer = createServer(sslOptions, (request, response) => {
   if (request.url == '/metrics') {
     console.log('Metrics endpoint queried');
     response.writeHead(200);
@@ -51,8 +57,31 @@ createServer((request, response) => {
     response.writeHead(404);
   }
   response.end();
-}).listen(8044);
-console.log('HTTP server started successfully');
+});
+
+const wsServer = createWsServer(
+  new WebSocketServer({
+    server: httpsServer,
+    path: '/ws'
+  }),
+  (pathId) => createFilePersister(
+    createMergeableStore(),
+    `${dataDir}/${pathId.replace(/[^a-zA-Z0-9]/g, '-')}.json`,
+    handle_error
+  ),
+);
+
+httpsServer.listen(8043, () => {
+  console.log('Secure WebSocket server started successfully on port 8043');
+});
+
+// -- Optional metrics handling hereon
+
+wsServer.addClientIdsListener(null, () => {
+  console.log('Client connections changed:', wsServer.getStats());
+  updatePeakStats();
+});
+const stats = { paths: 0, clients: 0 };
 
 const updatePeakStats = (reset = 0) => {
   if (reset) {

@@ -35,4 +35,6 @@ export const {
   useCreateQueries,
   useQueries,
   useResultTable,
+  useCreateSynchronizer,
+  useCreateMergeableStore,
 } = UiReactWithSchemas;

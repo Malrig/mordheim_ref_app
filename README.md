@@ -66,6 +66,7 @@ To build web app into docker container:
 npx expo export --platform web
 docker build -t mordheim_app .
 docker save mordheim_app -o mordheim_app_image.tgz
+docker save mordheim-server -o mordheim-server.tgz
 ```
 
 ## Ideas

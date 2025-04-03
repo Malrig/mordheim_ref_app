@@ -8,39 +8,40 @@ import { Weapon } from "../../../library/types/items";
 import { selectSpecialRulesByIds } from "../../../library/store/features/specialRulesSlice";
 import Divider from "../../general/divider";
 import ColonText from "../../general/colon_text";
-import { itemUpdated } from "../../../library/store/features/itemsSlice";
+import { Item } from "@/library/tinybase_store/objects/item";
+import { useSetPartialRowCallback } from "@/library/tinybase_store/ui";
 
 type Props = {
-  weapon: Weapon
+  weapon: { id: string }
 }
 
 export default function WeaponListItem({ weapon }: Props) {
   const [expanded, setExpanded] = React.useState(false);
-  const dispatch = useAppDispatch();
-  // Get the special rule details for the weapon  
-  const special_rules = useAppSelector(state => selectSpecialRulesByIds(state, weapon.special_rules || []));
 
-  const onFavouritePress = () => {
-    let updatedWeapon: Weapon = { ...weapon };
-    updatedWeapon.favourite = !updatedWeapon.favourite;
+  const item_object = Item.useInstance(weapon.id);
+  const metadata_info = item_object.useMetadata();
+  const special_rules = item_object.useSpecialRules();
 
-    dispatch(itemUpdated(updatedWeapon));
-  }
+  const onFavouritePress = useSetPartialRowCallback(
+    'metadata',
+    metadata_info?.table_name_id || '',
+    (favourite: boolean) => ({ favourite: favourite })
+  );
 
   return (
     <Pressable style={styles.item} onPress={() => setExpanded(!expanded)}>
       <View style={styles.header}>
-        <Pressable onPress={() => onFavouritePress()}>
-          <FontAwesome name={weapon.favourite ? "heart" : "heart-o"} />
+        <Pressable onPress={() => onFavouritePress(!metadata_info?.favourite)}>
+          <FontAwesome name={metadata_info?.favourite ? "heart" : "heart-o"} />
         </Pressable>
-        <Text> {weapon.name}</Text>
+        <Text> {item_object.name}</Text>
         <FontAwesome style={[{ marginLeft: "auto" }]} name={expanded ? "chevron-up" : "chevron-down"} />
       </View>
       {expanded && <>
         <Divider />
         {/* <Text style={styles.description_text}>{weapon.description}</Text> */}
-        <ColonText before="Range" after={weapon.range?.toString() || ''} />
-        <ColonText before="Strength" after={weapon.strength?.toString() || ''} />
+        <ColonText before="Range" after={item_object.range?.toString() || ''} />
+        <ColonText before="Strength" after={item_object.strength?.toString() || ''} />
         <Divider />
         <Text>Special Rules:</Text>
         <FlatList data={special_rules} renderItem={({ item }) => <>

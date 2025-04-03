@@ -4,38 +4,36 @@ import * as React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 // import { Divider, List } from "react-native-paper";
 
-import { useAppDispatch } from "../../../library/store/hooks";
-import { Armour, MiscItem } from "../../../library/types/items";
-import { itemUpdated } from "../../../library/store/features/itemsSlice";
-import RichText from "../../../components/general/markdown_text";
+import RichText from "../../general/markdown_text";
+import { Item } from "@/library/tinybase_store/objects/item";
+import { useSetPartialRowCallback } from "@/library/tinybase_store/ui";
+import Divider from "@/components/general/divider";
 
-type SupportedItems = Armour | MiscItem
-
-type Props = {
-  item: SupportedItems
+interface Props {
+  item: { id: string }
 }
 
 export default function OtherItemListItem({ item }: Props) {
   const [expanded, setExpanded] = React.useState(false);
-  const dispatch = useAppDispatch();
 
-  const onFavouritePress = () => {
-    let updatedItem = { ...item };
-    updatedItem.favourite = !updatedItem.favourite;
-
-    dispatch(itemUpdated(updatedItem));
-  }
+  const item_object = Item.useInstance(item.id);
+  const metadata_info = item_object.useMetadata();
+  const onFavouritePress = useSetPartialRowCallback(
+    'metadata',
+    metadata_info?.table_name_id || '',
+    (favourite: boolean) => ({ favourite: favourite })
+  );
 
   return (
     <Pressable style={styles.item} onPress={() => setExpanded(!expanded)}>
       <View style={styles.header}>
-        <Pressable onPress={() => onFavouritePress()}>
-          <FontAwesome name={item.favourite ? "heart" : "heart-o"} />
+        <Pressable onPress={() => onFavouritePress(!metadata_info?.favourite)}>
+          <FontAwesome name={metadata_info?.favourite ? "heart" : "heart-o"} />
         </Pressable>
-        <Text> {item.name}</Text>
+        <Text> {item_object.name}</Text>
         <FontAwesome style={[{ marginLeft: "auto" }]} name={expanded ? "chevron-up" : "chevron-down"} />
       </View>
-      {expanded && <RichText text={item.description} />}
+      {expanded && <><Divider /><RichText text={item_object.description} /></>}
     </Pressable>
   );
 }

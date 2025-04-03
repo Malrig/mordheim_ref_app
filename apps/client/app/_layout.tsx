@@ -1,7 +1,6 @@
 import { Stack } from 'expo-router';
 import { Provider as ReduxProvider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import DataLoader from '../components/general/data_loader';
 import { store as redux_store, persistor } from '../library/store/store';
 
 import { createStore } from "tinybase/with-schemas";
@@ -49,16 +48,10 @@ export default function RootLayout() {
 
   return (
     <Provider store={store} indexes={indexes} relationships={relationships} queries={queries}>
-      <ReduxProvider store={redux_store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <DataLoader>
-            < Stack >
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen name="+not-found" />
-            </Stack >
-          </DataLoader>
-        </PersistGate>
-      </ReduxProvider>
+      < Stack >
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="+not-found" />
+      </Stack >
     </Provider>
   );
 }

@@ -1,7 +1,7 @@
 import { Content } from "tinybase/store/with-schemas";
 import { ItemType, WeaponType } from "../types/items";
 import { TablesSchema, ValuesSchema } from "./schema";
-import { SourceStatus } from "../types/metadata";
+import { Metadata, SourceStatus } from "../types/metadata";
 import { initialArmourState, initialMiscItemState } from "../data/items";
 import { initialWeaponState, initialSpecialRuleState } from "../data/weapons";
 import { initialSkillState } from "../data/skills";
@@ -22,6 +22,14 @@ const initialItemEntries = initialItems.map((item) => {
     weapon_type: item.weapon_type || ''
   };
 });
+const itemMetadataEntries = initialItems.map((item: Metadata) => {
+  return {
+    table_name_id: `items_${item.id}`,
+    favourite: item.favourite || false,
+    source: item.source || '',
+    source_type: (item.source_type || SourceStatus.Unknown).toString(),
+  };
+});
 
 const initialSpecialRuleEntries = initialSpecialRuleState.map((rule) => {
   return {
@@ -39,18 +47,20 @@ const initialSkillEntries = initialSkillState.map((skill) => {
     group: skill.group
   };
 });
+const skillMetadataEntries = initialSkillState.map((skill: Metadata) => {
+  return {
+    table_name_id: `skills_${skill.id}`,
+    favourite: skill.favourite || false,
+    source: skill.source || '',
+    source_type: (skill.source_type || SourceStatus.Unknown).toString(),
+  };
+});
+
+const allMetadataEntries = [...itemMetadataEntries, ...skillMetadataEntries];
 
 const InitialTableData = {
   metadata: Object.fromEntries(
-    initialItems.map(item => [
-      `items_${item.id}`,
-      {
-        table_name_id: `items_${item.id}`,
-        favourite: item.favourite || false,
-        source: item.source || '',
-        source_type: (item.source_type || SourceStatus.Unknown).toString(),
-      }
-    ])
+    allMetadataEntries.map(entry => [entry.table_name_id, entry])
   ),
   items: Object.fromEntries(
     initialItemEntries.map(item => [item.id, item])

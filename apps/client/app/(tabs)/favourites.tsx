@@ -1,8 +1,6 @@
 import { Text, View, FlatList } from "react-native";
 import { Link } from 'expo-router';
 import SkillListItem from "../../components/skills/list_item";
-import { selectAllSkills, selectFavouriteSkills } from "../../library/store/features/skillsSlice";
-import { useAppSelector } from "../../library/store/hooks";
 import React from "react";
 
 // What does this page do?
@@ -17,11 +15,11 @@ import React from "react";
 //   - Misfire rules, etc.
 
 export default function Favourites() {
-  const skills = useAppSelector(selectFavouriteSkills);
+  // const skills = useAppSelector(selectFavouriteSkills);
   return (
     <View>
       <Text>Favourite Skills</Text>
-      <FlatList data={skills} renderItem={({ item }) => <><SkillListItem skill={item} /></>} />
+      {/* <FlatList data={skills} renderItem={({ item }) => <><SkillListItem skill={item} /></>} /> */}
     </View>
   );
 }

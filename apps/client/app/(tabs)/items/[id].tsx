@@ -1,9 +1,7 @@
 import { Text, View, StyleSheet } from "react-native";
 import { useLocalSearchParams } from 'expo-router';
-import { useAppSelector } from '@/library/store/hooks';
-import { selectItemById } from '@/library/store/features/itemsSlice';
 import { ItemType } from "@/library/types/items";
-import { Item } from "@/library/types/items";
+import { Item } from "@/library/tinybase_store/objects/item";
 import React from "react";
 
 export function ItemDetail({ item }: { item: Item }) {
@@ -13,9 +11,9 @@ export function ItemDetail({ item }: { item: Item }) {
       <Text style={styles.detailDescription}>{item.description}</Text>
       <View style={styles.detailInfo}>
         <Text style={styles.detailText}>Price: {item.price}</Text>
-        <Text style={styles.detailText}>Availability: {item.availability.map(avail =>
+        {/* <Text style={styles.detailText}>Availability: {item.availability.map(avail =>
           avail.restrictions.length > 0 ? 'Restricted' : 'Common'
-        ).join(', ')}</Text>
+        ).join(', ')}</Text> */}
         {item.item_type === ItemType.Weapon && (
           <>
             <Text style={styles.detailText}>Range: {item.range}</Text>
@@ -30,7 +28,7 @@ export function ItemDetail({ item }: { item: Item }) {
 
 export default function CombinedItemsDetail() {
   const { id } = useLocalSearchParams();
-  const item = useAppSelector((state) => selectItemById(state, id as string));
+  const item = Item.useInstance(id as string);
 
   return <ItemDetail item={item} />;
 }

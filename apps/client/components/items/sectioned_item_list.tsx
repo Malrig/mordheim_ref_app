@@ -1,4 +1,4 @@
-import { Item, WeaponType } from "../../library/types/items";
+import { WeaponType } from "../../library/types/items";
 import { Text, View, StyleSheet, FlatList, SectionList, Pressable, ViewToken, SectionListData } from "react-native";
 import * as React from 'react';
 import { ItemType } from "../../library/types/items";
@@ -12,21 +12,27 @@ interface SectionKey {
 
 interface ItemSection {
   title: string;
-  data: Item[];
+  data: ItemObject[];
   sectionKey: SectionKey;
 };
+
+interface ItemObject {
+  id: string,
+  item_type: string,
+  weapon_type: string | null,
+}
 
 function getSectionKey(key: SectionKey) {
   return `${key.item_type}-${key.weapon_type}`;
 }
 
 type Props = {
-  items: Item[]
+  items: ItemObject[]
 }
 
 export default function SectionedItemList({ items }: Props) {
   const [currentSection, setCurrentSection] = useState<SectionKey | null>(null);
-  const sectionListRef = React.useRef<SectionList<Item, ItemSection>>(null);
+  const sectionListRef = React.useRef<SectionList<ItemObject, ItemSection>>(null);
   const sectionSelectionRef = React.useRef<FlatList<ItemSection>>(null);
 
   const sections: ItemSection[] = [
@@ -89,12 +95,11 @@ export default function SectionedItemList({ items }: Props) {
     });
   }, [items]);
 
-  const onViewableItemsChanged = ({ viewableItems, changed }: { viewableItems: ViewToken<Item>[], changed: ViewToken<Item>[] }) => {
+  const onViewableItemsChanged = ({ viewableItems, changed }: { viewableItems: ViewToken<ItemObject>[], changed: ViewToken<ItemObject>[] }) => {
     // Set the current section to the first viewable item
     if (viewableItems.length > 0) {
       setCurrentSection(viewableItems[0].section.sectionKey);
     }
-    console.log(sections.findIndex(s => s.sectionKey === viewableItems[0].section.sectionKey));
     sectionSelectionRef?.current?.scrollToIndex({
       index: sections.findIndex(s => s.sectionKey === viewableItems[0].section.sectionKey),
       animated: true,
@@ -116,10 +121,10 @@ export default function SectionedItemList({ items }: Props) {
       />
     </View>
     <View style={styles.sectionListContainer}>
-      <SectionList<Item, ItemSection>
+      <SectionList<ItemObject, ItemSection>
         ref={sectionListRef}
         sections={sections}
-        renderItem={({ item }: { item: Item }) => <ItemListItem item={item} />}
+        renderItem={({ item }: { item: ItemObject }) => <ItemListItem item={item} />}
         renderSectionHeader={renderSectionHeader}
         onViewableItemsChanged={onViewableItemsChanged}
         keyExtractor={(item) => item.id}

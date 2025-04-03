@@ -2,44 +2,40 @@ import { Text, View, FlatList, Pressable, StyleSheet } from "react-native";
 import { Link } from 'expo-router';
 import * as React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Skill } from '../../library/types/skills';
-import { useAppDispatch } from '../../library/store/hooks';
-import { skillUpdated } from '../../library/store/features/skillsSlice';
 import Divider from '../general/divider';
+import { Id } from "tinybase/with-schemas";
 
+import { Skill } from "@/library/tinybase_store/objects/skill";
+import { useSetPartialRowCallback } from "@/library/tinybase_store/ui";
 type Props = {
-  skill: Skill
+  skill: Id
 }
 
 export default function SkillListItem({ skill }: Props) {
   const [expanded, setExpanded] = React.useState(false);
-  const dispatch = useAppDispatch();
 
-  const onFavouritePress = () => {
-    let updatedSkill = {
-      id: skill.id,
-      name: skill.name,
-      description: skill.description,
-      group: skill.group,
-      source: skill.source,
-      source_type: skill.source_type,
-      favourite: !skill.favourite,
-    }
-    dispatch(skillUpdated(updatedSkill));
-  }
+  const skill_object = Skill.useInstance(skill);
+  const metadata_info = skill_object.useMetadata();
+  console.log(metadata_info);
+
+  const onFavouritePress = useSetPartialRowCallback(
+    'metadata',
+    metadata_info?.table_name_id || '',
+    (favourite: boolean) => ({ favourite: favourite })
+  );
 
   return (
     <Pressable style={styles.item} onPress={() => setExpanded(!expanded)}>
       <View style={styles.header}>
-        <Pressable onPress={() => onFavouritePress()}>
-          <FontAwesome name={skill.favourite ? "heart" : "heart-o"} />
+        <Pressable onPress={() => onFavouritePress(!metadata_info?.favourite)}>
+          <FontAwesome name={metadata_info?.favourite ? "heart" : "heart-o"} />
         </Pressable>
-        <Text> {skill.name}</Text>
+        <Text> {skill_object.name}</Text>
         <FontAwesome style={[{ marginLeft: "auto" }]} name={expanded ? "chevron-up" : "chevron-down"} />
       </View>
       {expanded && <>
         <Divider />
-        <Text>{skill.description}</Text>
+        <Text>{skill_object.description}</Text>
       </>}
     </Pressable>
   );

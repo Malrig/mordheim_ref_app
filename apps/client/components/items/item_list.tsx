@@ -1,28 +1,32 @@
 
-import { Text } from "react-native";
 import * as React from 'react';
-import { AnyItem, Armour, ItemType, MiscItem } from "../../library/types/items";
+import { ItemType } from "../../library/types/items";
 import WeaponListItem from "./weapons/list_item";
 import OtherItemListItem from "./other_items/list_item";
 
 type Props = {
-  item: AnyItem
+  item: {
+    id: string,
+    item_type: string,
+  }
 }
 
 function ensureExhaustive(p: never): never;
-function ensureExhaustive(p: AnyItem) {
-  throw new Error('Unknown item type: ' + p.item_type);
+function ensureExhaustive(p: ItemType) {
+  throw new Error('Unknown item type: ' + p);
 }
 
 export default function ItemListItem({ item }: Props) {
-  switch (item.item_type) {
+  const itemTypeAsEnum = item.item_type as unknown as ItemType;
+
+  switch (itemTypeAsEnum) {
     case ItemType.Weapon:
       return <WeaponListItem weapon={item} />;
     case ItemType.Armour:
-      return <OtherItemListItem item={item as Armour} />;
+      return <OtherItemListItem item={item} />;
     case ItemType.MiscItem:
-      return <OtherItemListItem item={item as MiscItem} />;
+      return <OtherItemListItem item={item} />;
     default:
-      ensureExhaustive(item);
+      ensureExhaustive(itemTypeAsEnum);
   };
 }

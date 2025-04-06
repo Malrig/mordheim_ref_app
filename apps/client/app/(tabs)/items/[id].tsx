@@ -1,7 +1,7 @@
 import { Text, View, StyleSheet } from "react-native";
 import { useLocalSearchParams } from 'expo-router';
 import { ItemType } from "../../../library/types/items";
-import { Item } from "../../../library/tinybase_store/objects/item";
+import { Item } from "../../../library/stores/data/objects/item";
 import React from "react";
 
 export function ItemDetail({ item }: { item: Item }) {

@@ -1,6 +1,6 @@
 import { useRemoteRowId } from '../ui';
 import { useRow } from '../ui';
-
+import { DATA_STORE_ID, DataStoreRelationships } from '../store';
 /**
  * Represents a special rule in the TinyBase store
  */
@@ -27,8 +27,8 @@ export class SpecialRule {
    * @returns The metadata object or undefined if not found
    */
   useMetadata(): Record<string, any> | undefined {
-    const metadata = useRemoteRowId('specialRulesMetadata', this.id);
-    const metadata_info = metadata && useRow('metadata', metadata) || undefined;
+    const metadata = useRemoteRowId('specialRulesMetadata', this.id, DataStoreRelationships());
+    const metadata_info = metadata && useRow('metadata', metadata, DATA_STORE_ID) || undefined;
     return metadata_info;
   }
 
@@ -50,6 +50,6 @@ export class SpecialRule {
    * @returns A SpecialRule instance
    */
   static useInstance(id: string): SpecialRule {
-    return SpecialRule.fromRow(useRow(SpecialRule.TABLE_NAME, id));
+    return SpecialRule.fromRow(useRow(SpecialRule.TABLE_NAME, id, DATA_STORE_ID));
   }
 } 

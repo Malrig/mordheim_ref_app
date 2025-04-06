@@ -4,9 +4,9 @@ import * as React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Divider from "../../../components/general/divider";
 import ColonText from "../../general/colon_text";
-import { Item } from "../../../library/tinybase_store/objects/item";
-import { useSetPartialRowCallback } from "../../../library/tinybase_store/ui";
-
+import { Item } from "../../../library/stores/data/objects/item";
+import { useSetPartialRowCallback } from "../../../library/stores/data/ui";
+import { DATA_STORE_ID } from "@/library/stores/data/store";
 type Props = {
   weapon: { id: string }
 }
@@ -21,7 +21,9 @@ export default function WeaponListItem({ weapon }: Props) {
   const onFavouritePress = useSetPartialRowCallback(
     'metadata',
     metadata_info?.table_name_id || '',
-    (favourite: boolean) => ({ favourite: favourite })
+    (favourite: boolean) => ({ favourite: favourite }),
+    undefined,
+    DATA_STORE_ID,
   );
 
   return (

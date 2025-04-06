@@ -1,10 +1,10 @@
 import { Content } from "tinybase/store/with-schemas";
-import { ItemType, WeaponType } from "../types/items";
+import { ItemType, WeaponType } from "../../types/items";
 import { TablesSchema, ValuesSchema } from "./schema";
-import { Metadata, SourceStatus } from "../types/metadata";
-import { initialArmourState, initialMiscItemState } from "../data/items";
-import { initialWeaponState, initialSpecialRuleState } from "../data/weapons";
-import { initialSkillState } from "../data/skills";
+import { Metadata, SourceStatus } from "../../types/metadata";
+import { initialArmourState, initialMiscItemState } from "../../data/items";
+import { initialWeaponState, initialSpecialRuleState } from "../../data/weapons";
+import { initialSkillState } from "../../data/skills";
 
 const initialItems = [...initialArmourState, ...initialMiscItemState, ...initialWeaponState];
 

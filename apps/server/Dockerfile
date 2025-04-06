@@ -5,19 +5,12 @@ WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
-COPY apps/server/package*.json ./apps/server/
 
-# Install dependencies
-RUN npm install
+# Install production dependencies only
+RUN npm install --omit=dev
 
-# Copy source code
-COPY . .
-
-# Build the application
-RUN npm run build
-
-# Set the working directory to the server app
-WORKDIR /app/apps/server
+# Copy only the built files
+COPY dist ./dist
 
 # Expose the ports
 EXPOSE 8043 8044

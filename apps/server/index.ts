@@ -1,15 +1,50 @@
-import { createServer } from 'https';
+import { createServer, IncomingMessage } from 'http';
 import { createWsServer } from 'tinybase/synchronizers/synchronizer-ws-server';
-import { WebSocketServer } from 'ws';
+import { WebSocketServer, WebSocket } from 'ws';
 import { existsSync, mkdirSync, readFileSync } from 'fs';
-import { join } from 'path';
+import { createClient } from '@supabase/supabase-js';
 
 // Something like this if you want to save Store state on the server:
 import { createMergeableStore } from 'tinybase';
 import { createFilePersister } from 'tinybase/persisters/persister-file';
 
-const handle_error: (error: any) => void = (error) => {
-  console.error('Error:', error);
+// Initialize Supabase client
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY;
+if (!supabaseUrl || !supabaseServiceKey) {
+  throw new Error('Missing Supabase configuration. Please set SUPABASE_URL and SUPABASE_SERVICE_KEY environment variables.');
+}
+const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+async function checkAuth(request: IncomingMessage) {
+  const url = new URL(request.url || '', `http://${request.headers.host}`);
+  const token = url.searchParams.get('token');
+  console.log(`Auth attempt from ${request.socket.remoteAddress} with token: ${token ? 'present' : 'missing'}`);
+
+  if (!token) {
+    console.log('Auth failed: No token provided');
+    return false;
+  }
+
+  try {
+    const { data: { user }, error } = await supabase.auth.getUser(token);
+    
+    if (error) {
+      console.log(`Auth failed: ${error.message}, ${error.toString()}`);
+      return false;
+    }
+
+    if (!user) {
+      console.log('Auth failed: No user found for token');
+      return false;
+    }
+
+    console.log(`Auth succeeded for user: ${user.email}`);
+    return true;
+  } catch (error) {
+    console.log('Auth failed: Error validating token', error);
+    return false;
+  }
 }
 
 // Ensure data directory exists
@@ -19,76 +54,52 @@ if (!existsSync(dataDir)) {
   mkdirSync(dataDir);
 }
 
-// SSL configuration
-const sslDir = 'ssl';
-if (!existsSync(sslDir)) {
-  console.log('Creating SSL directory...');
-  mkdirSync(sslDir);
-}
+console.log('Starting WebSocket server on port 8043...');
+const wss = new WebSocketServer({
+  port: 8043,
+  verifyClient: async (info, callback) => {
+    console.log(`Verifying client connection from ${info.req.socket.remoteAddress}`);
+    const isAuthenticated = await checkAuth(info.req);
+    if (isAuthenticated) {
+      console.log(`Client ${info.req.socket.remoteAddress} verified successfully`);
+      callback(true);
+    } else {
+      console.log(`Client ${info.req.socket.remoteAddress} verification failed`);
+      callback(false, 401, 'Unauthorized');
+    }
+  }
+});
 
-const sslOptions = {
-  key: readFileSync(join(sslDir, 'private.key')),
-  cert: readFileSync(join(sslDir, 'certificate.crt')),
-};
+// Log on connection and disconnection
+wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
+  console.log(`New client connected from ${req.socket.remoteAddress}`);
 
-console.log('Starting secure WebSocket server on port 8043...');
-const httpsServer = createServer(sslOptions, (request, response) => {
-  if (request.url == '/metrics') {
-    console.log('Metrics endpoint queried');
+  ws.on('close', () => {
+    console.log(`Client disconnected from ${req.socket.remoteAddress}`);
+  });
+});
+
+const wsServer = createWsServer(
+  wss,
+  // Something like this if you want to save Store state on the server:
+  (pathId) => createFilePersister(
+    createMergeableStore(),
+    `${dataDir}/${pathId.replace(/[^a-zA-Z0-9]/g, '-')}.json`,
+  ),
+);
+console.log('WebSocket server started successfully');
+
+// -- Optional metrics handling hereon
+
+console.log('Starting HTTP server on port 8044...');
+createServer((request, response) => {
+  if (request.url == '/healthcheck') {
+    console.log('Healtcheck endpoint queried');
     response.writeHead(200);
-    response.write(`# HELP sub_domains The total number of sub-domains.\n`);
-    response.write(`# TYPE sub_domains gauge\n`);
-    response.write(`sub_domains 1\n`);
-
-    response.write(
-      `# HELP peak_paths The highest number of paths recently managed.\n`,
-    );
-    response.write(`# TYPE peak_paths gauge\n`);
-    response.write(`peak_paths ${stats.paths}\n`);
-
-    response.write(
-      `# HELP peak_clients The highest number of clients recently managed.\n`,
-    );
-    response.write(`# TYPE peak_clients gauge\n`);
-    response.write(`peak_clients ${stats.clients}\n`);
-
-    updatePeakStats(1);
+    response.write(`healthy`);
   } else {
     response.writeHead(404);
   }
   response.end();
-});
-
-const wsServer = createWsServer(
-  new WebSocketServer({
-    server: httpsServer,
-    path: '/ws'
-  }),
-  (pathId) => createFilePersister(
-    createMergeableStore(),
-    `${dataDir}/${pathId.replace(/[^a-zA-Z0-9]/g, '-')}.json`,
-    handle_error
-  ),
-);
-
-httpsServer.listen(8043, () => {
-  console.log('Secure WebSocket server started successfully on port 8043');
-});
-
-// -- Optional metrics handling hereon
-
-wsServer.addClientIdsListener(null, () => {
-  console.log('Client connections changed:', wsServer.getStats());
-  updatePeakStats();
-});
-const stats = { paths: 0, clients: 0 };
-
-const updatePeakStats = (reset = 0) => {
-  if (reset) {
-    stats.paths = 0;
-    stats.clients = 0;
-  }
-  const newStats = wsServer.getStats();
-  stats.paths = Math.max(stats.paths, newStats.paths ?? 0);
-  stats.clients = Math.max(stats.clients, newStats.clients ?? 0);
-};
+}).listen(8044);
+console.log('HTTP server started successfully');

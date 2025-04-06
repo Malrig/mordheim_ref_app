@@ -1,4 +1,4 @@
-import { SourceStatus } from '../types/metadata';
+import { SourceStatus } from '../../types/metadata';
 import { Store } from "tinybase/store/with-schemas";
 import { createIndexes, createQueries, createRelationships, Indexes, Queries, Relationships } from "tinybase/with-schemas";
 
@@ -62,7 +62,7 @@ const skill_schema = {
 // - Checking that the item_type is a valid ItemType
 
 export const TablesSchema = { ...metadata_schema, ...item_schema, ...special_rule_schema, ...skill_schema } as const;
-export const ValuesSchema = {};
+export const ValuesSchema = {} as const;
 
 export function createObjectStoreRelationships(store: Store<
   [typeof TablesSchema, typeof ValuesSchema]

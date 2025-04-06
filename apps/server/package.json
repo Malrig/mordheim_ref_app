@@ -5,11 +5,12 @@
   "license": "MIT",
   "scripts": {
     "dev": "ts-node index.ts",
-    "build": "tsc && docker build -t mordheim-server ."
+    "build": "tsc && docker build -t mordheim-server:dev ."
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.49.4",
     "tinybase": "^6.0.0",
-    "ws": "^8.18.1",
+    "ws": "^8.16.0",
     "yarn": "^1.22.22"
   },
   "devDependencies": {

@@ -5,9 +5,10 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 // import { Divider, List } from "react-native-paper";
 
 import RichText from "../../../components/general/markdown_text";
-import { Item } from "../../../library/tinybase_store/objects/item";
-import { useSetPartialRowCallback } from "../../../library/tinybase_store/ui";
+import { Item } from "../../../library/stores/data/objects/item";
+import { useSetPartialRowCallback } from "../../../library/stores/data/ui";
 import Divider from "../../../components/general/divider";
+import { DATA_STORE_ID } from "@/library/stores/data/store";
 
 interface Props {
   item: { id: string }
@@ -21,7 +22,9 @@ export default function OtherItemListItem({ item }: Props) {
   const onFavouritePress = useSetPartialRowCallback(
     'metadata',
     metadata_info?.table_name_id || '',
-    (favourite: boolean) => ({ favourite: favourite })
+    (favourite: boolean) => ({ favourite: favourite }),
+    undefined,
+    DATA_STORE_ID,
   );
 
   return (

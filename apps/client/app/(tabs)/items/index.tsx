@@ -3,17 +3,21 @@ import { ItemType, WeaponType } from "../../../library/types/items";
 import { Item as ItemInterface, Armour, MiscItem } from "../../../library/types/items";
 import React, { useState, useRef, useMemo } from "react";
 import { SectionList, Text, View, Pressable, ViewToken, FlatList, StyleSheet } from "react-native";
-import { useSetPartialRowCallback, useResultRowIds, useResultTable } from "../../../library/tinybase_store/ui";
+import { createQueries } from "tinybase/with-schemas";
+
+import { useSetPartialRowCallback, useResultRowIds, useResultTable, useStore } from "../../../library/stores/data/ui";
 
 import ItemListItem from "../../../components/items/item_list";
 import SectionedItemList from "../../../components/items/sectioned_item_list";
+import { DataStoreQueries } from "@/library/stores/data/store";
 
 export default function BrowseItems() {
   const [searchedType, setSearchedType] = useState<ItemType | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
   // Get the result table from the query
-  const resultTable = useResultTable('filterable_items');
+  const resultTable = useResultTable('filterable_items', DataStoreQueries());
+  console.log(resultTable);
 
   // Filter items based on search query and type
   const filteredItems = useMemo(() => {
@@ -44,11 +48,6 @@ export default function BrowseItems() {
       return matchesSearch && matchesType;
     });
   }, [resultTable, searchQuery, searchedType]);
-
-  // Render each item in the FlatList
-  const renderItem = ({ item }: { item: { id: string, name: string, item_type: string } }) => {
-    return <ItemListItem item={item} />;
-  };
 
   return (
     <View style={styles.container}>

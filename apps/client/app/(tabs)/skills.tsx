@@ -4,7 +4,7 @@ import * as React from 'react';
 // import { Divider, List } from "react-native-paper";
 
 import SkillListItem from "../../components/skills/list_item"
-import { useRowIds } from "../../library/tinybase_store/ui";
+import { useRowIds } from "../../library/stores/data/ui";
 import { Id } from "tinybase/with-schemas";
 // What does this page do?
 // - Display all the skills we have in the campaign

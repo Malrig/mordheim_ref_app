@@ -5,8 +5,8 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Divider from '../general/divider';
 import { Id } from "tinybase/with-schemas";
 
-import { Skill } from "../../library/tinybase_store/objects/skill";
-import { useSetPartialRowCallback } from "../../library/tinybase_store/ui";
+import { Skill } from "../../library/stores/data/objects/skill";
+import { useSetPartialRowCallback } from "../../library/stores/data/ui";
 type Props = {
   skill: Id
 }

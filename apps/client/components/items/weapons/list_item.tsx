@@ -6,7 +6,8 @@ import Divider from "../../../components/general/divider";
 import ColonText from "../../general/colon_text";
 import { Item } from "../../../library/stores/data/objects/item";
 import { useSetPartialRowCallback } from "../../../library/stores/data/ui";
-import { DATA_STORE_ID } from "@/library/stores/data/store";
+import { DATA_STORE } from "mordheim-common";
+
 type Props = {
   weapon: { id: string }
 }
@@ -23,7 +24,7 @@ export default function WeaponListItem({ weapon }: Props) {
     metadata_info?.table_name_id || '',
     (favourite: boolean) => ({ favourite: favourite }),
     undefined,
-    DATA_STORE_ID,
+    DATA_STORE,
   );
 
   return (

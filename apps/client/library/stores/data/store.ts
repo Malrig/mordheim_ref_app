@@ -15,20 +15,20 @@ import { createWsSynchronizer } from "tinybase/synchronizers/synchronizer-ws-cli
 import { InitialData } from "./initial_data";
 import { createLocalPersister } from "tinybase/persisters/persister-browser/with-schemas";
 
-export const DATA_STORE_ID = "data_store";
+import { DATA_STORE } from "mordheim-common";
 
 export const DataStore = () => {
   const dataStore: MergeableStore<[typeof TablesSchema, typeof ValuesSchema]> = useCreateMergeableStore(
     () => createMergeableStore().setTablesSchema(TablesSchema).setValuesSchema(ValuesSchema) as MergeableStore<[typeof TablesSchema, typeof ValuesSchema]>
   );
-  useProvideStore(DATA_STORE_ID, dataStore);
+  useProvideStore(DATA_STORE, dataStore);
 
   const wsUrl = process.env.EXPO_PUBLIC_WS_URL;
   useCreatePersister(
     dataStore,
     (store) => {
       // return createIndexedDbPersister(store, "new");
-      return createLocalPersister(store, "data_store");
+      return createLocalPersister(store, DATA_STORE);
     },
     [],
     async (persister) => {
@@ -37,8 +37,9 @@ export const DataStore = () => {
     }
   );
   useCreateSynchronizer(dataStore, async (store) => {
-    const token = process.env.EXPO_PUBLIC_WS_TOKEN || '';
-    const ws = new ReconnectingWebSocket(`${wsUrl}data_store?token=${token}`, [], { debug: false });
+    const token = "...";
+    //process.env.EXPO_PUBLIC_WS_TOKEN || '';
+    const ws = new ReconnectingWebSocket(`${wsUrl}${DATA_STORE}?token=${token}`, [], { debug: false });
     const synchronizer = await createWsSynchronizer(
       store,
       ws,
@@ -69,11 +70,11 @@ export const DataStore = () => {
 }
 
 export const DataStoreQueries = () => {
-  return createQueries(useStore("data_store")!);
+  return createQueries(useStore(DATA_STORE)!);
 }
 export const DataStoreIndexes = () => {
-  return createIndexes(useStore("data_store")!);
+  return createIndexes(useStore(DATA_STORE)!);
 }
 export const DataStoreRelationships = () => {
-  return createRelationships(useStore("data_store")!);
+  return createRelationships(useStore(DATA_STORE)!);
 }

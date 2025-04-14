@@ -1,4 +1,5 @@
 import { AppState } from 'react-native'
+import { jwtDecode } from 'jwt-decode'
 import 'react-native-url-polyfill/auto'
 // import AsyncStorage from '@react-native-async-storage/async-storage'
 import { createClient } from '@supabase/supabase-js'
@@ -13,7 +14,19 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     persistSession: true,
     detectSessionInUrl: false,
   },
+});
+
+supabase.auth.onAuthStateChange(async (event, session) => {
+  if (session) {
+    const jwt = jwtDecode(session.access_token)
+    const userRole = jwt.user_role
+    console.log(`Role: ${userRole}`)
+    console.log(`Claims: ${jwt.permissions}`)
+    console.log(`Test: ${JSON.stringify(jwt)}`)
+  }
 })
+
+
 
 // Tells Supabase Auth to continuously refresh the session automatically
 // if the app is in the foreground. When this is added, you will continue

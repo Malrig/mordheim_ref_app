@@ -1,6 +1,7 @@
 import { useRemoteRowId } from '../ui';
 import { useRow } from '../ui';
-import { DATA_STORE_ID, DataStoreRelationships } from '../store';
+import { DataStoreRelationships } from '../store';
+import { DATA_STORE } from 'mordheim-common';
 /**
  * Represents a skill in the TinyBase store
  */
@@ -31,7 +32,7 @@ export class Skill {
    */
   useMetadata(): Record<string, any> | undefined {
     const metadata = useRemoteRowId('skillsMetadata', this.id, DataStoreRelationships());
-    const metadata_info = metadata && useRow('metadata', metadata, DATA_STORE_ID) || undefined;
+    const metadata_info = metadata && useRow('metadata', metadata, DATA_STORE) || undefined;
     return metadata_info;
   }
 
@@ -54,6 +55,6 @@ export class Skill {
    * @returns A Skill instance
    */
   static useInstance(id: string): Skill {
-    return Skill.fromRow(useRow(Skill.TABLE_NAME, id, DATA_STORE_ID));
+    return Skill.fromRow(useRow(Skill.TABLE_NAME, id, DATA_STORE));
   }
 } 

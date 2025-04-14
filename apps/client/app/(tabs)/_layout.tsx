@@ -2,6 +2,7 @@ import { Text, View, Pressable, TextInput, Image } from "react-native";
 import { Stack, Tabs } from "expo-router";
 import { PaperProvider } from 'react-native-paper';
 import { Button } from "react-native-paper";
+import { jwtDecode } from 'jwt-decode'
 import React from "react";
 import { supabase } from '@/library/supabase';
 import { Session } from '@supabase/supabase-js'

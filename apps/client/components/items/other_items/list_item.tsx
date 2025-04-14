@@ -8,7 +8,7 @@ import RichText from "../../../components/general/markdown_text";
 import { Item } from "../../../library/stores/data/objects/item";
 import { useSetPartialRowCallback } from "../../../library/stores/data/ui";
 import Divider from "../../../components/general/divider";
-import { DATA_STORE_ID } from "@/library/stores/data/store";
+import { DATA_STORE } from "mordheim-common";
 
 interface Props {
   item: { id: string }
@@ -24,7 +24,7 @@ export default function OtherItemListItem({ item }: Props) {
     metadata_info?.table_name_id || '',
     (favourite: boolean) => ({ favourite: favourite }),
     undefined,
-    DATA_STORE_ID,
+    DATA_STORE,
   );
 
   return (

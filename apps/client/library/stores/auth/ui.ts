@@ -39,4 +39,6 @@ export const {
   useCreateMergeableStore,
   useProvideStore,
   useStore,
+  useValuesListener,
+  useValueListener,
 } = UiReactWithSchemas;

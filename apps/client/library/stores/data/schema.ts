@@ -1,6 +1,6 @@
 import { SourceStatus } from '../../types/metadata';
 import { Store } from "tinybase/store/with-schemas";
-import { createIndexes, createQueries, createRelationships, Indexes, Queries, Relationships } from "tinybase/with-schemas";
+import { createIndexes, createQueries, createRelationships, Indexes, MergeableStore, Queries, Relationships } from "tinybase/with-schemas";
 
 const metadata_schema = {
   metadata: {
@@ -134,3 +134,5 @@ export function createObjectStoreQueries(store: Store<
 
   return store_queries;
 }
+
+export type DataStoreType = MergeableStore<[typeof TablesSchema, typeof ValuesSchema]>;

@@ -2,7 +2,7 @@ import { AppState } from 'react-native'
 import { jwtDecode } from 'jwt-decode'
 import 'react-native-url-polyfill/auto'
 // import AsyncStorage from '@react-native-async-storage/async-storage'
-import { createClient } from '@supabase/supabase-js'
+import { createClient, Session } from '@supabase/supabase-js'
 
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL
 const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY
@@ -16,18 +16,21 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   },
 });
 
-supabase.auth.onAuthStateChange(async (event, session) => {
-  if (session) {
-    const jwt = jwtDecode(session.access_token)
-    const userRole = jwt.user_role
-    console.log(`Role: ${userRole}`)
-    console.log(`Claims: ${jwt.permissions}`)
-    console.log(`Test: ${JSON.stringify(jwt)}`)
-  }
-  else {
-    console.log('User is signed out')
-  }
-})
+interface CustomJwtPayload {
+  user_role: string;
+  permissions: string[];
+  [key: string]: any;
+}
+
+export function getUserRoleAndPermissions(session: Session) {
+  const jwt = jwtDecode<CustomJwtPayload>(session.access_token);
+  const userRole: string = jwt.user_role;
+  const permissions: Record<string, { permission_name: string }> = {};
+  jwt.permissions.forEach(permission => {
+    permissions[permission] = { permission_name: permission };
+  });
+  return { userRole, permissions };
+}
 
 // Tells Supabase Auth to continuously refresh the session automatically
 // if the app is in the foreground. When this is added, you will continue

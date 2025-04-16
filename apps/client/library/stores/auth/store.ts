@@ -1,4 +1,4 @@
-import { createIndexes, createMergeableStore, createRelationships, createQueries, MergeableStore } from "tinybase/with-schemas"
+import { createIndexes, createMergeableStore, createRelationships, createQueries, MergeableStore, createStore } from "tinybase/with-schemas"
 import {
   useProvideStore,
   useCreatePersister,
@@ -6,20 +6,19 @@ import {
   useCreateIndexes,
   useCreateRelationships,
   useCreateQueries,
-  useCreateSynchronizer,
   useStore,
+  useCreateStore,
 } from "./ui"
-import { createObjectStoreIndexes, createObjectStoreRelationships, createObjectStoreQueries, TablesSchema, ValuesSchema } from "./schema"
-import ReconnectingWebSocket from "reconnecting-websocket";
-import { createWsSynchronizer } from "tinybase/synchronizers/synchronizer-ws-client/with-schemas";
-import { InitialData } from "./initial_data";
+import { createObjectStoreIndexes, createObjectStoreRelationships, createObjectStoreQueries, TablesSchema, ValuesSchema, AuthStoreType } from "./schema"
+import { supabase, getUserRoleAndPermissions } from "../../supabase";
 import { createLocalPersister } from "tinybase/persisters/persister-browser/with-schemas";
+import { InitialData } from "./initial_data";
 
 export const STORE_NAME = "auth-store";
 
 export const AuthStore = () => {
-  const authStore: MergeableStore<[typeof TablesSchema, typeof ValuesSchema]> = useCreateMergeableStore(
-    () => createMergeableStore().setTablesSchema(TablesSchema).setValuesSchema(ValuesSchema) as MergeableStore<[typeof TablesSchema, typeof ValuesSchema]>
+  const authStore: AuthStoreType = useCreateStore(
+    () => createStore().setTablesSchema(TablesSchema).setValuesSchema(ValuesSchema) as AuthStoreType
   );
   useProvideStore(STORE_NAME, authStore);
 
@@ -43,6 +42,27 @@ export const AuthStore = () => {
   });
   useCreateQueries(authStore, (store) => {
     return createObjectStoreQueries(store);
+  });
+
+  supabase.auth.onAuthStateChange((event, session) => {
+    if (session) {
+      console.log(`User signed in: ${session.user.email}`);
+      authStore.setValue('email', session.user.email || '');
+      authStore.setValue('access_token', session.access_token || '');
+      const { userRole, permissions } = getUserRoleAndPermissions(session);
+
+      console.log(`User role: ${userRole}`);
+      console.log(`User permissions: ${JSON.stringify(permissions)}`);
+      authStore.setValue('user_role', userRole);
+      authStore.setTable('permissions', permissions);
+    }
+    else {
+      console.log('User signed out');
+      authStore.setValue('email', '');
+      authStore.setValue('access_token', '');
+      authStore.setValue('user_role', '');
+      authStore.setTable('permissions', {});
+    }
   });
 
   return null;

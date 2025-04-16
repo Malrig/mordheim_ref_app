@@ -10,6 +10,7 @@
     "supabase": "supabase start",
     "build-server": "docker build -f ./Server.Dockerfile -t mordheim-server:dev .",
     "dev-server": "docker compose up -d",
-    "dev-client": "yarn workspace client expo start"
+    "dev-client": "yarn workspace client expo start",
+    "stop": "supabase stop && docker compose down"
   }
 }

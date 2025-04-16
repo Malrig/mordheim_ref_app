@@ -29,7 +29,7 @@ export const {
   RowProps,
   useLocalRowIds,
   useRemoteRowId,
-  useDelRowCallback,  
+  useDelRowCallback,
   useResultRowIds,
   useResultRow,
   useCreateQueries,
@@ -37,4 +37,6 @@ export const {
   useResultTable,
   useCreateSynchronizer,
   useCreateMergeableStore,
+  useProvideStore,
+  useStore,
 } = UiReactWithSchemas;

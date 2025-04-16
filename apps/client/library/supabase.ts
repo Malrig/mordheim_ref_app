@@ -24,9 +24,10 @@ supabase.auth.onAuthStateChange(async (event, session) => {
     console.log(`Claims: ${jwt.permissions}`)
     console.log(`Test: ${JSON.stringify(jwt)}`)
   }
+  else {
+    console.log('User is signed out')
+  }
 })
-
-
 
 // Tells Supabase Auth to continuously refresh the session automatically
 // if the app is in the foreground. When this is added, you will continue

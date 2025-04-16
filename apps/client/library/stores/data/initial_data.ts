@@ -81,5 +81,3 @@ export const InitialData: Content<[typeof TablesSchema, typeof ValuesSchema]> = 
   InitialTableData,
   InitialValueData
 ];
-
-export { InitialTableData };

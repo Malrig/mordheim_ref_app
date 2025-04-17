@@ -12,6 +12,7 @@ export const ValuesSchema = {
   email: {type: "string", default: ""},
   access_token: {type: "string", default: ""},
   user_role: {type: "string", default: ""},
+  user_id: {type: "string", default: ""},
 } as const;
 
 export function createObjectStoreRelationships(store: Store<
@@ -40,7 +41,7 @@ export function createObjectStoreQueries(store: Store<
   [typeof TablesSchema, typeof ValuesSchema]
 > {
   const store_queries = createQueries(store);
-  
+
   return store_queries;
 }
 

@@ -46,7 +46,8 @@ export const AuthStore = () => {
 
   supabase.auth.onAuthStateChange((event, session) => {
     if (session) {
-      console.log(`User signed in: ${session.user.email}`);
+      console.log(`User signed in: ${session.user.email}, ${session.user.id}`);
+      authStore.setValue('user_id', session.user.id || '');
       authStore.setValue('email', session.user.email || '');
       authStore.setValue('access_token', session.access_token || '');
       const { userRole, permissions } = getUserRoleAndPermissions(session);
@@ -58,6 +59,7 @@ export const AuthStore = () => {
     }
     else {
       console.log('User signed out');
+      authStore.setValue('user_id', '');  
       authStore.setValue('email', '');
       authStore.setValue('access_token', '');
       authStore.setValue('user_role', '');

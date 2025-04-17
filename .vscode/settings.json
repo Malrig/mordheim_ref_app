@@ -31,5 +31,6 @@
     "fs",
     "http",
     "net"
-  ]
+],
+"editor.tabSize": 2
 }

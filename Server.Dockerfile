@@ -6,10 +6,13 @@ WORKDIR /build
 # Copy root package files
 COPY package.json .
 COPY yarn.lock .
-COPY packages/mordheim-common ./packages/mordheim-common
-COPY apps/server ./apps/server
+COPY apps/server/package.json ./apps/server/
+COPY packages/mordheim-common/package.json ./packages/mordheim-common/
 
 RUN yarn install --pure-lockfile --non-interactive
+
+COPY apps/server ./apps/server
+COPY packages/mordheim-common ./packages/mordheim-common
 
 WORKDIR /build/packages/mordheim-common
 RUN yarn build
@@ -38,4 +41,4 @@ ENV NODE_ENV production
 
 WORKDIR /app
 
-CMD ["node", "dist/index.js"] 
+CMD ["node", "dist/index.js"]

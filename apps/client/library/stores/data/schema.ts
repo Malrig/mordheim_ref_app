@@ -4,7 +4,7 @@ import { createIndexes, createQueries, createRelationships, Indexes, MergeableSt
 
 const metadata_schema = {
   metadata: {
-    // Metadata belongs to any object on any table, so ID needs to contain both the table 
+    // Metadata belongs to any object on any table, so ID needs to contain both the table
     // name and the object ID. Should be {table_name}_{object_id}.
     table_name_id: { type: 'string' },
     favourite: { type: 'boolean', default: false },

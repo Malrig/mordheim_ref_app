@@ -9,7 +9,6 @@ function QuickSkill(id: string, name: string, description: string, group: string
     name: name,
     description: description,
     group: group,
-    favourite: false,
     source: "",
     source_type: SourceStatus.Unknown,
   };

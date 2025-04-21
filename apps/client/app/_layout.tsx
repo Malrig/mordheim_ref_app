@@ -10,7 +10,7 @@ export default function RootLayout() {
     <Provider>
       <AuthStore />
       <DataStore />
-      <UserStore/>
+      <UserStore />
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />

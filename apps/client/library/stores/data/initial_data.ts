@@ -25,7 +25,6 @@ const initialItemEntries = initialItems.map((item) => {
 const itemMetadataEntries = initialItems.map((item: Metadata) => {
   return {
     table_name_id: `items_${item.id}`,
-    favourite: item.favourite || false,
     source: item.source || '',
     source_type: (item.source_type || SourceStatus.Unknown).toString(),
   };
@@ -50,7 +49,6 @@ const initialSkillEntries = initialSkillState.map((skill) => {
 const skillMetadataEntries = initialSkillState.map((skill: Metadata) => {
   return {
     table_name_id: `skills_${skill.id}`,
-    favourite: skill.favourite || false,
     source: skill.source || '',
     source_type: (skill.source_type || SourceStatus.Unknown).toString(),
   };

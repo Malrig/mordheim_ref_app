@@ -36,6 +36,12 @@ export function createObjectStoreIndexes(store: Store<
     "favourites",
     "object_table",
   );
+  // Objects need to be able to search for their entry easily.
+  store_indexes.setIndexDefinition(
+    "by_object_table_and_id",
+    "favourites",
+    (getCell) => `${getCell("object_table")}_${getCell('object_id')}`,
+  );
 
   return store_indexes;
 }

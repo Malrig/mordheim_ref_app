@@ -1,14 +1,12 @@
 import { Text, View, FlatList, Pressable, StyleSheet } from "react-native";
-import { Link } from 'expo-router';
 import * as React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 // import { Divider, List } from "react-native-paper";
 
 import RichText from "../../../components/general/markdown_text";
 import { Item } from "../../../library/stores/data/objects/item";
-import { useSetPartialRowCallback } from "../../../library/stores/data/ui";
 import Divider from "../../../components/general/divider";
-import { DATA_STORE } from "mordheim-common";
+import { toggleFavouriteCallback } from "@/library/stores/user/utils/favourites";
 
 interface Props {
   item: { id: string }
@@ -19,19 +17,15 @@ export default function OtherItemListItem({ item }: Props) {
 
   const item_object = Item.useInstance(item.id);
   const metadata_info = item_object.useMetadata();
-  const onFavouritePress = useSetPartialRowCallback(
-    'metadata',
-    metadata_info?.table_name_id || '',
-    (favourite: boolean) => ({ favourite: favourite }),
-    undefined,
-    DATA_STORE,
-  );
+  const isFavourite = item_object.useFavourite();
+
+  const setFavouriteCb = toggleFavouriteCallback(Item.TABLE_NAME, item_object.id);
 
   return (
     <Pressable style={styles.item} onPress={() => setExpanded(!expanded)}>
       <View style={styles.header}>
-        <Pressable onPress={() => onFavouritePress(!metadata_info?.favourite)}>
-          <FontAwesome name={metadata_info?.favourite ? "heart" : "heart-o"} />
+        <Pressable onPress={() => {console.log("Pressed"); setFavouriteCb()}}>
+          <FontAwesome name={isFavourite ? "heart" : "heart-o"} />
         </Pressable>
         <Text> {item_object.name}</Text>
         <FontAwesome style={[{ marginLeft: "auto" }]} name={expanded ? "chevron-up" : "chevron-down"} />

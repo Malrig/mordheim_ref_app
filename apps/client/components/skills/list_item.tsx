@@ -1,12 +1,12 @@
 import { Text, View, FlatList, Pressable, StyleSheet } from "react-native";
-import { Link } from 'expo-router';
 import * as React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Divider from '../general/divider';
 import { Id } from "tinybase/with-schemas";
 
 import { Skill } from "../../library/stores/data/objects/skill";
-import { useSetPartialRowCallback } from "../../library/stores/data/ui";
+import { toggleFavouriteCallback } from "@/library/stores/user/utils/favourites";
+
 type Props = {
   skill: Id
 }
@@ -16,19 +16,17 @@ export default function SkillListItem({ skill }: Props) {
 
   const skill_object = Skill.useInstance(skill);
   const metadata_info = skill_object.useMetadata();
+  const isFavourite = skill_object.useFavourite();
   console.log(metadata_info);
 
-  const onFavouritePress = useSetPartialRowCallback(
-    'metadata',
-    metadata_info?.table_name_id || '',
-    (favourite: boolean) => ({ favourite: favourite })
-  );
+  const setFavouriteCb = toggleFavouriteCallback(Skill.TABLE_NAME, skill_object.id);
+
 
   return (
     <Pressable style={styles.item} onPress={() => setExpanded(!expanded)}>
       <View style={styles.header}>
-        <Pressable onPress={() => onFavouritePress(!metadata_info?.favourite)}>
-          <FontAwesome name={metadata_info?.favourite ? "heart" : "heart-o"} />
+        <Pressable onPress={() => {console.log("Pressed"); setFavouriteCb()}}>
+          <FontAwesome name={isFavourite ? "heart" : "heart-o"} />
         </Pressable>
         <Text> {skill_object.name}</Text>
         <FontAwesome style={[{ marginLeft: "auto" }]} name={expanded ? "chevron-up" : "chevron-down"} />

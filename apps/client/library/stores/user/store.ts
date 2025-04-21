@@ -20,14 +20,13 @@ import { useValue as authUseValue } from "../auth/ui";
 import { STORE_NAME as AUTH_STORE_NAME } from "../auth/store";
 
 export const UserStore = () => {
+  const user_id = authUseValue('user_id', AUTH_STORE_NAME);
+  const token = authUseValue('access_token', AUTH_STORE_NAME);
+  const wsUrl = process.env.EXPO_PUBLIC_WS_URL;
+
   const userStore: UserStoreType = useCreateMergeableStore(
     () => createMergeableStore().setTablesSchema(TablesSchema).setValuesSchema(ValuesSchema) as UserStoreType
   );
-
-  const wsUrl = process.env.EXPO_PUBLIC_WS_URL;
-
-  const user_id = authUseValue('user_id', AUTH_STORE_NAME);
-  const token = authUseValue('access_token', AUTH_STORE_NAME);
 
   useProvideStore(userStoreName(user_id), userStore);
 
@@ -35,6 +34,9 @@ export const UserStore = () => {
   useCreatePersister(
     userStore,
     (store) => {
+      if (user_id === undefined || user_id === "") {
+        return undefined;
+      }
       return createLocalPersister(store, userStoreName(user_id));
     },
     [user_id],
@@ -47,7 +49,7 @@ export const UserStore = () => {
   useCreateSynchronizer(
     userStore,
     async (store) => {
-      if (token) {
+      if (token && user_id) {
         console.log("Recreating synchronizer");
         const ws = new ReconnectingWebSocket(`${wsUrl}${userStoreName(user_id)}?token=${token}`, [], { debug: false });
         const synchronizer = await createWsSynchronizer(
@@ -71,10 +73,13 @@ export const UserStore = () => {
     [token, user_id]
   );
 
-  useCreateIndexes(userStore, (store) => {
-    return createObjectStoreIndexes(store)
-  },
-[user_id]);
+  useCreateIndexes(
+    userStore,
+    (store) => {
+      return createObjectStoreIndexes(store)
+    },
+    [user_id],
+  );
   useCreateRelationships(userStore, (store) => {
     return createObjectStoreRelationships(store);
   });
@@ -87,14 +92,41 @@ export const UserStore = () => {
 }
 
 export const UserStoreQueries = () => {
-  const user_id = authUseValue('user_id', AUTH_STORE_NAME);
-  return createQueries(useStore(userStoreName(user_id))!);
+  const store = useStore(useUserStoreId())
+  if (store === undefined) {
+    return undefined;
+  }
+  return createQueries(store);
 }
 export const UserStoreIndexes = () => {
-  const user_id = authUseValue('user_id', AUTH_STORE_NAME);
-  return createIndexes(useStore(userStoreName(user_id))!);
+  const store = useStore(useUserStoreId())
+  if (store === undefined) {
+    return undefined;
+  }
+  return createIndexes(store);
 }
-export const DataUserStoreRelationships = () => {
+export const UserStoreRelationships = () => {
+  const store = useStore(useUserStoreId());
+  if (store === undefined) {
+    return undefined;
+  }
+  return createRelationships(store);
+}
+export const useUserStoreId = () => {
   const user_id = authUseValue('user_id', AUTH_STORE_NAME);
-  return createRelationships(useStore(userStoreName(user_id))!);
+  if (user_id) {
+    return userStoreName(user_id);
+  }
+  else {
+    return undefined;
+  }
+}
+export const useUserStore = () => {
+  const user_id = authUseValue('user_id', AUTH_STORE_NAME);
+  if (user_id) {
+    return useStore(userStoreName(user_id));
+  }
+  else {
+    return undefined;
+  }
 }

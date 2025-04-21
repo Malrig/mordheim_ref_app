@@ -1,9 +1,10 @@
 import { ItemType, WeaponType } from '../../../types/items';
 import { SpecialRule } from './special_rule';
-import { useRemoteRowId } from '..//ui';
-import { useRow } from '../ui';
+import { useRow, useRemoteRowId } from '../ui';
 import { DataStoreRelationships } from '../store';
 import { DATA_STORE } from 'mordheim-common';
+import { useIsFavourite } from '../../user/utils/favourites';
+
 /**
  * Represents a single item in the TinyBase store
  */
@@ -115,6 +116,10 @@ export class Item {
     return special_rules;
   }
 
+  useFavourite(): boolean {
+    return useIsFavourite(Item.TABLE_NAME, this.id);
+  }
+
   /**
    * Creates a new Item from a TinyBase row
    * @param row The row data from TinyBase
@@ -137,4 +142,4 @@ export class Item {
   static useInstance(id: string): Item {
     return Item.fromRow(useRow(Item.TABLE_NAME, id, DATA_STORE));
   }
-} 
+}

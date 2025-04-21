@@ -2,6 +2,8 @@ import { useRemoteRowId } from '../ui';
 import { useRow } from '../ui';
 import { DataStoreRelationships } from '../store';
 import { DATA_STORE } from 'mordheim-common';
+import { useIsFavourite } from '../../user/utils/favourites';
+
 /**
  * Represents a skill in the TinyBase store
  */
@@ -36,6 +38,10 @@ export class Skill {
     return metadata_info;
   }
 
+  useFavourite(): boolean {
+    return useIsFavourite(Skill.TABLE_NAME, this.id);
+  }
+
   /**
    * Creates a new Skill from a TinyBase row
    * @param row The row data from TinyBase
@@ -57,4 +63,4 @@ export class Skill {
   static useInstance(id: string): Skill {
     return Skill.fromRow(useRow(Skill.TABLE_NAME, id, DATA_STORE));
   }
-} 
+}

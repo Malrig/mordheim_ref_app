@@ -7,7 +7,13 @@ const permissions_schema = {
   }
 } as const;
 
-export const TablesSchema = { ...permissions_schema } as const;
+const user_specific_stores_schema = {
+  user_specific_stores: {
+    store_name: {type: 'string'}
+  }
+} as const;
+
+export const TablesSchema = { ...permissions_schema, ...user_specific_stores_schema } as const;
 export const ValuesSchema = {
   email: {type: "string", default: ""},
   access_token: {type: "string", default: ""},

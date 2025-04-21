@@ -12,7 +12,6 @@ const addFavouriteCallback = (object_table: string, object_id: string) => {
   const userStore = useUserStore();
 
   const addRow = userStore ? (object_table: string, object_id: string) => {
-    console.log("Setting row");
     userStore.setRow("favourites", `${object_table}_${object_id}`, {
       object_table: object_table,
       object_id: object_id,
@@ -20,9 +19,7 @@ const addFavouriteCallback = (object_table: string, object_id: string) => {
   } : () => {console.log("No user store id")};
 
   return useCallback(() => {
-    console.log("In callback");
     addRow(object_table, object_id);
-    console.log("Finished callback");
   }, [addRow, object_table, object_id]);
 }
 
@@ -30,14 +27,11 @@ const removeFavouriteCallback = (object_table: string, object_id: string) => {
   const userStore = useUserStore();
 
   const removeRow = userStore ? (object_table: string, object_id: string) => {
-    console.log("Setting row");
     userStore.delRow("favourites", `${object_table}_${object_id}`);
   } : () => {console.log("No user store id")};
 
   return useCallback(() => {
-    console.log("In callback");
     removeRow(object_table, object_id);
-    console.log("Finished callback");
   }, [removeRow, object_table, object_id]);
 }
 

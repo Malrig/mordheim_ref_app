@@ -71,7 +71,7 @@ docker save mordheim-server -o mordheim-server.tgz
 
 ```
 supabase up
-npx yarn workspace server build 
+npx yarn workspace server build
 npx yarn dev-server
 npx yarn dev-client
 ```
@@ -88,6 +88,13 @@ TODO next time:
 - Make using multiple stores across the app easier (e.g. don't want to have to propagate a bunch of different IDs / call useStore all the time).
 - Populate the auth store from Supabase, do sensible things on logout, better login pages.
 - Support anonymous login.
+- Need to think about a users "connection state", there's several different possibilities we need to handle. These should be almost exactly the same for "full" and "anonymous" users:
+  - User is logged in, able to authenticate with Supabase, and connected to the server.
+  - User is logged in, unable to authenticate with Supabase or connect to the server.
+  - User is logged in, able to authenticate with Supabase but can't connect to the server.
+  - User is logged in, unable to authenticate with Supabase but can connect to the server.
+    - This shouldn't happen as connecting to the server requires a valid token from Supabase.
+  - User is not logged in.
 
 ## Ideas
 

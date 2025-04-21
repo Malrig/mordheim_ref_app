@@ -4,8 +4,10 @@ import { TablesSchema, ValuesSchema } from "./schema";
 const InitialTableData = { } as const;
 
 const InitialValueData = {
-  username: "",
+  email: "",
   access_token: "",
+  user_role: "",
+  user_id: "",
 };
 
 export const InitialData: Content<[typeof TablesSchema, typeof ValuesSchema]> = [

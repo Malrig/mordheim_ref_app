@@ -13,11 +13,12 @@ import { createObjectStoreIndexes, createObjectStoreRelationships, createObjectS
 import ReconnectingWebSocket from "reconnecting-websocket";
 import { createWsSynchronizer, WebSocketTypes } from "tinybase/synchronizers/synchronizer-ws-client/with-schemas";
 import { InitialData } from "./initial_data";
-import { createLocalPersister } from "tinybase/persisters/persister-browser/with-schemas";
+import { createLocalPersister, LocalPersister } from "tinybase/persisters/persister-browser/with-schemas";
 
 import { userStore as userStoreName } from "mordheim-common";
 import { useValue as authUseValue } from "../auth/ui";
 import { STORE_NAME as AUTH_STORE_NAME } from "../auth/store";
+import { registerUserSpecificStore } from "../auth/utils/user_specific_stores";
 
 export const UserStore = () => {
   const user_id = authUseValue('user_id', AUTH_STORE_NAME);
@@ -30,7 +31,8 @@ export const UserStore = () => {
 
   useProvideStore(userStoreName(user_id), userStore);
 
-  // TODO: Need to delete local data when user_id changes
+  const registerStore = registerUserSpecificStore()
+
   useCreatePersister(
     userStore,
     (store) => {
@@ -41,9 +43,11 @@ export const UserStore = () => {
     },
     [user_id],
     async (persister) => {
+      registerStore(userStoreName(user_id));
       await persister?.startAutoLoad(InitialData);
       await persister?.startAutoSave();
-    }
+    },
+    [user_id]
   );
 
   useCreateSynchronizer(

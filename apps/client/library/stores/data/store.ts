@@ -1,4 +1,4 @@
-import { createIndexes, createMergeableStore, createRelationships, createQueries, MergeableStore, WebSocketTypes } from "tinybase/with-schemas"
+import { createIndexes, createMergeableStore, createRelationships, createQueries, MergeableStore } from "tinybase/with-schemas"
 import {
   useProvideStore,
   useCreatePersister,
@@ -11,7 +11,7 @@ import {
 } from "./ui"
 import { createObjectStoreIndexes, createObjectStoreRelationships, createObjectStoreQueries, TablesSchema, ValuesSchema, DataStoreType } from "./schema"
 import ReconnectingWebSocket from "reconnecting-websocket";
-import { createWsSynchronizer } from "tinybase/synchronizers/synchronizer-ws-client/with-schemas";
+import { createWsSynchronizer, WebSocketTypes } from "tinybase/synchronizers/synchronizer-ws-client/with-schemas";
 import { InitialData } from "./initial_data";
 import { createLocalPersister } from "tinybase/persisters/persister-browser/with-schemas";
 

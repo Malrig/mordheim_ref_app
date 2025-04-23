@@ -1,15 +1,14 @@
-import { useSliceRowIds } from "../ui";
-import { UserStoreIndexes, useUserStore } from "../store";
+import { UserStore } from "../interface";
 import { useCallback } from "react";
 
 export function useIsFavourite(object_table: string, object_id: string) {
-  const favourite = useSliceRowIds("by_object_table_and_id", `${object_table}_${object_id}`, UserStoreIndexes());
+  const favourite = UserStore.storeUIHooks.useSliceRowIds("by_object_table_and_id", `${object_table}_${object_id}`, UserStore.useIndexes());
 
   return favourite.length > 0;
 }
 
 const addFavouriteCallback = (object_table: string, object_id: string) => {
-  const userStore = useUserStore();
+  const userStore = UserStore.useStore();
 
   const addRow = userStore ? (object_table: string, object_id: string) => {
     userStore.setRow("favourites", `${object_table}_${object_id}`, {
@@ -24,7 +23,7 @@ const addFavouriteCallback = (object_table: string, object_id: string) => {
 }
 
 const removeFavouriteCallback = (object_table: string, object_id: string) => {
-  const userStore = useUserStore();
+  const userStore = UserStore.useStore();
 
   const removeRow = userStore ? (object_table: string, object_id: string) => {
     userStore.delRow("favourites", `${object_table}_${object_id}`);

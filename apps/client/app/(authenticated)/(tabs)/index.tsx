@@ -1,6 +1,6 @@
 import { Pressable, Text, View } from "react-native";
 import { Link } from 'expo-router';
-import RichText from "../../components/general/markdown_text";
+import RichText from "../../../components/general/markdown_text";
 
 export default function Index() {
   const text = `

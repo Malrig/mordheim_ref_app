@@ -7,7 +7,9 @@ import React from "react";
 import { supabase } from '@/library/supabase';
 import { Session } from '@supabase/supabase-js'
 import { useEffect, useState } from 'react';
-import Auth from '../../components/login';
+import { DataStore } from "@/library/stores/data/store";
+import { UserStore } from "@/library/stores/user/store";
+import { useIsLoggedIn } from "@/library/stores/auth/utils/login";
 
 const icons_path = "@/assets/images/icons/";
 
@@ -23,21 +25,13 @@ const icons = {
 }
 
 export default function RootLayout() {
-
-  const [session, setSession] = useState<Session | null>(null)
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-    })
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session)
-    })
-  }, [])
-
+  const isLoggedIn = useIsLoggedIn();
 
   return <>
-    <Auth />
-    {session && session.user &&
+    {isLoggedIn  &&
+    <>
+      <DataStore />
+      <UserStore />
       <Tabs
         screenOptions={{
           tabBarActiveTintColor: '#ffd33d',
@@ -84,6 +78,7 @@ export default function RootLayout() {
           )
         }} />
       </Tabs>
+      </>
     }
   </>;
 }

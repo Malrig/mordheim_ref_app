@@ -1,14 +1,14 @@
-import ItemFilter, { filterItems } from "../../../components/items/item_filter";
-import { ItemType, WeaponType } from "../../../library/types/items";
-import { Item as ItemInterface, Armour, MiscItem } from "../../../library/types/items";
+import ItemFilter, { filterItems } from "../../../../components/items/item_filter";
+import { ItemType, WeaponType } from "../../../../library/types/items";
+import { Item as ItemInterface, Armour, MiscItem } from "../../../../library/types/items";
 import React, { useState, useRef, useMemo } from "react";
 import { SectionList, Text, View, Pressable, ViewToken, FlatList, StyleSheet } from "react-native";
 import { createQueries } from "tinybase/with-schemas";
 
-import { useSetPartialRowCallback, useResultRowIds, useResultTable, useStore } from "../../../library/stores/data/ui";
+import { useSetPartialRowCallback, useResultRowIds, useResultTable, useStore } from "../../../../library/stores/data/ui";
 
-import ItemListItem from "../../../components/items/item_list";
-import SectionedItemList from "../../../components/items/sectioned_item_list";
+import ItemListItem from "../../../../components/items/item_list";
+import SectionedItemList from "../../../../components/items/sectioned_item_list";
 import { DataStoreQueries } from "@/library/stores/data/store";
 
 export default function BrowseItems() {
@@ -126,4 +126,4 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
     fontSize: 12,
   }
-}); 
+});

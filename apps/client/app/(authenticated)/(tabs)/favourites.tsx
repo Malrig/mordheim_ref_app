@@ -1,6 +1,6 @@
 import { Text, View, FlatList } from "react-native";
 import { Link } from 'expo-router';
-import SkillListItem from "../../components/skills/list_item";
+import SkillListItem from "../../../components/skills/list_item";
 import React from "react";
 
 // What does this page do?

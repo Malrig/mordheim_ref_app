@@ -4,7 +4,7 @@ import * as React from 'react';
 // import { Divider, List } from "react-native-paper";
 
 import SkillListItem from "../../../components/skills/list_item"
-import { useRowIds } from "../../../library/stores/data/ui";
+import { DataStore } from "../../../library/stores/stores";
 import { Id } from "tinybase/with-schemas";
 // What does this page do?
 // - Display all the skills we have in the campaign
@@ -17,7 +17,7 @@ import { Id } from "tinybase/with-schemas";
 
 
 export default function Skills() {
-  const skills = useRowIds("skills");
+  const skills = DataStore.storeUIHooks.useRowIds("skills");
 
   return (
     <View style={{ flex: 1 }}>

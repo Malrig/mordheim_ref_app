@@ -5,7 +5,7 @@ import React, { useState, useRef, useMemo } from "react";
 import { SectionList, Text, View, Pressable, ViewToken, FlatList, StyleSheet } from "react-native";
 import { createQueries } from "tinybase/with-schemas";
 
-import { useSetPartialRowCallback, useResultRowIds, useResultTable, useStore } from "../../../../library/stores/data/ui";
+import { DataStore } from "../../../../library/stores/stores";
 
 import ItemListItem from "../../../../components/items/item_list";
 import SectionedItemList from "../../../../components/items/sectioned_item_list";
@@ -16,7 +16,7 @@ export default function BrowseItems() {
   const [searchQuery, setSearchQuery] = useState('');
 
   // Get the result table from the query
-  const resultTable = useResultTable('filterable_items', DataStoreQueries());
+  const resultTable = DataStore.storeUIHooks.useResultTable('filterable_items', DataStoreQueries());
   console.log(resultTable);
 
   // Filter items based on search query and type

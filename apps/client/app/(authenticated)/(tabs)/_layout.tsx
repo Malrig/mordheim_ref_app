@@ -1,14 +1,8 @@
-import { Text, View, Pressable, TextInput, Image } from "react-native";
-import { Stack, Tabs } from "expo-router";
-import { PaperProvider } from 'react-native-paper';
-import { Button } from "react-native-paper";
-import { jwtDecode } from 'jwt-decode'
+import { Image } from "react-native";
+import { Tabs } from "expo-router";
 import React from "react";
-import { supabase } from '@/library/supabase';
-import { Session } from '@supabase/supabase-js'
-import { useEffect, useState } from 'react';
-import { DataStore } from "@/library/stores/data/store";
-import { UserStore } from "@/library/stores/user/store";
+import { DataStoreProvider } from "@/library/stores/data/store";
+import { UserStoreProvider } from "@/library/stores/user/store";
 import { useIsLoggedIn } from "@/library/stores/auth/utils/login";
 
 const icons_path = "@/assets/images/icons/";
@@ -30,8 +24,8 @@ export default function RootLayout() {
   return <>
     {isLoggedIn  &&
     <>
-      <DataStore />
-      <UserStore />
+      {/* <DataStoreProvider />
+      <UserStoreProvider /> */}
       <Tabs
         screenOptions={{
           tabBarActiveTintColor: '#ffd33d',

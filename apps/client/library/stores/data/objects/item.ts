@@ -1,9 +1,7 @@
 import { ItemType, WeaponType } from '../../../types/items';
 import { SpecialRule } from './special_rule';
-import { useRow, useRemoteRowId } from '../ui';
-import { DataStoreRelationships } from '../store';
-import { DATA_STORE } from 'mordheim-common';
 import { useIsFavourite } from '../../user/utils/favourites';
+import { DataStore } from '../interface';
 
 /**
  * Represents a single item in the TinyBase store
@@ -95,9 +93,9 @@ export class Item {
   }
 
   useMetadata(): Record<string, any> | undefined {
-    const metadata = useRemoteRowId('itemsMetadata', this.id, DataStoreRelationships());
+    const metadata = DataStore.storeUIHooks.useRemoteRowId('itemsMetadata', this.id, DataStore.useRelationships());
 
-    const metadata_info = metadata && useRow('metadata', metadata, DATA_STORE) || undefined;
+    const metadata_info = metadata && DataStore.storeUIHooks.useRow('metadata', metadata, DataStore.store_id) || undefined;
     return metadata_info;
   }
 
@@ -140,6 +138,6 @@ export class Item {
   }
 
   static useInstance(id: string): Item {
-    return Item.fromRow(useRow(Item.TABLE_NAME, id, DATA_STORE));
+    return Item.fromRow(DataStore.storeUIHooks.useRow(Item.TABLE_NAME, id, DataStore.store_id));
   }
 }

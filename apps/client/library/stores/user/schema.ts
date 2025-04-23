@@ -19,7 +19,7 @@ export type UserQueriesType = Queries<  [typeof TablesSchema, typeof ValuesSchem
 
 export function createObjectStoreRelationships(store: Store<
   [typeof TablesSchema, typeof ValuesSchema]
->): Relationships<  [typeof TablesSchema, typeof ValuesSchema]> {
+>): UserRelationshipsType {
   const store_relations = createRelationships(store);
 
   return store_relations;
@@ -27,7 +27,7 @@ export function createObjectStoreRelationships(store: Store<
 
 export function createObjectStoreIndexes(store: Store<
   [typeof TablesSchema, typeof ValuesSchema]
->): Indexes<  [typeof TablesSchema, typeof ValuesSchema]>{
+>): UserIndexesType {
   const store_indexes = createIndexes(store);
 
   // Want to index favourites by object table
@@ -48,7 +48,7 @@ export function createObjectStoreIndexes(store: Store<
 
 export function createObjectStoreQueries(store: Store<
   [typeof TablesSchema, typeof ValuesSchema]
->): Queries<  [typeof TablesSchema, typeof ValuesSchema]> {
+>): UserQueriesType {
   const store_queries = createQueries(store);
 
   return store_queries;

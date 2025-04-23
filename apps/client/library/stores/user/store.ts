@@ -7,7 +7,7 @@ import { createLocalPersister, LocalPersister } from "tinybase/persisters/persis
 import * as UiReact from "tinybase/ui-react/with-schemas";
 
 import { userStore as userStoreName } from "mordheim-common";
-import { useValue as authUseValue } from "../auth/ui";
+import { AuthStore } from "../auth/interface";
 import { STORE_NAME as AUTH_STORE_NAME } from "../auth/store";
 import { registerUserSpecificStore } from "../auth/utils/user_specific_stores";
 
@@ -15,7 +15,7 @@ export const UserUiHooks = UiReact as UiReact.WithSchemas<
   [typeof TablesSchema, typeof ValuesSchema]
 >;
 
-export const UserStore = () => {
+export const UserStoreProvider = () => {
   const user_id = authUseValue('user_id', AUTH_STORE_NAME);
   const token = authUseValue('access_token', AUTH_STORE_NAME);
   const wsUrl = process.env.EXPO_PUBLIC_WS_URL;
@@ -90,29 +90,31 @@ export const UserStore = () => {
   return null;
 }
 
+const authUseValue = AuthStore.storeUIHooks.useValue;
+
+export function isUserStoreLoading(): boolean {
+  const user_id = authUseValue('user_id', AUTH_STORE_NAME);
+  const store = UserUiHooks.useStore(userStoreName(user_id!));
+  return store === undefined;
+}
 export function useUserStoreId(): string {
   const user_id = authUseValue('user_id', AUTH_STORE_NAME);
   return userStoreName(user_id!);
 }
+export function useUserStore(): UserStoreType {
+  const user_id = authUseValue('user_id', AUTH_STORE_NAME);
+  const store = UserUiHooks.useStore(useUserStoreId());
+  return store as UserStoreType;
+}
 export function UserStoreQueries(): UserQueriesType {
-  const store = UserUiHooks.useStore(useUserStoreId())
+  const store = useUserStore();
   return createQueries(store!);
 }
 export function UserStoreIndexes(): UserIndexesType{
-  const store = UserUiHooks.useStore(useUserStoreId())
+  const store = useUserStore();
   return createIndexes(store!);
 }
 export function UserStoreRelationships(): UserRelationshipsType{
-  const store = UserUiHooks.useStore(useUserStoreId());
+  const store = useUserStore();
   return createRelationships(store!);
-}
-export function useUserStore(): UserStoreType {
-  const user_id = authUseValue('user_id', AUTH_STORE_NAME);
-  const store = UserUiHooks.useStore(userStoreName(user_id!)) as UserStoreType;
-  return store
-}
-export function isUserStoreLoading(): boolean {
-  const user_id = authUseValue('user_id', AUTH_STORE_NAME);
-  const store = UserUiHooks.useStore(userStoreName(user_id!)) as UserStoreType;
-  return store === undefined;
 }

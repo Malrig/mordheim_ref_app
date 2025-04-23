@@ -1,9 +1,8 @@
-import {useAuthStore, STORE_NAME} from '../store';
-import { useRowIds } from "../ui";
+import { AuthStore } from "../interface";
 import { useCallback } from "react";
 
 export const registerUserSpecificStore = () => {
-  const authStore = useAuthStore()
+  const authStore = AuthStore.useStore()
 
   const addRow = authStore ? (store_name: string) => {
     authStore.setRow("user_specific_stores", store_name, {
@@ -18,7 +17,7 @@ export const registerUserSpecificStore = () => {
 }
 
 export const unregisterUserSpecificStores = () => {
-  const authStore = useAuthStore()
+  const authStore = AuthStore.useStore()
 
   const delRow = authStore ? (store_name: string) => {
     authStore.delRow("user_specific_stores", store_name);
@@ -32,7 +31,7 @@ export const unregisterUserSpecificStores = () => {
 }
 
 export const removeUserSpecificStores = () => {
-  const userSpecificStores = useRowIds("user_specific_stores", STORE_NAME)
+  const userSpecificStores = AuthStore.storeUIHooks.useRowIds("user_specific_stores", AuthStore.store_id)
 
   const unregisterStore = unregisterUserSpecificStores()
 

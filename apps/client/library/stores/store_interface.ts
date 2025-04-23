@@ -6,7 +6,7 @@ export interface StoreInterface<StoreSchema extends [tbTablesSchema, tbValuesSch
   // For most stores the ID is fixed and so can be stored in a constant. But some
   // stores IDs are dynamic and so need to be generated at runtime using useStoreId.
   store_id: string | undefined,
-  useStoreId: () => string,
+  useStoreId: undefined | (() => string),
   // The isLoading hook can be used to determine whether a store is ready and available.
   // If loading then it's not ready yet and no other functions in this interface should
   // be used.

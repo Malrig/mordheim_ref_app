@@ -4,6 +4,7 @@ import { removeUserSpecificStores } from "./user_specific_stores";
 import { Session } from "@supabase/supabase-js";
 import { getUserRoleAndPermissions } from "@/library/supabase";
 import { supabase } from "@/library/supabase";
+import { Alert } from "react-native";
 
 export function useIsLoggedIn(): { loading: boolean, isLoggedIn: boolean } {
   const authStore = AuthStore.useStore();
@@ -17,16 +18,35 @@ export function useIsLoggedIn(): { loading: boolean, isLoggedIn: boolean } {
   };
 }
 
-export const login = () => {
+export async function signInWithEmail(email: string, password: string, setLoading: (loading: boolean) => void) {
+  setLoading(true)
+  const { error } = await supabase.auth.signInWithPassword({
+    email: email,
+    password: password,
+  })
 
+  if (error) Alert.alert(error.message)
+  setLoading(false)
 }
 
-export const logout = () => {
-
+export async function signOut() {
+  const { error } = await supabase.auth.signOut()
+  if (error) Alert.alert(error.message)
 }
 
-export const signUpWithEmail = () => {
+export async function signUpWithEmail(email: string, password: string, setLoading: (loading: boolean) => void) {
+  setLoading(true)
+  const {
+    data: { session },
+    error,
+  } = await supabase.auth.signUp({
+    email: email,
+    password: password,
+  })
 
+  if (error) Alert.alert(error.message)
+  if (!session) Alert.alert('Please check your inbox for email verification!')
+  setLoading(false)
 }
 
 export const userLoggedOutCallback = () => {

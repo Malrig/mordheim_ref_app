@@ -3,12 +3,13 @@ import { Tabs } from "expo-router";
 import React from "react";
 import { useIsLoggedIn } from "@/library/stores/auth/utils/login";
 import { useThemeColour } from "@/library/stores/user/utils/theme";
-
+import { ThemedText } from "@/components/general/themed_components";
+import { Header } from "@/components/general/header";
 const icons_path = "@/assets/images/icons/";
 
 const icons = {
-  home_selected: require(icons_path + 'home_selected.png'),
-  home_default: require(icons_path + 'home_default.png'),
+  index_selected: require(icons_path + 'home_selected.png'),
+  index_default: require(icons_path + 'home_default.png'),
   skills_selected: require(icons_path + 'skills_selected.png'),
   skills_default: require(icons_path + 'skills_default.png'),
   items_selected: require(icons_path + 'items_selected.png'),
@@ -25,13 +26,12 @@ export default function RootLayout() {
   const tabIconDefault = useThemeColour('tabIconDefault');
 
   return <Tabs
-    screenOptions={{
+    screenOptions={({ route, navigation }) => ({
       tabBarActiveTintColor: tabIconSelected,
       tabBarInactiveTintColor: tabIconDefault,
       headerStyle: {
         backgroundColor: tabBarBackgroundColor,
       },
-      // headerShadowVisible: false,
       headerTintColor: textColor,
       tabBarStyle: {
         backgroundColor: tabBarBackgroundColor,
@@ -40,51 +40,21 @@ export default function RootLayout() {
         fontSize: 12,
         fontWeight: '500',
       },
-    }}
+      sceneStyle: {
+        backgroundColor: backgroundColor
+      },
+      header: ({ route, options }) => <Header title={options.title || route.name} />,
+      tabBarIcon: ({ color, focused }: { color: string, focused: boolean }) => (
+        <Image
+          source={focused ? icons[`${route.name}_selected` as keyof typeof icons] : icons[`${route.name}_default` as keyof typeof icons]}
+          style={{ tintColor: color, width: 24, height: 24 }}
+        />
+      )
+    })}
   >
-    <Tabs.Screen name="index" options={{
-      sceneStyle: {
-        backgroundColor: backgroundColor, // This what you want
-      },
-      title: "Home", tabBarIcon: ({ color, focused }: { color: string, focused: boolean }) => (
-        <Image
-          source={focused ? icons["home_selected"] : icons["home_default"]}
-          style={{ tintColor: color, width: 24, height: 24 }}
-        />
-      )
-    }} />
-    <Tabs.Screen name="skills" options={{
-      sceneStyle: {
-        backgroundColor: backgroundColor, // This what you want
-      },
-      title: "Skills", tabBarIcon: ({ color, focused }: { color: string, focused: boolean }) => (
-        <Image
-          source={focused ? icons["skills_selected"] : icons["skills_default"]}
-          style={{ tintColor: color, width: 24, height: 24 }}
-        />
-      )
-    }} />
-    <Tabs.Screen name="items" options={{
-      sceneStyle: {
-        backgroundColor: backgroundColor, // This what you want
-      },
-      title: "Items", tabBarIcon: ({ color, focused }: { color: string, focused: boolean }) => (
-        <Image
-          source={focused ? icons["items_selected"] : icons["items_default"]}
-          style={{ tintColor: color, width: 24, height: 24 }}
-        />
-      )
-    }} />
-    <Tabs.Screen name="favourites" options={{
-      sceneStyle: {
-        backgroundColor: backgroundColor, // This what you want
-      },
-      title: "Favourites", tabBarIcon: ({ color, focused }: { color: string, focused: boolean }) => (
-        <Image
-          source={focused ? icons["favourites_selected"] : icons["favourites_default"]}
-          style={{ tintColor: color, width: 24, height: 24 }}
-        />
-      )
-    }} />
+    <Tabs.Screen name="index" options={{ title: "Home" }} />
+    <Tabs.Screen name="skills" options={{ title: "Skills" }} />
+    <Tabs.Screen name="items" options={{ title: "Items" }} />
+    <Tabs.Screen name="favourites" options={{ title: "Favourites" }} />
   </Tabs>;
 }

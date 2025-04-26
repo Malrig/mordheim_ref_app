@@ -1,21 +1,17 @@
-import { Stack } from 'expo-router';
+import { Slot } from 'expo-router';
 
 import { Provider } from 'tinybase/ui-react';
-import { DataStore } from '../library/stores/data/store';
-import { AuthStore } from '../library/stores/auth/store';
-import { UserStore } from '../library/stores/user/store';
+import { AuthStoreProvider } from '../library/stores/auth/store';
+import { StrictMode } from 'react';
 
 export default function RootLayout() {
   return (
-    <Provider>
-      <AuthStore />
-      <DataStore />
-      <UserStore />
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack >
-    </Provider>
+    <StrictMode>
+      <Provider>
+        <AuthStoreProvider />
+        <Slot />
+      </Provider>
+    </StrictMode>
   );
 }
 

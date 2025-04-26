@@ -1,9 +1,11 @@
 import { WeaponType } from "../../library/types/items";
-import { Text, View, StyleSheet, FlatList, SectionList, Pressable, ViewToken, SectionListData } from "react-native";
+import { StyleSheet, FlatList, SectionList, Pressable, ViewToken } from "react-native";
 import * as React from 'react';
 import { ItemType } from "../../library/types/items";
 import { useState } from "react";
 import ItemListItem from "./item_list";
+import { ThemedText, ThemedView } from "../general/themed_components";
+import { useThemeColour } from "@/library/stores/user/utils/theme";
 
 interface SectionKey {
   item_type: ItemType;
@@ -34,6 +36,48 @@ export default function SectionedItemList({ items }: Props) {
   const [currentSection, setCurrentSection] = useState<SectionKey | null>(null);
   const sectionListRef = React.useRef<SectionList<ItemObject, ItemSection>>(null);
   const sectionSelectionRef = React.useRef<FlatList<ItemSection>>(null);
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      padding: 16,
+    },
+    typeListContainer: {
+      height: 50,
+      marginBottom: 16,
+    },
+    typeListContent: {
+      paddingVertical: 8,
+    },
+    typeItem: {
+      paddingHorizontal: 16,
+      paddingVertical: 8,
+      marginRight: 8,
+      borderRadius: 20,
+      backgroundColor: useThemeColour("tabIconDefault"),
+    },
+    selectedTypeItem: {
+      backgroundColor: useThemeColour("tabIconSelected"),
+    },
+    selectedTypeItemText: {
+      color: useThemeColour("grey"),
+      fontWeight: 'bold',
+    },
+    sectionListContainer: {
+      flex: 1,
+    },
+    sectionHeader: {
+      padding: 10,
+      marginTop: 0,
+    },
+    itemContainer: {
+      padding: 16,
+    },
+    sectionTitle: {
+      fontSize: 18,
+      fontWeight: 'bold',
+    },
+  });
 
   const sections: ItemSection[] = [
     {
@@ -71,19 +115,18 @@ export default function SectionedItemList({ items }: Props) {
       ]}
       onPress={() => onItemTypeSelect(section)}
     >
-      <Text style={[
-        styles.typeItemText,
-        currentSection != null && getSectionKey(currentSection) == getSectionKey(section.sectionKey) && styles.selectedTypeItemText
-      ]}>
+      <ThemedText style={
+        ((currentSection != null && getSectionKey(currentSection) == getSectionKey(section.sectionKey)) ? { ...styles.selectedTypeItemText } : {})
+      }>
         {section.title}
-      </Text>
+      </ThemedText>
     </Pressable>
   );
 
   const renderSectionHeader = ({ section: { title } }: { section: ItemSection }) => (
-    <View style={styles.sectionHeader}>
-      <Text style={styles.sectionHeaderText}>{title}</Text>
-    </View>
+    <ThemedView style={styles.sectionHeader}>
+      <ThemedText variant="subtitle">{title}</ThemedText>
+    </ThemedView>
   );
 
   const onItemTypeSelect = React.useCallback((item: ItemSection) => {
@@ -107,78 +150,31 @@ export default function SectionedItemList({ items }: Props) {
     });
   }
 
-  return (<View style={styles.container}>
-    <Text style={styles.title}>All Items</Text>
-    <View style={styles.typeListContainer}>
-      <FlatList
-        ref={sectionSelectionRef}
-        horizontal
-        data={sections}
-        renderItem={renderSectionSelectionHeading}
-        keyExtractor={(item) => getSectionKey(item.sectionKey)}
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.typeListContent}
-      />
-    </View>
-    <View style={styles.sectionListContainer}>
-      <SectionList<ItemObject, ItemSection>
-        ref={sectionListRef}
-        sections={sections}
-        renderItem={({ item }: { item: ItemObject }) => <ItemListItem item={item} />}
-        renderSectionHeader={renderSectionHeader}
-        onViewableItemsChanged={onViewableItemsChanged}
-        keyExtractor={(item) => item.id}
-        stickySectionHeadersEnabled={true}
-      />
-    </View>
-  </View>)
+  return (
+    <ThemedView style={styles.container}>
+      <ThemedText variant="title">All Items</ThemedText>
+      <ThemedView style={styles.typeListContainer}>
+        <FlatList
+          ref={sectionSelectionRef}
+          horizontal
+          data={sections}
+          renderItem={renderSectionSelectionHeading}
+          keyExtractor={(item) => getSectionKey(item.sectionKey)}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.typeListContent}
+        />
+      </ThemedView>
+      <ThemedView style={styles.sectionListContainer}>
+        <SectionList<ItemObject, ItemSection>
+          ref={sectionListRef}
+          sections={sections}
+          renderItem={({ item }: { item: ItemObject }) => <ItemListItem item={item} />}
+          renderSectionHeader={renderSectionHeader}
+          onViewableItemsChanged={onViewableItemsChanged}
+          keyExtractor={(item) => item.id}
+          stickySectionHeadersEnabled={true}
+        />
+      </ThemedView>
+    </ThemedView>
+  );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 16,
-  },
-  typeListContainer: {
-    height: 50,
-    marginBottom: 16,
-  },
-  typeListContent: {
-    paddingVertical: 8,
-  },
-  typeItem: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    marginRight: 8,
-    borderRadius: 20,
-    backgroundColor: '#f0f0f0',
-  },
-  selectedTypeItem: {
-    backgroundColor: '#007AFF',
-  },
-  typeItemText: {
-    fontSize: 16,
-    color: '#000',
-  },
-  selectedTypeItemText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  sectionListContainer: {
-    flex: 1,
-  },
-  sectionHeader: {
-    backgroundColor: '#f0f0f0',
-    padding: 10,
-    marginTop: 0,
-  },
-  sectionHeaderText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-}); 

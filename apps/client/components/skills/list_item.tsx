@@ -1,4 +1,4 @@
-import { Text, View, FlatList, Pressable, StyleSheet } from "react-native";
+import { View, FlatList, Pressable, StyleSheet } from "react-native";
 import * as React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Divider from '../general/divider';
@@ -6,6 +6,7 @@ import { Id } from "tinybase/with-schemas";
 
 import { Skill } from "../../library/stores/data/objects/skill";
 import { toggleFavouriteCallback } from "@/library/stores/user/utils/favourites";
+import { ThemedText } from "../general/themed_components";
 
 type Props = {
   skill: Id
@@ -28,12 +29,12 @@ export default function SkillListItem({ skill }: Props) {
         <Pressable onPress={() => {console.log("Pressed"); setFavouriteCb()}}>
           <FontAwesome name={isFavourite ? "heart" : "heart-o"} />
         </Pressable>
-        <Text> {skill_object.name}</Text>
+        <ThemedText> {skill_object.name}</ThemedText>
         <FontAwesome style={[{ marginLeft: "auto" }]} name={expanded ? "chevron-up" : "chevron-down"} />
       </View>
       {expanded && <>
         <Divider />
-        <Text>{skill_object.description}</Text>
+        <ThemedText>{skill_object.description}</ThemedText>
       </>}
     </Pressable>
   );

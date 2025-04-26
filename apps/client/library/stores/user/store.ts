@@ -1,39 +1,34 @@
 import { createIndexes, createMergeableStore, createRelationships, createQueries, MergeableStore } from "tinybase/with-schemas"
-import {
-  useProvideStore,
-  useCreatePersister,
-  useCreateMergeableStore,
-  useCreateIndexes,
-  useCreateRelationships,
-  useCreateQueries,
-  useCreateSynchronizer,
-  useStore,
-} from "./ui"
-import { createObjectStoreIndexes, createObjectStoreRelationships, createObjectStoreQueries, TablesSchema, ValuesSchema, UserStoreType } from "./schema"
+import { createObjectStoreIndexes, createObjectStoreRelationships, createObjectStoreQueries, TablesSchema, ValuesSchema, UserStoreType, UserQueriesType, UserIndexesType, UserRelationshipsType } from "./schema"
 import ReconnectingWebSocket from "reconnecting-websocket";
 import { createWsSynchronizer, WebSocketTypes } from "tinybase/synchronizers/synchronizer-ws-client/with-schemas";
 import { InitialData } from "./initial_data";
 import { createLocalPersister, LocalPersister } from "tinybase/persisters/persister-browser/with-schemas";
+import * as UiReact from "tinybase/ui-react/with-schemas";
 
 import { userStore as userStoreName } from "mordheim-common";
-import { useValue as authUseValue } from "../auth/ui";
+import { AuthStore } from "../auth/interface";
 import { STORE_NAME as AUTH_STORE_NAME } from "../auth/store";
 import { registerUserSpecificStore } from "../auth/utils/user_specific_stores";
 
-export const UserStore = () => {
+export const UserUiHooks = UiReact as UiReact.WithSchemas<
+  [typeof TablesSchema, typeof ValuesSchema]
+>;
+
+export const UserStoreProvider = () => {
   const user_id = authUseValue('user_id', AUTH_STORE_NAME);
   const token = authUseValue('access_token', AUTH_STORE_NAME);
   const wsUrl = process.env.EXPO_PUBLIC_WS_URL;
 
-  const userStore: UserStoreType = useCreateMergeableStore(
+  const userStore: UserStoreType = UserUiHooks.useCreateMergeableStore(
     () => createMergeableStore().setTablesSchema(TablesSchema).setValuesSchema(ValuesSchema) as UserStoreType
   );
 
-  useProvideStore(userStoreName(user_id), userStore);
+  UserUiHooks.useProvideStore(userStoreName(user_id), userStore);
 
   const registerStore = registerUserSpecificStore()
 
-  useCreatePersister(
+  UserUiHooks.useCreatePersister(
     userStore,
     (store) => {
       if (user_id === undefined || user_id === "") {
@@ -50,7 +45,7 @@ export const UserStore = () => {
     [user_id]
   );
 
-  useCreateSynchronizer(
+  UserUiHooks.useCreateSynchronizer(
     userStore,
     async (store) => {
       if (token && user_id) {
@@ -77,17 +72,17 @@ export const UserStore = () => {
     [token, user_id]
   );
 
-  useCreateIndexes(
+  UserUiHooks.useCreateIndexes(
     userStore,
     (store) => {
       return createObjectStoreIndexes(store)
     },
     [user_id],
   );
-  useCreateRelationships(userStore, (store) => {
+  UserUiHooks.useCreateRelationships(userStore, (store) => {
     return createObjectStoreRelationships(store);
   });
-  useCreateQueries(userStore, (store) => {
+  UserUiHooks.useCreateQueries(userStore, (store) => {
     return createObjectStoreQueries(store);
   });
 
@@ -95,42 +90,31 @@ export const UserStore = () => {
   return null;
 }
 
-export const UserStoreQueries = () => {
-  const store = useStore(useUserStoreId())
-  if (store === undefined) {
-    return undefined;
-  }
-  return createQueries(store);
-}
-export const UserStoreIndexes = () => {
-  const store = useStore(useUserStoreId())
-  if (store === undefined) {
-    return undefined;
-  }
-  return createIndexes(store);
-}
-export const UserStoreRelationships = () => {
-  const store = useStore(useUserStoreId());
-  if (store === undefined) {
-    return undefined;
-  }
-  return createRelationships(store);
-}
-export const useUserStoreId = () => {
+const authUseValue = AuthStore.storeUIHooks.useValue;
+
+export function isUserStoreLoading(): boolean {
   const user_id = authUseValue('user_id', AUTH_STORE_NAME);
-  if (user_id) {
-    return userStoreName(user_id);
-  }
-  else {
-    return undefined;
-  }
+  const store = UserUiHooks.useStore(userStoreName(user_id!));
+  return store === undefined;
 }
-export const useUserStore = () => {
+export function useUserStoreId(): string {
   const user_id = authUseValue('user_id', AUTH_STORE_NAME);
-  if (user_id) {
-    return useStore(userStoreName(user_id));
-  }
-  else {
-    return undefined;
-  }
+  return userStoreName(user_id!);
+}
+export function useUserStore(): UserStoreType {
+  const user_id = authUseValue('user_id', AUTH_STORE_NAME);
+  const store = UserUiHooks.useStore(useUserStoreId());
+  return store as UserStoreType;
+}
+export function UserStoreQueries(): UserQueriesType {
+  const store = useUserStore();
+  return createQueries(store!);
+}
+export function UserStoreIndexes(): UserIndexesType{
+  const store = useUserStore();
+  return createIndexes(store!);
+}
+export function UserStoreRelationships(): UserRelationshipsType{
+  const store = useUserStore();
+  return createRelationships(store!);
 }

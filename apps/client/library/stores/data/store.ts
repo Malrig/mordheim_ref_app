@@ -1,35 +1,31 @@
 import { createIndexes, createMergeableStore, createRelationships, createQueries, MergeableStore } from "tinybase/with-schemas"
-import {
-  useProvideStore,
-  useCreatePersister,
-  useCreateMergeableStore,
-  useCreateIndexes,
-  useCreateRelationships,
-  useCreateQueries,
-  useCreateSynchronizer,
-  useStore,
-} from "./ui"
-import { createObjectStoreIndexes, createObjectStoreRelationships, createObjectStoreQueries, TablesSchema, ValuesSchema, DataStoreType } from "./schema"
+import { createObjectStoreIndexes, createObjectStoreRelationships, createObjectStoreQueries, TablesSchema, ValuesSchema, DataStoreType, DataQueriesType, DataIndexesType, DataRelationshipsType } from "./schema"
 import ReconnectingWebSocket from "reconnecting-websocket";
 import { createWsSynchronizer, WebSocketTypes } from "tinybase/synchronizers/synchronizer-ws-client/with-schemas";
 import { InitialData } from "./initial_data";
 import { createLocalPersister } from "tinybase/persisters/persister-browser/with-schemas";
 
-import { DATA_STORE } from "mordheim-common";
-import { useValue as authUseValue } from "../auth/ui";
+export { DATA_STORE as STORE_NAME } from "mordheim-common";
+import { DATA_STORE as STORE_NAME } from "mordheim-common";
+import { AuthStore } from "../auth/interface";
 import { STORE_NAME as AUTH_STORE_NAME } from "../auth/store";
+import * as UiReact from "tinybase/ui-react/with-schemas";
 
-export const DataStore = () => {
-  const dataStore: DataStoreType = useCreateMergeableStore(
+export const DataUiHooks = UiReact as UiReact.WithSchemas<
+  [typeof TablesSchema, typeof ValuesSchema]
+>;
+
+export const DataStoreProvider = () => {
+  const dataStore: DataStoreType = DataUiHooks.useCreateMergeableStore(
     () => createMergeableStore().setTablesSchema(TablesSchema).setValuesSchema(ValuesSchema) as DataStoreType
   );
-  useProvideStore(DATA_STORE, dataStore);
+  DataUiHooks.useProvideStore(STORE_NAME, dataStore);
 
   const wsUrl = process.env.EXPO_PUBLIC_WS_URL;
-  useCreatePersister(
+  DataUiHooks.useCreatePersister(
     dataStore,
     (store) => {
-      return createLocalPersister(store, DATA_STORE);
+      return createLocalPersister(store, STORE_NAME);
     },
     [],
     async (persister) => {
@@ -38,14 +34,14 @@ export const DataStore = () => {
     }
   );
 
-  const token = authUseValue('access_token', AUTH_STORE_NAME);
+  const token = AuthStore.storeUIHooks.useValue('access_token', AUTH_STORE_NAME);
 
-  useCreateSynchronizer(
+  DataUiHooks.useCreateSynchronizer(
     dataStore,
     async (store) => {
       if (token) {
         console.log("Recreating synchronizer");
-        const ws = new ReconnectingWebSocket(`${wsUrl}${DATA_STORE}?token=${token}`, [], { debug: false });
+        const ws = new ReconnectingWebSocket(`${wsUrl}${STORE_NAME}?token=${token}`, [], { debug: false });
         const synchronizer = await createWsSynchronizer(
           store,
           ws as unknown as WebSocketTypes,
@@ -67,13 +63,13 @@ export const DataStore = () => {
     [token]
   );
 
-  useCreateIndexes(dataStore, (store) => {
+  DataUiHooks.useCreateIndexes(dataStore, (store) => {
     return createObjectStoreIndexes(store)
   });
-  useCreateRelationships(dataStore, (store) => {
+  DataUiHooks.useCreateRelationships(dataStore, (store) => {
     return createObjectStoreRelationships(store);
   });
-  useCreateQueries(dataStore, (store) => {
+  DataUiHooks.useCreateQueries(dataStore, (store) => {
     return createObjectStoreQueries(store);
   });
 
@@ -81,12 +77,23 @@ export const DataStore = () => {
   return null;
 }
 
-export const DataStoreQueries = () => {
-  return createQueries(useStore(DATA_STORE)!);
+export function isDataStoreLoading(): boolean {
+  const store = DataUiHooks.useStore(STORE_NAME);
+  return store === undefined;
 }
-export const DataStoreIndexes = () => {
-  return createIndexes(useStore(DATA_STORE)!);
+export function useDataStore(): DataStoreType {
+  const store = DataUiHooks.useStore(STORE_NAME);
+  return store as DataStoreType;
 }
-export const DataStoreRelationships = () => {
-  return createRelationships(useStore(DATA_STORE)!);
+export function DataStoreQueries(): DataQueriesType {
+  const store = useDataStore();
+  return createQueries(store!);
+}
+export function DataStoreIndexes(): DataIndexesType {
+  const store = useDataStore();
+  return createIndexes(store!);
+}
+export function DataStoreRelationships(): DataRelationshipsType {
+  const store = useDataStore();
+  return createRelationships(store!);
 }

@@ -1,11 +1,9 @@
-import { Text, View, FlatList, TextInput, StyleSheet } from "react-native";
-import { Link } from 'expo-router';
-import * as React from 'react';
-// import { Divider, List } from "react-native-paper";
-
-import SkillListItem from "../../components/skills/list_item"
-import { useRowIds } from "../../library/stores/data/ui";
+import { FlatList, TextInput, StyleSheet } from "react-native";
+import { ThemedView, ThemedTextInput, ThemedText } from "@/components/general/themed_components";
+import SkillListItem from "../../../components/skills/list_item"
 import { Id } from "tinybase/with-schemas";
+import { DataStore } from "../../../library/stores/stores";
+
 // What does this page do?
 // - Display all the skills we have in the campaign
 //   - Group them by skill group
@@ -14,22 +12,24 @@ import { Id } from "tinybase/with-schemas";
 // - Allow filtering the skills to specific groups / restrictions in the future. For now just pick and choose the one you want to see.
 //   - So people may want to view skills that certain warbands have access to, certain heroes in warbands, potentially in the future link somehow to someones warband.
 
-
-
 export default function Skills() {
-  const skills = useRowIds("skills");
+  const skills = DataStore.storeUIHooks.useRowIds("skills");
 
   return (
-    <View style={{ flex: 1 }}>
-      {/* <NewSkill /> */}
-      <Text>TODO: Allow searching / filtering of skills.</Text>
-      {/* <ObjectList<Skill> objects={skills} renderObject={(object) => <SkillListItem skill={object} />} /> */}
+    <ThemedView style={styles.container}>
+      <ThemedText>TODO: Allow searching / filtering of skills.</ThemedText>
       <FlatList
         data={skills}
         renderItem={({ item }: { item: Id }) => <SkillListItem skill={item} />}
         keyExtractor={(item) => item}
       />
-    </View>
+    </ThemedView>
   );
-  ;
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+  },
+});

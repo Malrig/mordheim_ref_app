@@ -1,14 +1,12 @@
-import ItemFilter, { filterItems } from "../../../components/items/item_filter";
-import { ItemType, WeaponType } from "../../../library/types/items";
-import { Item as ItemInterface, Armour, MiscItem } from "../../../library/types/items";
-import React, { useState, useRef, useMemo } from "react";
-import { SectionList, Text, View, Pressable, ViewToken, FlatList, StyleSheet } from "react-native";
-import { createQueries } from "tinybase/with-schemas";
+import ItemFilter from "../../../../components/items/item_filter";
+import { ItemType } from "../../../../library/types/items";
+import React, { useState, useMemo } from "react";
+import { StyleSheet } from "react-native";
+import { ThemedText, ThemedView } from '@/components/general/themed_components'
 
-import { useSetPartialRowCallback, useResultRowIds, useResultTable, useStore } from "../../../library/stores/data/ui";
+import { DataStore } from "../../../../library/stores/stores";
 
-import ItemListItem from "../../../components/items/item_list";
-import SectionedItemList from "../../../components/items/sectioned_item_list";
+import SectionedItemList from "../../../../components/items/sectioned_item_list";
 import { DataStoreQueries } from "@/library/stores/data/store";
 
 export default function BrowseItems() {
@@ -16,7 +14,7 @@ export default function BrowseItems() {
   const [searchQuery, setSearchQuery] = useState('');
 
   // Get the result table from the query
-  const resultTable = useResultTable('filterable_items', DataStoreQueries());
+  const resultTable = DataStore.storeUIHooks.useResultTable('filterable_items', DataStoreQueries());
   console.log(resultTable);
 
   // Filter items based on search query and type
@@ -50,8 +48,8 @@ export default function BrowseItems() {
   }, [resultTable, searchQuery, searchedType]);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>All Items</Text>
+    <ThemedView style={styles.container}>
+      <ThemedText variant="title">All Items</ThemedText>
       <ItemFilter
         searchQuery={searchQuery}
         onSearchQueryChange={setSearchQuery}
@@ -59,7 +57,7 @@ export default function BrowseItems() {
         onTypeChange={setSearchedType}
       />
       <SectionedItemList items={filteredItems} />
-    </View>
+    </ThemedView>
   );
 }
 
@@ -67,11 +65,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 16,
   },
   listContainer: {
     paddingBottom: 20,
@@ -126,4 +119,4 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
     fontSize: 12,
   }
-}); 
+});

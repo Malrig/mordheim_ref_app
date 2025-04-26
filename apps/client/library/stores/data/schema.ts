@@ -63,11 +63,14 @@ const skill_schema = {
 export const TablesSchema = { ...metadata_schema, ...item_schema, ...special_rule_schema, ...skill_schema } as const;
 export const ValuesSchema = {} as const;
 
+export type DataStoreType = MergeableStore<[typeof TablesSchema, typeof ValuesSchema]>;
+export type DataRelationshipsType = Relationships<  [typeof TablesSchema, typeof ValuesSchema]>;
+export type DataIndexesType = Indexes<  [typeof TablesSchema, typeof ValuesSchema]>;
+export type DataQueriesType = Queries<  [typeof TablesSchema, typeof ValuesSchema]>;
+
 export function createObjectStoreRelationships(store: Store<
   [typeof TablesSchema, typeof ValuesSchema]
->): Relationships<
-  [typeof TablesSchema, typeof ValuesSchema]
-> {
+>): DataRelationshipsType {
   const store_relations = createRelationships(store);
 
   // Create relationships for the metadata table
@@ -89,9 +92,7 @@ export function createObjectStoreRelationships(store: Store<
 
 export function createObjectStoreIndexes(store: Store<
   [typeof TablesSchema, typeof ValuesSchema]
->): Indexes<
-  [typeof TablesSchema, typeof ValuesSchema]
-> {
+>): DataIndexesType {
   const store_indexes = createIndexes(store);
 
   // Want to index items by item_type and weapon_type
@@ -112,9 +113,7 @@ export function createObjectStoreIndexes(store: Store<
 
 export function createObjectStoreQueries(store: Store<
   [typeof TablesSchema, typeof ValuesSchema]
->): Queries<
-  [typeof TablesSchema, typeof ValuesSchema]
-> {
+>): DataQueriesType {
   const store_queries = createQueries(store);
 
   // This query is used to get all the items in a format that allows filtering. It also
@@ -133,5 +132,3 @@ export function createObjectStoreQueries(store: Store<
 
   return store_queries;
 }
-
-export type DataStoreType = MergeableStore<[typeof TablesSchema, typeof ValuesSchema]>;

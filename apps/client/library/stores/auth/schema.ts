@@ -21,11 +21,14 @@ export const ValuesSchema = {
   user_id: {type: "string", default: ""},
 } as const;
 
+export type AuthStoreType = Store<[typeof TablesSchema, typeof ValuesSchema]>;
+export type AuthRelationshipsType = Relationships<  [typeof TablesSchema, typeof ValuesSchema]>;
+export type AuthIndexesType = Indexes<  [typeof TablesSchema, typeof ValuesSchema]>;
+export type AuthQueriesType = Queries<  [typeof TablesSchema, typeof ValuesSchema]>;
+
 export function createObjectStoreRelationships(store: Store<
   [typeof TablesSchema, typeof ValuesSchema]
->): Relationships<
-  [typeof TablesSchema, typeof ValuesSchema]
-> {
+>): AuthRelationshipsType {
   const store_relations = createRelationships(store);
 
   return store_relations;
@@ -33,9 +36,7 @@ export function createObjectStoreRelationships(store: Store<
 
 export function createObjectStoreIndexes(store: Store<
   [typeof TablesSchema, typeof ValuesSchema]
->): Indexes<
-  [typeof TablesSchema, typeof ValuesSchema]
-> {
+>): AuthIndexesType {
   const store_indexes = createIndexes(store);
 
   return store_indexes;
@@ -43,12 +44,8 @@ export function createObjectStoreIndexes(store: Store<
 
 export function createObjectStoreQueries(store: Store<
   [typeof TablesSchema, typeof ValuesSchema]
->): Queries<
-  [typeof TablesSchema, typeof ValuesSchema]
-> {
+>): AuthQueriesType {
   const store_queries = createQueries(store);
 
   return store_queries;
 }
-
-export type AuthStoreType = Store<[typeof TablesSchema, typeof ValuesSchema]>;

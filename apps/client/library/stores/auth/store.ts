@@ -1,86 +1,22 @@
-import { createIndexes, createMergeableStore, createRelationships, createQueries, MergeableStore, createStore } from "tinybase/with-schemas"
-import {
-  useProvideStore,
-  useCreatePersister,
-  useCreateMergeableStore,
-  useCreateIndexes,
-  useCreateRelationships,
-  useCreateQueries,
-  useStore,
-  useValue,
-  useCreateStore,
-} from "./ui"
-import { createObjectStoreIndexes, createObjectStoreRelationships, createObjectStoreQueries, TablesSchema, ValuesSchema, AuthStoreType } from "./schema"
-import { supabase, getUserRoleAndPermissions } from "../../supabase";
+import { createIndexes, createRelationships, createQueries, createStore } from "tinybase/with-schemas"
+import { createObjectStoreIndexes, createObjectStoreRelationships, createObjectStoreQueries, TablesSchema, ValuesSchema, AuthStoreType, AuthQueriesType, AuthIndexesType, AuthRelationshipsType } from "./schema"
 import { createLocalPersister } from "tinybase/persisters/persister-browser/with-schemas";
 import { InitialData } from "./initial_data";
-import { useCallback } from "react";
-import { userStore as userStoreName } from "mordheim-common";
-import { Session } from "@supabase/auth-js";
-import { removeUserSpecificStores } from "./utils/user_specific_stores";
-
-
+import * as UiReact from "tinybase/ui-react/with-schemas";
+import { supabase } from "@/library/supabase";
+import { userLoggedOutCallback, userSignedInCallback } from "./utils/login";
 export const STORE_NAME = "auth-store";
+export const AuthUiHooks = UiReact as UiReact.WithSchemas<
+  [typeof TablesSchema, typeof ValuesSchema]
+>;
 
-const userLoggedOutCallback = () => {
-  const authStore = useStore(STORE_NAME);
-
-  const removeStores = removeUserSpecificStores();
-
-  return useCallback(() => {
-      console.log(`User logged out`)
-
-      removeStores();
-
-      if (authStore){
-        authStore.setValue('user_id', '');
-        authStore.setValue('email', '');
-        authStore.setValue('access_token', '');
-        authStore.setValue('user_role', '');
-        authStore.delTable("permissions");
-      }
-    },
-    [authStore, removeStores]
-  )
-}
-
-const userSignedInCallback = () => {
-  const authStore = useStore(STORE_NAME);
-  const user_id = useValue("user_id");
-
-  const logoutCb = userLoggedOutCallback()
-
-  return useCallback((user_session: Session) => {
-    console.log("Sign in event")
-
-    if (user_id && user_session.user.id && (user_id != user_session.user.id)) {
-      // Use has changed or been logged out somehow, call the logout callback
-      logoutCb()
-    }
-
-    if (!authStore) { console.log("No auth store"); return; }
-
-    console.log(`User signed in: ${user_session.user.email}, ${user_session.user.id}`);
-    authStore.setValue('user_id', user_session.user.id || '');
-    authStore.setValue('email', user_session.user.email || '');
-    authStore.setValue('access_token', user_session.access_token || '');
-    const { userRole, permissions } = getUserRoleAndPermissions(user_session);
-
-    console.log(`User role: ${userRole}`);
-    console.log(`User permissions: ${JSON.stringify(permissions)}`);
-    authStore.setValue('user_role', userRole);
-    authStore.setTable('permissions', permissions);
-  },
-[logoutCb, authStore, user_id])
-}
-
-export const AuthStore = () => {
-  const authStore: AuthStoreType = useCreateStore(
+export const AuthStoreProvider = () => {
+  const authStore: AuthStoreType = AuthUiHooks.useCreateStore(
     () => createStore().setTablesSchema(TablesSchema).setValuesSchema(ValuesSchema) as AuthStoreType
   );
-  useProvideStore(STORE_NAME, authStore);
+  AuthUiHooks.useProvideStore(STORE_NAME, authStore);
 
-  useCreatePersister(
+  AuthUiHooks.useCreatePersister(
     authStore,
     (store) => {
       return createLocalPersister(store, STORE_NAME);
@@ -92,13 +28,13 @@ export const AuthStore = () => {
     }
   );
 
-  useCreateIndexes(authStore, (store) => {
+  AuthUiHooks.useCreateIndexes(authStore, (store) => {
     return createObjectStoreIndexes(store)
   });
-  useCreateRelationships(authStore, (store) => {
+  AuthUiHooks.useCreateRelationships(authStore, (store) => {
     return createObjectStoreRelationships(store);
   });
-  useCreateQueries(authStore, (store) => {
+  AuthUiHooks.useCreateQueries(authStore, (store) => {
     return createObjectStoreQueries(store);
   });
 
@@ -121,15 +57,23 @@ export const AuthStore = () => {
   return null;
 }
 
-export const AuthStoreQueries = () => {
-  return createQueries(useStore(STORE_NAME)!);
+export function isAuthStoreLoading(): boolean {
+  const store = AuthUiHooks.useStore(STORE_NAME);
+  return store === undefined;
 }
-export const AuthStoreIndexes = () => {
-  return createIndexes(useStore(STORE_NAME)!);
+export function useAuthStore(): AuthStoreType {
+  const store = AuthUiHooks.useStore(STORE_NAME);
+  return store as AuthStoreType;
 }
-export const AuthStoreRelationships = () => {
-  return createRelationships(useStore(STORE_NAME)!);
+export function AuthStoreQueries(): AuthQueriesType {
+  const store = useAuthStore();
+  return createQueries(store!);
 }
-export const useAuthStore = () => {
-  return useStore(STORE_NAME);
+export function AuthStoreIndexes(): AuthIndexesType {
+  const store = useAuthStore();
+  return createIndexes(store!);
+}
+export function AuthStoreRelationships(): AuthRelationshipsType {
+  const store = useAuthStore();
+  return createRelationships(store!);
 }

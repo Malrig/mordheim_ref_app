@@ -3,6 +3,7 @@ import { Link } from 'expo-router';
 import * as React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import MarkdownText from "./markdown_text";
+import { ThemedText } from "./themed_components";
 
 type Props = {
   before: string,
@@ -11,10 +12,10 @@ type Props = {
 
 export default function ColonText({ before, after }: Props) {
   return (
-    <Text style={{ flexDirection: 'row', }}>
-      <Text style={{ fontWeight: "bold" }}>{before}: </Text>
+    <ThemedText style={{ flexDirection: 'row', }}>
+      <ThemedText style={{ fontWeight: "bold" }}>{before}: </ThemedText>
       <MarkdownText text={after} />
-    </Text>
+    </ThemedText>
   );
 }
 

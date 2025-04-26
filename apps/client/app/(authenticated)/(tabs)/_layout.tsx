@@ -1,9 +1,8 @@
 import { Image } from "react-native";
 import { Tabs } from "expo-router";
 import React from "react";
-import { DataStoreProvider } from "@/library/stores/data/store";
-import { UserStoreProvider } from "@/library/stores/user/store";
 import { useIsLoggedIn } from "@/library/stores/auth/utils/login";
+import { useThemeColour } from "@/library/stores/user/utils/theme";
 
 const icons_path = "@/assets/images/icons/";
 
@@ -19,60 +18,73 @@ const icons = {
 }
 
 export default function RootLayout() {
-  const isLoggedIn = useIsLoggedIn();
+  const backgroundColor = useThemeColour('primary');
+  const textColor = useThemeColour('text');
+  const tabBarBackgroundColor = useThemeColour('tabBarBackground');
+  const tabIconSelected = useThemeColour('tabIconSelected');
+  const tabIconDefault = useThemeColour('tabIconDefault');
 
-  return <>
-    {isLoggedIn  &&
-    <>
-      {/* <DataStoreProvider />
-      <UserStoreProvider /> */}
-      <Tabs
-        screenOptions={{
-          tabBarActiveTintColor: '#ffd33d',
-          headerStyle: {
-            backgroundColor: '#25292e',
-          },
-          headerShadowVisible: false,
-          headerTintColor: '#fff',
-          tabBarStyle: {
-            backgroundColor: '#25292e',
-          },
-        }}
-      >
-        <Tabs.Screen name="index" options={{
-          title: "Home", tabBarIcon: ({ color, focused }: { color: string, focused: boolean }) => (
-            <Image
-              source={focused ? icons["home_selected"] : icons["home_default"]}
-              style={{ tintColor: color, width: 24, height: 24 }}
-            />
-          )
-        }} />
-        <Tabs.Screen name="skills" options={{
-          title: "Skills", tabBarIcon: ({ color, focused }: { color: string, focused: boolean }) => (
-            <Image
-              source={focused ? icons["skills_selected"] : icons["skills_default"]}
-              style={{ tintColor: color, width: 24, height: 24 }}
-            />
-          )
-        }} />
-        <Tabs.Screen name="items" options={{
-          title: "Items", tabBarIcon: ({ color, focused }: { color: string, focused: boolean }) => (
-            <Image
-              source={focused ? icons["items_selected"] : icons["items_default"]}
-              style={{ tintColor: color, width: 24, height: 24 }}
-            />
-          )
-        }} />
-        <Tabs.Screen name="favourites" options={{
-          title: "Favourites", tabBarIcon: ({ color, focused }: { color: string, focused: boolean }) => (
-            <Image
-              source={focused ? icons["favourites_selected"] : icons["favourites_default"]}
-              style={{ tintColor: color, width: 24, height: 24 }}
-            />
-          )
-        }} />
-      </Tabs>
-      </>
-    }
-  </>;
+  return <Tabs
+    screenOptions={{
+      tabBarActiveTintColor: tabIconSelected,
+      tabBarInactiveTintColor: tabIconDefault,
+      headerStyle: {
+        backgroundColor: tabBarBackgroundColor,
+      },
+      // headerShadowVisible: false,
+      headerTintColor: textColor,
+      tabBarStyle: {
+        backgroundColor: tabBarBackgroundColor,
+      },
+      tabBarLabelStyle: {
+        fontSize: 12,
+        fontWeight: '500',
+      },
+    }}
+  >
+    <Tabs.Screen name="index" options={{
+      sceneStyle: {
+        backgroundColor: backgroundColor, // This what you want
+      },
+      title: "Home", tabBarIcon: ({ color, focused }: { color: string, focused: boolean }) => (
+        <Image
+          source={focused ? icons["home_selected"] : icons["home_default"]}
+          style={{ tintColor: color, width: 24, height: 24 }}
+        />
+      )
+    }} />
+    <Tabs.Screen name="skills" options={{
+      sceneStyle: {
+        backgroundColor: backgroundColor, // This what you want
+      },
+      title: "Skills", tabBarIcon: ({ color, focused }: { color: string, focused: boolean }) => (
+        <Image
+          source={focused ? icons["skills_selected"] : icons["skills_default"]}
+          style={{ tintColor: color, width: 24, height: 24 }}
+        />
+      )
+    }} />
+    <Tabs.Screen name="items" options={{
+      sceneStyle: {
+        backgroundColor: backgroundColor, // This what you want
+      },
+      title: "Items", tabBarIcon: ({ color, focused }: { color: string, focused: boolean }) => (
+        <Image
+          source={focused ? icons["items_selected"] : icons["items_default"]}
+          style={{ tintColor: color, width: 24, height: 24 }}
+        />
+      )
+    }} />
+    <Tabs.Screen name="favourites" options={{
+      sceneStyle: {
+        backgroundColor: backgroundColor, // This what you want
+      },
+      title: "Favourites", tabBarIcon: ({ color, focused }: { color: string, focused: boolean }) => (
+        <Image
+          source={focused ? icons["favourites_selected"] : icons["favourites_default"]}
+          style={{ tintColor: color, width: 24, height: 24 }}
+        />
+      )
+    }} />
+  </Tabs>;
 }

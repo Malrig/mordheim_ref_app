@@ -6,11 +6,12 @@ const favourites = {
     object_table: { type: 'string' },
     object_id: { type: 'string' },
   }
-
 } as const;
 
 export const TablesSchema = { ...favourites } as const;
-export const ValuesSchema = {} as const;
+export const ValuesSchema = {
+  theme: {type: "string", default: "dark"},
+} as const;
 
 export type UserStoreType = MergeableStore<[typeof TablesSchema, typeof ValuesSchema]>;
 export type UserRelationshipsType = Relationships<  [typeof TablesSchema, typeof ValuesSchema]>;

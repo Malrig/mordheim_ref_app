@@ -1,10 +1,11 @@
-import { Text, View, FlatList, Pressable, StyleSheet } from "react-native";
+import { View, FlatList, Pressable, StyleSheet } from "react-native";
 import * as React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Divider from "../../../components/general/divider";
 import ColonText from "../../general/colon_text";
 import { Item } from "../../../library/stores/data/objects/item";
 import { toggleFavouriteCallback } from "@/library/stores/user/utils/favourites";
+import { ThemedText } from "@/components/general/themed_components";
 
 type Props = {
   weapon: { id: string }
@@ -26,7 +27,7 @@ export default function WeaponListItem({ weapon }: Props) {
         <Pressable onPress={() => {console.log("Pressed"); setFavouriteCb()}}>
           <FontAwesome name={isFavourite ? "heart" : "heart-o"} />
         </Pressable>
-        <Text> {item_object.name}</Text>
+        <ThemedText> {item_object.name}</ThemedText>
         <FontAwesome style={[{ marginLeft: "auto" }]} name={expanded ? "chevron-up" : "chevron-down"} />
       </View>
       {expanded && <>
@@ -35,7 +36,7 @@ export default function WeaponListItem({ weapon }: Props) {
         <ColonText before="Range" after={item_object.range?.toString() || ''} />
         <ColonText before="Strength" after={item_object.strength?.toString() || ''} />
         <Divider />
-        <Text>Special Rules:</Text>
+        <ThemedText>Special Rules:</ThemedText>
         <FlatList data={special_rules} renderItem={({ item }) => <>
           <ColonText before={item.name} after={item.description} />
         </>} />

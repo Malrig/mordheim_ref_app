@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-import { Alert, Button, StyleSheet, View, TextInput } from 'react-native'
+import { Alert, StyleSheet } from 'react-native'
 import { supabase } from '../library/supabase'
+import { ThemedButton, ThemedTextInput, ThemedText, ThemedView } from './general/themed_components'
 
 export default function Auth() {
   const [email, setEmail] = useState('')
@@ -39,45 +40,43 @@ export default function Auth() {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <TextInput
-          // label="Email"
-          // leftIcon={{ type: 'font-awesome', name: 'envelope' }}
-          onChangeText={(text) => setEmail(text)}
+    <ThemedView style={styles.container}>
+      <ThemedText variant="title" style={styles.title}>Welcome</ThemedText>
+      <ThemedView style={{ ...styles.verticallySpaced, ...styles.mt20 }}>
+        <ThemedTextInput
+          onChangeText={setEmail}
           value={email}
           placeholder="email@address.com"
-          autoCapitalize={'none'}
+          autoCapitalize="none"
         />
-      </View>
-      <View style={styles.verticallySpaced}>
-        <TextInput  
-          // label="Password"
-          // leftIcon={{ type: 'font-awesome', name: 'lock' }}
-          onChangeText={(text) => setPassword(text)}
+      </ThemedView>
+      <ThemedView style={styles.verticallySpaced}>
+        <ThemedTextInput
+          onChangeText={setPassword}
           value={password}
           secureTextEntry={true}
           placeholder="Password"
-          autoCapitalize={'none'}
+          autoCapitalize="none"
         />
-      </View>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button title="Sign in" disabled={loading} onPress={() => signInWithEmail()} />
-      </View>
-      <View style={styles.verticallySpaced}>
-        <Button title="Sign up" disabled={loading} onPress={() => signUpWithEmail()} />
-      </View>
-      <View style={styles.verticallySpaced}>
-        <Button title="Sign out" disabled={loading} onPress={() => signOut()} />
-      </View>
-    </View>
+      </ThemedView>
+      <ThemedView style={{ ...styles.verticallySpaced, ...styles.mt20 }}>
+        <ThemedButton title="Sign in" disabled={loading} onPress={signInWithEmail} />
+      </ThemedView>
+      <ThemedView style={styles.verticallySpaced}>
+        <ThemedButton title="Sign up" disabled={loading} onPress={signUpWithEmail} />
+      </ThemedView>
+      <ThemedView style={styles.verticallySpaced}>
+        <ThemedButton title="Sign out" disabled={loading} onPress={signOut} />
+      </ThemedView>
+    </ThemedView>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 40,
     padding: 12,
+    width: '100%',
+    maxWidth: 400,
   },
   verticallySpaced: {
     paddingTop: 4,
@@ -86,5 +85,9 @@ const styles = StyleSheet.create({
   },
   mt20: {
     marginTop: 20,
+  },
+  title: {
+    textAlign: 'center',
+    marginBottom: 20,
   },
 })

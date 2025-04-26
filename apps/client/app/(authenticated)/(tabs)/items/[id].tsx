@@ -1,23 +1,24 @@
-import { Text, View, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { useLocalSearchParams } from 'expo-router';
 import { ItemType } from "../../../../library/types/items";
 import { Item } from "../../../../library/stores/data/objects/item";
 import React from "react";
+import { ThemedText } from "@/components/general/themed_components";
 
 export function ItemDetail({ item }: { item: Item }) {
   return (
     <View style={styles.detailContainer}>
-      <Text style={styles.detailTitle}>{item.name}</Text>
-      <Text style={styles.detailDescription}>{item.description}</Text>
+      <ThemedText style={styles.detailTitle}>{item.name}</ThemedText>
+      <ThemedText style={styles.detailDescription}>{item.description}</ThemedText>
       <View style={styles.detailInfo}>
-        <Text style={styles.detailText}>Price: {item.price}</Text>
+        <ThemedText style={styles.detailText}>Price: {item.price}</ThemedText>
         {/* <Text style={styles.detailText}>Availability: {item.availability.map(avail =>
           avail.restrictions.length > 0 ? 'Restricted' : 'Common'
         ).join(', ')}</Text> */}
         {item.item_type === ItemType.Weapon && (
           <>
-            <Text style={styles.detailText}>Range: {item.range}</Text>
-            <Text style={styles.detailText}>Strength: {item.strength}</Text>
+            <ThemedText style={styles.detailText}>Range: {item.range}</ThemedText>
+            <ThemedText style={styles.detailText}>Strength: {item.strength}</ThemedText>
           </>
         )}
       </View>

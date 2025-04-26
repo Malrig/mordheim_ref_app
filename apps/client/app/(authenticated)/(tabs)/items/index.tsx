@@ -1,13 +1,11 @@
-import ItemFilter, { filterItems } from "../../../../components/items/item_filter";
-import { ItemType, WeaponType } from "../../../../library/types/items";
-import { Item as ItemInterface, Armour, MiscItem } from "../../../../library/types/items";
-import React, { useState, useRef, useMemo } from "react";
-import { SectionList, Text, View, Pressable, ViewToken, FlatList, StyleSheet } from "react-native";
-import { createQueries } from "tinybase/with-schemas";
+import ItemFilter from "../../../../components/items/item_filter";
+import { ItemType } from "../../../../library/types/items";
+import React, { useState, useMemo } from "react";
+import { StyleSheet } from "react-native";
+import { ThemedText, ThemedView } from '@/components/general/themed_components'
 
 import { DataStore } from "../../../../library/stores/stores";
 
-import ItemListItem from "../../../../components/items/item_list";
 import SectionedItemList from "../../../../components/items/sectioned_item_list";
 import { DataStoreQueries } from "@/library/stores/data/store";
 
@@ -50,8 +48,8 @@ export default function BrowseItems() {
   }, [resultTable, searchQuery, searchedType]);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>All Items</Text>
+    <ThemedView style={styles.container}>
+      <ThemedText style={styles.title}>All Items</ThemedText>
       <ItemFilter
         searchQuery={searchQuery}
         onSearchQueryChange={setSearchQuery}
@@ -59,7 +57,7 @@ export default function BrowseItems() {
         onTypeChange={setSearchedType}
       />
       <SectionedItemList items={filteredItems} />
-    </View>
+    </ThemedView>
   );
 }
 

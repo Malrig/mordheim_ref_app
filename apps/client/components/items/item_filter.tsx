@@ -1,6 +1,8 @@
-import { View, TextInput, StyleSheet, Text } from "react-native";
+import { TextInput, StyleSheet } from "react-native";
 import { Item, ItemType } from "../../library/types/items";
 import { Picker } from '@react-native-picker/picker';
+import { ThemedTextInput, ThemedText, ThemedView } from "../general/themed_components";
+import { useThemeColour } from "@/library/stores/user/utils/theme";
 
 type Props = {
   searchQuery: string;
@@ -23,16 +25,18 @@ export default function ItemFilter({
   selectedType,
   onTypeChange,
 }: Props) {
+  const containerColour = useThemeColour("primary")
+
   return (
-    <View style={styles.container}>
-      <TextInput
+    <ThemedView style={{ backgroundColor: containerColour, ...styles.container }}>
+      <ThemedTextInput
         style={styles.searchInput}
         placeholder="Search items..."
         value={searchQuery}
         onChangeText={onSearchQueryChange}
       />
-      <View style={styles.pickerContainer}>
-        <Text style={styles.label}>Type:</Text>
+      <ThemedView style={styles.pickerContainer}>
+        <ThemedText style={styles.label}>Type:</ThemedText>
         <Picker
           selectedValue={selectedType ?? ''}
           onValueChange={(itemValue) => {
@@ -49,23 +53,21 @@ export default function ItemFilter({
           <Picker.Item label="Armour" value={ItemType.Armour} />
           <Picker.Item label="Misc Items" value={ItemType.MiscItem} />
         </Picker>
-      </View>
-      <Text>TODO: Include filtering on: tags, availability, source, price, rarity, etc.</Text>
-    </View>
+      </ThemedView>
+      <ThemedText>TODO: Include filtering on: tags, availability, source, price, rarity, etc.</ThemedText>
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     padding: 10,
-    backgroundColor: '#f5f5f5',
     borderRadius: 8,
     margin: 10,
   },
   searchInput: {
     height: 40,
     borderWidth: 1,
-    borderColor: '#ddd',
     borderRadius: 4,
     paddingHorizontal: 10,
     marginBottom: 10,

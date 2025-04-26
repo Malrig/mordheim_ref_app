@@ -1,7 +1,7 @@
-import { Text, View, FlatList, Pressable, StyleSheet } from "react-native";
+import { View, FlatList, Pressable, StyleSheet } from "react-native";
 import * as React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-// import { Divider, List } from "react-native-paper";
+import { ThemedText } from "@/components/general/themed_components";
 
 import RichText from "../../../components/general/markdown_text";
 import { Item } from "../../../library/stores/data/objects/item";
@@ -27,7 +27,7 @@ export default function OtherItemListItem({ item }: Props) {
         <Pressable onPress={() => {console.log("Pressed"); setFavouriteCb()}}>
           <FontAwesome name={isFavourite ? "heart" : "heart-o"} />
         </Pressable>
-        <Text> {item_object.name}</Text>
+        <ThemedText> {item_object.name}</ThemedText>
         <FontAwesome style={[{ marginLeft: "auto" }]} name={expanded ? "chevron-up" : "chevron-down"} />
       </View>
       {expanded && <><Divider /><RichText text={item_object.description} /></>}

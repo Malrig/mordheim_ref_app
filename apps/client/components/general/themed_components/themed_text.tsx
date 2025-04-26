@@ -1,0 +1,40 @@
+import React from 'react';
+import { Text, StyleSheet, TextStyle } from 'react-native';
+import { useThemeColour } from '../../../library/stores/user/utils/theme';
+
+interface ThemedTextProps {
+  children: React.ReactNode;
+  style?: TextStyle;
+  variant?: 'body' | 'title' | 'subtitle';
+}
+
+export const ThemedText: React.FC<ThemedTextProps> = ({
+  children,
+  style,
+  variant = 'body',
+}) => {
+  const textColor = useThemeColour('text');
+
+  return (
+    <Text style={[styles[variant], { color: textColor }, style]}>
+      {children}
+    </Text>
+  );
+};
+
+const styles = StyleSheet.create({
+  body: {
+    fontSize: 16,
+    lineHeight: 24,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    lineHeight: 32,
+  },
+  subtitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    lineHeight: 26,
+  },
+}); 

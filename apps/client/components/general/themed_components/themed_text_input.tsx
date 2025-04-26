@@ -1,13 +1,13 @@
 import React from 'react';
-import { TextInput, StyleSheet, TextStyle } from 'react-native';
+import { TextInput, StyleSheet, TextStyle, StyleProp } from 'react-native';
 import { useThemeColour } from '@/library/stores/user/utils/theme';
 
 interface ThemedTextInputProps {
   value: string;
   onChangeText: (text: string) => void;
   placeholder?: string;
-  style?: TextStyle;
-  textStyle?: TextStyle;
+  style?: StyleProp<TextStyle>;
+  textStyle?: StyleProp<TextStyle>;
   secureTextEntry?: boolean;
   multiline?: boolean;
   numberOfLines?: number;

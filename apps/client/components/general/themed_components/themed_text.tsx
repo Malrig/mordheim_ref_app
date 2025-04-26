@@ -1,10 +1,10 @@
 import React from 'react';
-import { Text, StyleSheet, TextStyle } from 'react-native';
-import { useThemeColour } from '../../../library/stores/user/utils/theme';
+import { Text, StyleSheet, TextStyle, StyleProp } from 'react-native';
+import { useThemeColour } from '@/library/stores/user/utils/theme';
 
 interface ThemedTextProps {
   children: React.ReactNode;
-  style?: TextStyle;
+  style?: StyleProp<TextStyle>;
   variant?: 'body' | 'title' | 'subtitle';
 }
 

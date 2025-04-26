@@ -1,7 +1,6 @@
 import { TextInput, StyleSheet } from "react-native";
 import { Item, ItemType } from "../../library/types/items";
-import { Picker } from '@react-native-picker/picker';
-import { ThemedTextInput, ThemedText, ThemedView } from "../general/themed_components";
+import { ThemedTextInput, ThemedText, ThemedView, ThemedPicker } from "../general/themed_components";
 import { useThemeColour } from "@/library/stores/user/utils/theme";
 
 type Props = {
@@ -25,19 +24,17 @@ export default function ItemFilter({
   selectedType,
   onTypeChange,
 }: Props) {
-  const containerColour = useThemeColour("primary")
-
   return (
-    <ThemedView style={{ backgroundColor: containerColour, ...styles.container }}>
+    <ThemedView style={styles.container} backgroundColor="secondary">
       <ThemedTextInput
         style={styles.searchInput}
         placeholder="Search items..."
         value={searchQuery}
         onChangeText={onSearchQueryChange}
       />
-      <ThemedView style={styles.pickerContainer}>
+      <ThemedView style={styles.pickerContainer} backgroundColor="secondary">
         <ThemedText style={styles.label}>Type:</ThemedText>
-        <Picker
+        <ThemedPicker
           selectedValue={selectedType ?? ''}
           onValueChange={(itemValue) => {
             if (itemValue === '') {
@@ -48,11 +45,11 @@ export default function ItemFilter({
           }}
           style={styles.picker}
         >
-          <Picker.Item label="All Types" value="" />
-          <Picker.Item label="Weapons" value={ItemType.Weapon} />
-          <Picker.Item label="Armour" value={ItemType.Armour} />
-          <Picker.Item label="Misc Items" value={ItemType.MiscItem} />
-        </Picker>
+          <ThemedPicker.Item label="All Types" value="" />
+          <ThemedPicker.Item label="Weapons" value={ItemType.Weapon} />
+          <ThemedPicker.Item label="Armour" value={ItemType.Armour} />
+          <ThemedPicker.Item label="Misc Items" value={ItemType.MiscItem} />
+        </ThemedPicker>
       </ThemedView>
       <ThemedText>TODO: Include filtering on: tags, availability, source, price, rarity, etc.</ThemedText>
     </ThemedView>
@@ -83,6 +80,5 @@ const styles = StyleSheet.create({
   },
   picker: {
     flex: 1,
-    height: 40,
   },
 });

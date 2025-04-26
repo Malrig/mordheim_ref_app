@@ -43,6 +43,7 @@ export default function RootLayout(): ReactNode {
           }}
         >
           <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="items/[id]" />
         </Stack>
       </CheckStoresLoaded>
     </>

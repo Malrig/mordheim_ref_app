@@ -75,7 +75,6 @@ export default function SectionedItemList({ items }: Props) {
       flex: 1,
     },
     sectionHeader: {
-      backgroundColor: useThemeColour("background"),
       padding: 10,
       marginTop: 0,
     },

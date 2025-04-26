@@ -18,15 +18,20 @@ export function useIsLoggedIn(): { loading: boolean, isLoggedIn: boolean } {
   };
 }
 
-export async function signInWithEmail(email: string, password: string, setLoading: (loading: boolean) => void) {
-  setLoading(true)
+export async function signInWithEmail(email: string, password: string, setLoading?: (loading: boolean) => void) {
+  setLoading?.(true)
   const { error } = await supabase.auth.signInWithPassword({
     email: email,
     password: password,
   })
 
-  if (error) Alert.alert(error.message)
-  setLoading(false)
+  if (error) {
+    Alert.alert(error.message)
+    setLoading?.(false)
+    return false
+  }
+  setLoading?.(false)
+  return true
 }
 
 export async function signOut() {

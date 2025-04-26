@@ -24,7 +24,7 @@ const MarkdownWrapper: React.FC<any> = ({ children }) => {
   const styles = StyleSheet.create({
     body: {
       color: useThemeColour('text'),
-      fontSize: 10
+      // fontSize: 10
     },
   });
 

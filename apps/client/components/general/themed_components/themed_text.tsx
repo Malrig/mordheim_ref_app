@@ -5,7 +5,7 @@ import { useThemeColour } from '@/library/stores/user/utils/theme';
 interface ThemedTextProps {
   children: React.ReactNode;
   style?: StyleProp<TextStyle>;
-  variant?: 'body' | 'title' | 'subtitle';
+  variant?: 'body' | 'title' | 'subtitle' | 'important';
 }
 
 export const ThemedText: React.FC<ThemedTextProps> = ({
@@ -25,7 +25,7 @@ export const ThemedText: React.FC<ThemedTextProps> = ({
 const styles = StyleSheet.create({
   body: {
     fontSize: 16,
-    lineHeight: 24,
+    lineHeight: 16,
   },
   title: {
     fontSize: 24,
@@ -36,5 +36,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
     lineHeight: 26,
+  },
+  important: {
+    fontSize: 16,
+    fontWeight: '600',
+    lineHeight: 24,
   },
 }); 

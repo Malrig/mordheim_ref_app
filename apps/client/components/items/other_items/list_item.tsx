@@ -1,55 +1,55 @@
-import { View, FlatList, Pressable, StyleSheet } from "react-native";
+import { View, Pressable, StyleSheet } from "react-native";
 import * as React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { ThemedText } from "@/components/general/themed_components";
-
 import RichText from "../../../components/general/markdown_text";
 import { Item } from "../../../library/stores/data/objects/item";
-import Divider from "../../../components/general/divider";
 import { toggleFavouriteCallback } from "@/library/stores/user/utils/favourites";
+import { Expandable } from "@/components/general/expandable";
 
 interface Props {
   item: { id: string }
 }
 
 export default function OtherItemListItem({ item }: Props) {
-  const [expanded, setExpanded] = React.useState(false);
-
   const item_object = Item.useInstance(item.id);
   const metadata_info = item_object.useMetadata();
   const isFavourite = item_object.useFavourite();
 
   const setFavouriteCb = toggleFavouriteCallback(Item.TABLE_NAME, item_object.id);
 
+  const header = (
+    <View style={styles.header}>
+      <Pressable onPress={() => { console.log("Pressed"); setFavouriteCb() }}>
+        <FontAwesome name={isFavourite ? "heart" : "heart-o"} />
+      </Pressable>
+      <ThemedText> {item_object.name}</ThemedText>
+    </View>
+  );
+
   return (
-    <Pressable style={styles.item} onPress={() => setExpanded(!expanded)}>
-      <View style={styles.header}>
-        <Pressable onPress={() => {console.log("Pressed"); setFavouriteCb()}}>
-          <FontAwesome name={isFavourite ? "heart" : "heart-o"} />
-        </Pressable>
-        <ThemedText> {item_object.name}</ThemedText>
-        <FontAwesome style={[{ marginLeft: "auto" }]} name={expanded ? "chevron-up" : "chevron-down"} />
-      </View>
-      {expanded && <><Divider /><RichText text={item_object.description} /></>}
-    </Pressable>
+    <Expandable
+      title={header}
+      containerStyle={styles.item}
+      contentStyle={styles.content}
+    >
+      <RichText text={item_object.description} />
+    </Expandable>
   );
 }
 
 const styles = StyleSheet.create({
   item: {
-    flexDirection: 'column',
     borderRadius: 10,
     borderColor: '#000000',
     borderWidth: 1,
-    padding: 3,
     margin: 3,
   },
   header: {
     flexDirection: 'row',
     alignItems: "center",
   },
-  description_text: {
-    fontStyle: "italic",
-    fontSize: 12,
+  content: {
+    padding: 3,
   }
 });

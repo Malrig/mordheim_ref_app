@@ -49,7 +49,7 @@ export default function BrowseItems() {
 
   return (
     <ThemedView style={styles.container}>
-      <ThemedText style={styles.title}>All Items</ThemedText>
+      <ThemedText variant="title">All Items</ThemedText>
       <ItemFilter
         searchQuery={searchQuery}
         onSearchQueryChange={setSearchQuery}
@@ -65,11 +65,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 16,
   },
   listContainer: {
     paddingBottom: 20,

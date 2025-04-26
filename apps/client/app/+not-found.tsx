@@ -7,7 +7,7 @@ export default function NotFoundScreen() {
     <>
       <Stack.Screen options={{ title: 'Oops! Not Found' }} />
       <ThemedView style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <ThemedText>Page not found</ThemedText>
+        <ThemedText variant="subtitle">Page not found</ThemedText>
         <Link href="/">
           Go back to Home screen!
         </Link>

@@ -15,7 +15,7 @@ export const Header: React.FC<HeaderProps> = ({ title }) => {
 
   return (
     <View style={[styles.container, { backgroundColor }]}>
-      <ThemedText style={styles.title}>{title}</ThemedText>
+      <ThemedText variant="title">{title}</ThemedText>
       <View style={styles.rightSection}>
         <ThemedText style={styles.email}>{email}</ThemedText>
         <ThemedButton onPress={signOut} title="Sign Out" style={styles.signOutButton} textStyle={styles.signOutText} />
@@ -33,12 +33,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
   email: {
-    fontSize: 14,
     opacity: 0.7,
   },
   signOutButton: {

@@ -2,6 +2,7 @@ import { TextInput, StyleSheet } from "react-native";
 import { Item, ItemType } from "../../library/types/items";
 import { ThemedTextInput, ThemedText, ThemedView, ThemedPicker } from "../general/themed_components";
 import { useThemeColour } from "@/library/stores/user/utils/theme";
+import { Expandable } from "../general/expandable";
 
 type Props = {
   searchQuery: string;
@@ -25,41 +26,37 @@ export default function ItemFilter({
   onTypeChange,
 }: Props) {
   return (
-    <ThemedView style={styles.container} backgroundColor="secondary">
-      <ThemedTextInput
-        style={styles.searchInput}
-        placeholder="Search items..."
-        value={searchQuery}
-        onChangeText={onSearchQueryChange}
-      />
-      <ThemedView style={styles.pickerContainer} backgroundColor="secondary">
-        <ThemedText style={styles.label}>Type:</ThemedText>
-        <ThemedPicker
-          selectedValue={selectedType ?? ''}
-          onValueChange={(itemValue) => {
-            if (itemValue === '') {
-              onTypeChange(null);
-            } else {
-              onTypeChange(itemValue as ItemType);
-            }
-          }}
-          style={styles.picker}
-        >
-          <ThemedPicker.Item label="All Types" value="" />
-          <ThemedPicker.Item label="Weapons" value={ItemType.Weapon} />
-          <ThemedPicker.Item label="Armour" value={ItemType.Armour} />
-          <ThemedPicker.Item label="Misc Items" value={ItemType.MiscItem} />
-        </ThemedPicker>
-      </ThemedView>
-      <ThemedText>TODO: Include filtering on: tags, availability, source, price, rarity, etc.</ThemedText>
-    </ThemedView>
+    <Expandable title="Filter" containerStyle={styles.container} initialExpanded={true}>
+        <ThemedTextInput
+          style={styles.searchInput}
+          placeholder="Search items..."
+          value={searchQuery}
+          onChangeText={onSearchQueryChange}
+        />
+          <ThemedText style={styles.label}>Type:</ThemedText>
+          <ThemedPicker
+            selectedValue={selectedType ?? ''}
+            onValueChange={(itemValue) => {
+              if (itemValue === '') {
+                onTypeChange(null);
+              } else {
+                onTypeChange(itemValue as ItemType);
+              }
+            }}
+            style={styles.picker}
+          >
+            <ThemedPicker.Item label="All Types" value="" />
+            <ThemedPicker.Item label="Weapons" value={ItemType.Weapon} />
+            <ThemedPicker.Item label="Armour" value={ItemType.Armour} />
+            <ThemedPicker.Item label="Misc Items" value={ItemType.MiscItem} />
+          </ThemedPicker>
+        <ThemedText>TODO: Include filtering on: tags, availability, source, price, rarity, etc.</ThemedText>
+    </Expandable>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
-    borderRadius: 8,
     margin: 10,
   },
   searchInput: {

@@ -42,11 +42,6 @@ export default function SectionedItemList({ items }: Props) {
       flex: 1,
       padding: 16,
     },
-    title: {
-      fontSize: 24,
-      fontWeight: 'bold',
-      marginBottom: 16,
-    },
     typeListContainer: {
       height: 50,
       marginBottom: 16,
@@ -64,9 +59,6 @@ export default function SectionedItemList({ items }: Props) {
     selectedTypeItem: {
       backgroundColor: useThemeColour("tabIconSelected"),
     },
-    typeItemText: {
-      fontSize: 16,
-    },
     selectedTypeItemText: {
       color: useThemeColour("grey"),
       fontWeight: 'bold',
@@ -77,10 +69,6 @@ export default function SectionedItemList({ items }: Props) {
     sectionHeader: {
       padding: 10,
       marginTop: 0,
-    },
-    sectionHeaderText: {
-      fontSize: 18,
-      fontWeight: 'bold',
     },
     itemContainer: {
       padding: 16,
@@ -127,10 +115,9 @@ export default function SectionedItemList({ items }: Props) {
       ]}
       onPress={() => onItemTypeSelect(section)}
     >
-      <ThemedText style={{
-        ...styles.typeItemText,
-        ...((currentSection != null && getSectionKey(currentSection) == getSectionKey(section.sectionKey)) ? { ...styles.selectedTypeItemText } : {})
-      }}>
+      <ThemedText style={
+        ((currentSection != null && getSectionKey(currentSection) == getSectionKey(section.sectionKey)) ? { ...styles.selectedTypeItemText } : {})
+      }>
         {section.title}
       </ThemedText>
     </Pressable>
@@ -138,7 +125,7 @@ export default function SectionedItemList({ items }: Props) {
 
   const renderSectionHeader = ({ section: { title } }: { section: ItemSection }) => (
     <ThemedView style={styles.sectionHeader}>
-      <ThemedText style={styles.sectionHeaderText}>{title}</ThemedText>
+      <ThemedText variant="subtitle">{title}</ThemedText>
     </ThemedView>
   );
 
@@ -165,7 +152,7 @@ export default function SectionedItemList({ items }: Props) {
 
   return (
     <ThemedView style={styles.container}>
-      <ThemedText style={styles.title}>All Items</ThemedText>
+      <ThemedText variant="title">All Items</ThemedText>
       <ThemedView style={styles.typeListContainer}>
         <FlatList
           ref={sectionSelectionRef}

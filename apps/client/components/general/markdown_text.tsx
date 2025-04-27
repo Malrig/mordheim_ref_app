@@ -1,13 +1,15 @@
-import { Text, View, FlatList, Pressable, TextInput, StyleSheet } from "react-native";
+import { Text, View, ViewStyle, Pressable, TextInput, StyleSheet, StyleProp } from "react-native";
 import { Link } from 'expo-router';
 import * as React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Markdown, { RenderRules } from '@ronradtke/react-native-markdown-display';
 import { useThemeColour } from "@/library/stores/user/utils/theme";
+import { ThemedView } from "./themed_components";
 // import { Divider, List } from "react-native-paper";
 
 type Props = {
   text: string,
+  container_style?: StyleProp<ViewStyle>;
 }
 
 // If we need to override the default markdown rendering then this is how it's done.
@@ -32,10 +34,10 @@ const MarkdownWrapper: React.FC<any> = ({ children }) => {
   return <Markdown style={styles} rules={rules}>{children}</Markdown>;
 };
 
-export default function MarkdownText({ text }: Props) {
+export default function MarkdownText({ text, container_style }: Props) {
   return (
-    <>
+    <ThemedView style={container_style}>
       <MarkdownWrapper>{text}</MarkdownWrapper>
-    </>
+    </ThemedView>
   );
 }

@@ -123,7 +123,7 @@ export default function SectionedItemList({ items }: Props) {
   );
 
   const renderSectionHeader = ({ section: { title } }: { section: ItemSection }) => (
-    <ThemedView style={styles.sectionHeader}>
+    <ThemedView backgroundColor="primary" style={styles.sectionHeader}>
       <ThemedText variant="subtitle">{title}</ThemedText>
     </ThemedView>
   );
@@ -141,12 +141,12 @@ export default function SectionedItemList({ items }: Props) {
     // Set the current section to the first viewable item
     if (viewableItems.length > 0) {
       setCurrentSection(viewableItems[0].section.sectionKey);
+      sectionSelectionRef?.current?.scrollToIndex({
+        index: sections.findIndex(s => s.sectionKey === viewableItems[0].section.sectionKey),
+        animated: true,
+        viewPosition: 0.5,
+      });
     }
-    sectionSelectionRef?.current?.scrollToIndex({
-      index: sections.findIndex(s => s.sectionKey === viewableItems[0].section.sectionKey),
-      animated: true,
-      viewPosition: 0.5,
-    });
   }
 
   return (

@@ -18,6 +18,7 @@ const restriction_schema = {
     id: { type: 'string' },
     type: { type: 'string' },
     restriction: { type: 'string' },
+    restriction_type: { type: 'string' },
     availability_id: { type: 'string' },
   }
 } as const;

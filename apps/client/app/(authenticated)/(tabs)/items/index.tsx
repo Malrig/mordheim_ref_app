@@ -1,5 +1,5 @@
 import ItemFilter from "../../../../components/items/item_filter";
-import { ItemType } from "../../../../library/types/enums";
+import { ItemType } from "@/library/types/enums";
 import React, { useState, useMemo } from "react";
 import { StyleSheet } from "react-native";
 import { ThemedText, ThemedView } from '@/components/general/themed_components'
@@ -48,7 +48,7 @@ export default function BrowseItems() {
   }, [resultTable, searchQuery, searchedType]);
 
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView backgroundColor="primary" style={styles.container}>
       <ThemedText variant="title">All Items</ThemedText>
       <ItemFilter
         searchQuery={searchQuery}

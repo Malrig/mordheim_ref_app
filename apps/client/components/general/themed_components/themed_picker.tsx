@@ -43,9 +43,8 @@ const styles = StyleSheet.create({
   container: {
     borderWidth: 1,
     borderRadius: 8,
-    overflow: 'hidden',
   },
   picker: {
     height: 40,
   },
-}); 
+});

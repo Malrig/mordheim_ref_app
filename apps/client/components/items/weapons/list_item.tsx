@@ -8,6 +8,8 @@ import { toggleFavouriteCallback } from "@/library/stores/user/utils/favourites"
 import { ThemedText, ThemedView } from "@/components/general/themed_components";
 import { Expandable } from "@/components/general/expandable";
 import { useThemeColour } from "@/library/stores/user/utils/theme";
+import { router } from 'expo-router';
+import {SpecialRules} from "@/components/data/special_rules";
 
 type Props = {
   weapon: { id: string }
@@ -16,7 +18,6 @@ type Props = {
 export default function WeaponListItem({ weapon }: Props) {
   const item_object = Item.useInstance(weapon.id);
   const metadata_info = item_object.useMetadata();
-  const special_rules = item_object.useSpecialRules();
   const isFavourite = item_object.useFavourite();
   const background_colour = useThemeColour('secondary');
 
@@ -24,10 +25,13 @@ export default function WeaponListItem({ weapon }: Props) {
 
   const header = (
     <View style={styles.header}>
-      <Pressable onPress={() => { console.log("Pressed"); setFavouriteCb() }}>
+      <Pressable onPress={() => { console.log("Pressed"); setFavouriteCb() }} style={{ padding: 3 }}>
         <FontAwesome name={isFavourite ? "heart" : "heart-o"} />
       </Pressable>
       <ThemedText>{item_object.name}</ThemedText>
+      <Pressable onPress={() => router.push(`/items/${weapon.id}`)} style={styles.detailsButton}>
+        <FontAwesome name="info-circle" />
+      </Pressable>
     </View>
   );
 
@@ -41,10 +45,7 @@ export default function WeaponListItem({ weapon }: Props) {
       <ColonText before="Strength" after={item_object.strength?.toString() || ''} containerStyle={{ backgroundColor: background_colour }} />
 
       <Divider />
-      <ThemedText variant="subtitle">Special Rules:</ThemedText>
-      <FlatList data={special_rules} renderItem={({ item }) => <>
-        <ColonText before={item.name} after={item.description} containerStyle={{ backgroundColor: background_colour }} />
-      </>} />
+      <SpecialRules specialRules={item_object.getSpecialRuleIds()} />
     </Expandable>
   );
 }
@@ -59,11 +60,16 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: "center",
+    justifyContent: 'space-between',
   },
   content: {
     padding: 5,
   },
   colonText: {
     margin: 3,
+  },
+  detailsButton: {
+    marginLeft: 'auto',
+    padding: 8,
   }
 });

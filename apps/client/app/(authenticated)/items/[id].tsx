@@ -1,31 +1,63 @@
-import { View, StyleSheet } from "react-native";
+import { FlatList, StyleSheet } from "react-native";
 import { useLocalSearchParams } from 'expo-router';
-import { ItemType } from "../../../library/types/enums";
-import { Item } from "../../../library/stores/data/objects/item";
+import { ItemType } from "@/library/types/enums";
+import { Item } from "@/library/stores/data/objects/item";
 import React from "react";
-import { ThemedText } from "@/components/general/themed_components";
+import { ThemedText, ThemedView } from "@/components/general/themed_components";
+import ColonText from "@/components/general/colon_text";
+import MarkdownText from "@/components/general/markdown_text";
+import { Availability } from "@/library/stores/data/objects/availability";
+import { Restriction } from "@/library/stores/data/objects/restriction";
+import { Expandable } from "@/components/general/expandable";
+import { SpecialRules } from "@/components/data/special_rules";
 
-export function ItemDetail({ item }: { item: Item }) {
+function RestrictionDetails({ restriction }: { restriction: Restriction }) {
   return (
-    <View style={styles.detailContainer}>
-      <ThemedText style={styles.detailTitle}>{item.name}</ThemedText>
-      <ThemedText style={styles.detailDescription}>{item.description}</ThemedText>
-      <View style={styles.detailInfo}>
-        <ThemedText style={styles.detailText}>Price: {item.price}</ThemedText>
-        {/* <Text style={styles.detailText}>Availability: {item.availability.map(avail =>
-          avail.restrictions.length > 0 ? 'Restricted' : 'Common'
-        ).join(', ')}</Text> */}
-        {item.item_type === ItemType.Weapon && (
-          <>
-            <ThemedText style={styles.detailText}>Range: {item.range}</ThemedText>
-            <ThemedText style={styles.detailText}>Strength: {item.strength}</ThemedText>
-          </>
-        )}
-      </View>
-    </View>
+    <ThemedView>
+      <ColonText before={restriction.restriction_type} after={restriction.restriction} />
+    </ThemedView>
   );
 }
 
+function AvailabilityDetails({ availability }: { availability: Availability }) {
+  const restrictions = availability.useRestrictions();
+
+  return (
+    <ThemedView>
+      <ColonText before="Rarity" after={availability.rarity ? String(availability.rarity) : 'Common'} />
+      <FlatList
+        data={restrictions}
+        renderItem={({ item }) => <RestrictionDetails restriction={item} />}
+      />
+    </ThemedView>
+  );
+}
+
+export function ItemDetail({ item }: { item: Item }) {
+  const availabilities: Availability[] = item.useAvailabilities();
+
+  return (
+    <ThemedView style={styles.container} backgroundColor="primary">
+      <ThemedText variant="title">
+        {item.name} - {item.item_type === ItemType.Weapon ? `${item.weapon_type} weapon` : item.item_type}</ThemedText>
+      <MarkdownText text={item.description} />
+      <Expandable title="Availability">
+        <ColonText before="Price" after={item.price} />
+        <FlatList
+          data={availabilities}
+          renderItem={({ item }) => <AvailabilityDetails availability={item} />}
+        />
+      </Expandable>
+      {item.item_type === ItemType.Weapon && (
+        <ThemedView style={styles.weapon_details_container}>
+          <ColonText before="Range" after={item.range} />
+          <ColonText before="Strength" after={item.strength} />
+          <SpecialRules specialRules={item.getSpecialRuleIds()} />
+        </ThemedView>
+      )}
+    </ThemedView>
+  );
+}
 
 export default function CombinedItemsDetail() {
   const { id } = useLocalSearchParams();
@@ -33,27 +65,13 @@ export default function CombinedItemsDetail() {
 
   return <ItemDetail item={item} />;
 }
+
 const styles = StyleSheet.create({
-  detailContainer: {
+  container: {
+    padding: 16,
     flex: 1,
-    padding: 16,
   },
-  detailTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 16,
-  },
-  detailDescription: {
-    fontSize: 16,
-    marginBottom: 24,
-  },
-  detailInfo: {
-    backgroundColor: '#f0f0f0',
-    padding: 16,
-    borderRadius: 8,
-  },
-  detailText: {
-    fontSize: 16,
-    marginBottom: 8,
-  },
+  weapon_details_container: {
+    flex: 1,
+  }
 });

@@ -3,6 +3,7 @@ import { StyleSheet, ViewStyle, TextStyle, StyleProp, TouchableOpacity } from 'r
 import { ThemedView, ThemedText } from './themed_components';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useThemeColour } from '@/library/stores/user/utils/theme';
+import { Divider } from 'react-native-paper';
 
 interface ExpandableProps {
   title: string | React.ReactNode;
@@ -42,6 +43,7 @@ export const Expandable: React.FC<ExpandableProps> = ({
       </TouchableOpacity>
       {isExpanded && (
         <ThemedView style={[{ backgroundColor: defaultContainerColour }, styles.content, contentStyle]}>
+          <Divider />
           {children}
         </ThemedView>
       )}
@@ -53,15 +55,15 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     borderRadius: 8,
-    overflow: 'hidden',
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 3,
+    padding: 5,
   },
   content: {
-    padding: 12,
+    paddingLeft: 12,
+    paddingRight: 12,
   },
-}); 
+});

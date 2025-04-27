@@ -14,9 +14,13 @@ export function useColourScheme(): Theme {
 }
 
 export function useThemeColour(
-  colorName: availableColours
+  colorName: availableColours | "transparent"
 ) {
   const theme = useColourScheme() ?? Theme.Light;
+
+  if (colorName === "transparent") {
+    return "transparent";
+  }
 
   return Colours[theme][colorName];
 }

@@ -46,8 +46,8 @@ const itemRestrictionEntries = initialItems.flatMap((item) => {
     return restrictions.map((restriction) => {
       return {
         id: nanoid(),
-        restriction_type: restriction.restriction_type,
-        restriction: restriction.restriction,
+        restriction_type: String(restriction.restriction_type),
+        restriction: String(restriction.restriction),
         availability_id: availability.id,
       };
     });
@@ -101,8 +101,8 @@ const skillGroupRestrictionEntries = Object.values(initialSkillGroups).flatMap((
     return restrictions.map((restriction) => {
       return {
         id: nanoid(),
-        restriction_type: restriction.restriction_type,
-        restriction: restriction.restriction,
+        restriction_type: String(restriction.restriction_type),
+        restriction: String(restriction.restriction),
         availability_id: availability.id,
       };
     });

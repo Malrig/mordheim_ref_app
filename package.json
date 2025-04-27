@@ -5,7 +5,10 @@
   "version": "1.0.0",
   "author": "Malrig <g-a-b@hotmail.co.uk>",
   "license": "MIT",
-  "workspaces": ["apps/*", "packages/*"],
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "supabase": "supabase start",
     "build-server": "docker build -f ./Server.Dockerfile -t mordheim-server:dev .",

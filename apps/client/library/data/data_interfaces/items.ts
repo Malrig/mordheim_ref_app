@@ -1,37 +1,6 @@
-import { Metadata, SourceStatus } from "./metadata"
-import { Skill } from "./skills"
-
-export enum ItemType {
-  Weapon = "WEAPON",
-  MiscItem = "MISC_ITEM",
-  Armour = "ARMOUR",
-  // Possibly break things down further, e.g. herbs & potions, vehicles, etc.
-}
-
-export enum WeaponType {
-  Melee = "MELEE" ,
-  Ranged = "RANGED",
-  Blackpowder = "BLACKPOWDER",
-}
-
-export enum RestrictionType {
-  Warband = "WARBAND",
-  WarbandGroup = "WARBAND_GROUP",
-  Unit = "UNIT",
-  Setting = "SETTING",
-}
-
-export interface Restriction {
-  restriction_type: RestrictionType,
-  restriction: string
-}
-
-export interface Availability {
-  rarity: number | null
-  // If empty available to all, otherwise available to anyone that meets _any_
-  // of the restrictions. Will want to use the Restriction interface above later.
-  restrictions: string[]
-}
+import { WeaponType, ItemType } from "@/library/types/enums"
+import { Metadata } from "@/library/data/data_interfaces/metadata"
+import { Availability } from "@/library/data/data_interfaces/availability"
 
 export interface SpecialRule {
   id: string

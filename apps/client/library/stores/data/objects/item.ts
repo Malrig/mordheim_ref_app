@@ -1,7 +1,8 @@
-import { ItemType, WeaponType } from '../../../types/items';
+import { ItemType, WeaponType } from '../../../types/enums';
 import { SpecialRule } from './special_rule';
 import { useIsFavourite } from '../../user/utils/favourites';
 import { DataStore } from '../interface';
+import { Availability, useAvailabilitiesForObject } from './availability';
 
 /**
  * Represents a single item in the TinyBase store
@@ -11,7 +12,6 @@ export class Item {
   id: string;
   name: string;
   description: string;
-  availability: string; // JSON string of Availability[]
   price: string;
   item_type: string;
   range: string;
@@ -26,7 +26,6 @@ export class Item {
   constructor(id: string,
     name: string,
     description: string,
-    availability: string,
     price: string,
     item_type: string,
     range: string,
@@ -37,7 +36,6 @@ export class Item {
     this.id = id || '';
     this.name = name || '';
     this.description = description || '';
-    this.availability = availability || '[]';
     this.price = price || '';
     this.item_type = item_type || '';
     this.range = range || '';
@@ -73,18 +71,14 @@ export class Item {
   /**
    * Gets the availability as an array
    */
-  getAvailability(): any[] {
-    try {
-      return JSON.parse(this.availability);
-    } catch (e) {
-      return [];
-    }
+  useAvailabilities(): Availability[] {
+    return useAvailabilitiesForObject(Item.TABLE_NAME, this.id);
   }
 
   /**
    * Gets the special rules as an array
    */
-  getSpecialRules(): string[] {
+  getSpecialRuleIds(): string[] {
     try {
       return JSON.parse(this.special_rules);
     } catch (e) {
@@ -93,9 +87,17 @@ export class Item {
   }
 
   useMetadata(): Record<string, any> | undefined {
-    const metadata = DataStore.storeUIHooks.useRemoteRowId('itemsMetadata', this.id, DataStore.useRelationships());
+    const metadata = DataStore.storeUIHooks.useRemoteRowId(
+      'itemsMetadata',
+      this.id,
+      DataStore.useRelationships()
+    );
 
-    const metadata_info = metadata && DataStore.storeUIHooks.useRow('metadata', metadata, DataStore.store_id) || undefined;
+    const metadata_info = metadata && DataStore.storeUIHooks.useRow(
+      'metadata',
+      metadata,
+      DataStore.store_id
+    ) || undefined;
     return metadata_info;
   }
 
@@ -127,7 +129,6 @@ export class Item {
       row.id || '',
       row.name || '',
       row.description || '',
-      row.availability || '[]',
       row.price || '',
       row.item_type || '',
       row.range || '',
@@ -138,6 +139,12 @@ export class Item {
   }
 
   static useInstance(id: string): Item {
-    return Item.fromRow(DataStore.storeUIHooks.useRow(Item.TABLE_NAME, id, DataStore.store_id));
+    return Item.fromRow(
+      DataStore.storeUIHooks.useRow(
+        Item.TABLE_NAME,
+        id,
+        DataStore.store_id,
+      )
+    );
   }
 }

@@ -3,8 +3,8 @@ import { Link } from 'expo-router';
 import * as React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
-import { type Skill } from '../../library/types/skills';
-import { SourceStatus } from "../../library/types/metadata";
+import { type Skill } from '../../library/data/data_interfaces/skills';
+import { SourceStatus } from "../../library/data/data_interfaces/metadata";
 
 // What does this page do?
 // - Display all the skills we have in the campaign

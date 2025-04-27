@@ -2,7 +2,11 @@ import { UserStore } from "../interface";
 import { useCallback } from "react";
 
 export function useIsFavourite(object_table: string, object_id: string) {
-  const favourite = UserStore.storeUIHooks.useSliceRowIds("by_object_table_and_id", `${object_table}_${object_id}`, UserStore.useIndexes());
+  const favourite = UserStore.storeUIHooks.useSliceRowIds(
+    "by_object_table_and_id", 
+    `${object_table}_${object_id}`, 
+    UserStore.useIndexes(),
+  );
 
   return favourite.length > 0;
 }

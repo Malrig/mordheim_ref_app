@@ -1,7 +1,6 @@
-import { WeaponType } from "../../library/types/items";
 import { StyleSheet, FlatList, SectionList, Pressable, ViewToken } from "react-native";
 import * as React from 'react';
-import { ItemType } from "../../library/types/items";
+import { ItemType, WeaponType } from "../../library/types/enums";
 import { useState } from "react";
 import ItemListItem from "./item_list";
 import { ThemedText, ThemedView } from "../general/themed_components";

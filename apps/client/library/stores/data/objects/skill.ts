@@ -1,5 +1,6 @@
 import { useIsFavourite } from '../../user/utils/favourites';
 import { DataStore } from '../interface';
+import { SkillGroup } from './skill_group';
 
 /**
  * Represents a skill in the TinyBase store
@@ -60,4 +61,18 @@ export class Skill {
   static useInstance(id: string): Skill {
     return Skill.fromRow(DataStore.storeUIHooks.useRow(Skill.TABLE_NAME, id, DataStore.store_id));
   }
+
+  /**
+   * Gets the skill group for this skill
+   * @returns The skill group or undefined if not found
+   */
+  useSkillGroup(): SkillGroup | undefined {
+    const skill_group_id = DataStore.storeUIHooks.useRemoteRowId(
+      'skillsSkillGroup', 
+      this.id, 
+      DataStore.useRelationships()
+    );
+    return skill_group_id && SkillGroup.useInstance(skill_group_id) || undefined;
+  }
+  
 }

@@ -1,5 +1,5 @@
 import ItemFilter from "../../../../components/items/item_filter";
-import { ItemType } from "../../../../library/types/items";
+import { ItemType } from "../../../../library/types/enums";
 import React, { useState, useMemo } from "react";
 import { StyleSheet } from "react-native";
 import { ThemedText, ThemedView } from '@/components/general/themed_components'

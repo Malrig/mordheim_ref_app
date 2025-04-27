@@ -1,6 +1,6 @@
 import { View, StyleSheet } from "react-native";
 import { useLocalSearchParams } from 'expo-router';
-import { ItemType } from "../../../library/types/items";
+import { ItemType } from "../../../library/types/enums";
 import { Item } from "../../../library/stores/data/objects/item";
 import React from "react";
 import { ThemedText } from "@/components/general/themed_components";

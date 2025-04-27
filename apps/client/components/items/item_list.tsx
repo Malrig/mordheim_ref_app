@@ -1,6 +1,6 @@
 
 import * as React from 'react';
-import { ItemType } from "../../library/types/items";
+import { ItemType } from "../../library/types/enums";
 import WeaponListItem from "./weapons/list_item";
 import OtherItemListItem from "./other_items/list_item";
 

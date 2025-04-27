@@ -1,10 +1,10 @@
 import { Content } from "tinybase/store/with-schemas";
-import { ItemType, WeaponType } from "../../types/items";
 import { TablesSchema, ValuesSchema } from "./schema";
-import { Metadata, SourceStatus } from "../../types/metadata";
+import { Metadata, SourceStatus } from "../../data/data_interfaces/metadata";
 import { initialArmourState, initialMiscItemState } from "../../data/items";
 import { initialWeaponState, initialSpecialRuleState } from "../../data/weapons";
-import { initialSkillState } from "../../data/skills";
+import { initialSkillGroups, initialSkillState } from "../../data/skills";
+import { nanoid } from "nanoid";
 
 const initialItems = [...initialArmourState, ...initialMiscItemState, ...initialWeaponState];
 
@@ -13,7 +13,6 @@ const initialItemEntries = initialItems.map((item) => {
     id: item.id,
     name: item.name,
     description: item.description,
-    availability: JSON.stringify(item.availability || []),
     price: item.price || '',
     item_type: item.item_type || '',
     range: item.range || '',
@@ -29,6 +28,31 @@ const itemMetadataEntries = initialItems.map((item: Metadata) => {
     source_type: (item.source_type || SourceStatus.Unknown).toString(),
   };
 });
+const itemAvailabilityEntries = initialItems.flatMap((item) => {
+  const availability = item.availability || [];
+  return availability.map((availability) => {
+    return {
+      id: availability.id,
+      rarity: availability.rarity,
+      related_object_type: "items",
+      object_id: item.id,
+    };
+  });
+});
+const itemRestrictionEntries = initialItems.flatMap((item) => {
+  const availability = item.availability || [];
+  return availability.flatMap((availability) => {
+    const restrictions = availability.restrictions || [];
+    return restrictions.map((restriction) => {
+      return {
+        id: nanoid(),
+        restriction_type: restriction.restriction_type,
+        restriction: restriction.restriction,
+        availability_id: availability.id,
+      };
+    });
+  });
+});
 
 const initialSpecialRuleEntries = initialSpecialRuleState.map((rule) => {
   return {
@@ -43,7 +67,7 @@ const initialSkillEntries = initialSkillState.map((skill) => {
     id: skill.id,
     name: skill.name,
     description: skill.description,
-    group: skill.group
+    group_id: skill.group_id
   };
 });
 const skillMetadataEntries = initialSkillState.map((skill: Metadata) => {
@@ -53,8 +77,41 @@ const skillMetadataEntries = initialSkillState.map((skill: Metadata) => {
     source_type: (skill.source_type || SourceStatus.Unknown).toString(),
   };
 });
+const skillGroupEntries = Object.values(initialSkillGroups).map((group) => {
+  return {
+    id: group.id,
+    name: group.name,
+  };
+});
+const skillGroupAvailabilityEntries = Object.values(initialSkillGroups).flatMap((group) => {
+  const availability = group.availability || [];
+  return availability.map((availability) => {
+    return {
+      id: availability.id,
+      rarity: availability.rarity,
+      related_object_type: "skill_groups",
+      object_id: group.id,
+    };
+  });
+});
+const skillGroupRestrictionEntries = Object.values(initialSkillGroups).flatMap((group) => {
+  const availability = group.availability || [];
+  return availability.flatMap((availability) => {
+    const restrictions = availability.restrictions || [];
+    return restrictions.map((restriction) => {
+      return {
+        id: nanoid(),
+        restriction_type: restriction.restriction_type,
+        restriction: restriction.restriction,
+        availability_id: availability.id,
+      };
+    });
+  });
+});
 
 const allMetadataEntries = [...itemMetadataEntries, ...skillMetadataEntries];
+const allAvailabilityEntries = [...itemAvailabilityEntries, ...skillGroupAvailabilityEntries];
+const allRestrictionEntries = [...itemRestrictionEntries, ...skillGroupRestrictionEntries];
 
 const InitialTableData = {
   metadata: Object.fromEntries(
@@ -68,7 +125,16 @@ const InitialTableData = {
   ),
   skills: Object.fromEntries(
     initialSkillEntries.map(skill => [skill.id, skill])
-  )
+  ),
+  skill_groups: Object.fromEntries(
+    skillGroupEntries.map(group => [group.id, group])
+  ),
+  availabilities: Object.fromEntries(
+    allAvailabilityEntries.map(availability => [availability.id, availability])
+  ),
+  restrictions: Object.fromEntries(
+    allRestrictionEntries.map(restriction => [restriction.id, restriction])
+  ),
 } as const;
 
 const InitialValueData = {

@@ -113,6 +113,30 @@ const allMetadataEntries = [...itemMetadataEntries, ...skillMetadataEntries];
 const allAvailabilityEntries = [...itemAvailabilityEntries, ...skillGroupAvailabilityEntries];
 const allRestrictionEntries = [...itemRestrictionEntries, ...skillGroupRestrictionEntries];
 
+// Validate all IDs are set
+const validateIds = (entries: any[], type: string) => {
+  entries.forEach(entry => {
+    if (!entry.id) {
+      throw new Error(`Missing ID in ${type} entry: ${JSON.stringify(entry)}`);
+    }
+  });
+};
+
+// validateIds(allMetadataEntries, 'metadata');
+validateIds(allAvailabilityEntries, 'availability');
+validateIds(allRestrictionEntries, 'restriction');
+validateIds(initialItemEntries, 'item');
+validateIds(initialSkillEntries, 'skill');
+validateIds(initialSpecialRuleEntries, 'special rule');
+validateIds(skillGroupEntries, 'skill group');
+
+console.log(`Loaded ${allMetadataEntries.length} metadata entries`);
+console.log(`Loaded ${allAvailabilityEntries.length} availability entries`);
+console.log(`Loaded ${allRestrictionEntries.length} restriction entries`);
+console.log(`Loaded ${initialItemEntries.length} item entries`);
+console.log(`Loaded ${initialSkillEntries.length} skill entries`);
+console.log(`Loaded ${initialSpecialRuleEntries.length} special rule entries`);
+
 const InitialTableData = {
   metadata: Object.fromEntries(
     allMetadataEntries.map(entry => [entry.table_name_id, entry])

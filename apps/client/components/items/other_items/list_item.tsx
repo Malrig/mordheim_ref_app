@@ -13,7 +13,7 @@ interface Props {
 
 export default function OtherItemListItem({ item }: Props) {
   const item_object = Item.useInstance(item.id);
-  const metadata_info = item_object.useMetadata();
+  // const metadata_info = item_object.useMetadata();
   const isFavourite = item_object.useFavourite();
 
   const setFavouriteCb = toggleFavouriteCallback(Item.TABLE_NAME, item_object.id);

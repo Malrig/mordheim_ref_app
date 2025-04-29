@@ -10,20 +10,20 @@ export class Skill {
   id: string;
   name: string;
   description: string;
-  group: string;
+  group_id: string;
 
   /**
    * Creates a new Skill from a TinyBase row
    * @param id The ID of the skill
    * @param name The name of the skill
    * @param description The description of the skill
-   * @param group The group the skill belongs to
+   * @param group_id The ID of the group the skill belongs to
    */
   constructor(id: string, name: string, description: string, group: string) {
     this.id = id || '';
     this.name = name || '';
     this.description = description || '';
-    this.group = group || '';
+    this.group_id = group || '';
   }
 
   /**
@@ -49,7 +49,7 @@ export class Skill {
       row.id || '',
       row.name || '',
       row.description || '',
-      row.group || ''
+      row.group_id || ''
     );
   }
 
@@ -68,11 +68,11 @@ export class Skill {
    */
   useSkillGroup(): SkillGroup | undefined {
     const skill_group_id = DataStore.storeUIHooks.useRemoteRowId(
-      'skillsSkillGroup', 
-      this.id, 
+      'skillsSkillGroup',
+      this.id,
       DataStore.useRelationships()
     );
     return skill_group_id && SkillGroup.useInstance(skill_group_id) || undefined;
   }
-  
+
 }

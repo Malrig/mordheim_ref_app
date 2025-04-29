@@ -13,7 +13,7 @@ import { DataStore } from "../../../library/stores/stores";
 //   - So people may want to view skills that certain warbands have access to, certain heroes in warbands, potentially in the future link somehow to someones warband.
 
 export default function Skills() {
-  const skills = DataStore.storeUIHooks.useRowIds("skills");
+  const skills = DataStore.storeUIHooks.useRowIds("skills", DataStore.store_id);
 
   return (
     <ThemedView style={styles.container}>

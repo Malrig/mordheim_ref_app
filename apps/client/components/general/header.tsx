@@ -5,23 +5,15 @@ import { useThemeColour } from '@/library/stores/user/utils/theme';
 import { signOut } from '@/library/stores/auth/utils/login';
 import { AuthStore } from '@/library/stores/stores';
 
-interface HeaderProps {
-  title: string;
-}
+interface LoginStatus { }
 
-export const Header: React.FC<HeaderProps> = ({ title }) => {
-  const backgroundColor = useThemeColour('tabBarBackground');
+export const LoginStatus: React.FC<LoginStatus> = ({}) => {
   const email = AuthStore.storeUIHooks.useValue("email", AuthStore.store_id) || "";
 
   return (
-    <View style={[styles.container, { backgroundColor }]}>
-      <ThemedText variant="title">{title}</ThemedText>
-      <View style={styles.rightSection}>
+    <View style={[styles.container]}>
         <ThemedText style={styles.email}>{email}</ThemedText>
         <ThemedButton onPress={signOut} title="Sign Out" style={styles.signOutButton} textStyle={styles.signOutText} />
-      </View>
-
-
     </View>
   );
 };
@@ -44,10 +36,5 @@ const styles = StyleSheet.create({
   },
   signOutText: {
     fontSize: 14,
-    // fontWeight: 'bold',
   },
-  rightSection: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-}); 
+});

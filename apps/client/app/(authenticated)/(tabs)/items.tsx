@@ -1,12 +1,12 @@
-import ItemFilter from "../../../../components/items/item_filter";
+import ItemFilter from "../../../components/items/item_filter";
 import { ItemType } from "@/library/types/enums";
 import React, { useState, useMemo } from "react";
 import { StyleSheet } from "react-native";
 import { ThemedText, ThemedView } from '@/components/general/themed_components'
 
-import { DataStore } from "../../../../library/stores/stores";
+import { DataStore } from "../../../library/stores/stores";
 
-import SectionedItemList from "../../../../components/items/sectioned_item_list";
+import SectionedItemList from "../../../components/items/sectioned_item_list";
 import { DataStoreQueries } from "@/library/stores/data/store";
 
 export default function BrowseItems() {
@@ -14,8 +14,7 @@ export default function BrowseItems() {
   const [searchQuery, setSearchQuery] = useState('');
 
   // Get the result table from the query
-  const resultTable = DataStore.storeUIHooks.useResultTable('filterable_items', DataStoreQueries());
-  console.log(resultTable);
+  const resultTable = DataStore.storeUIHooks.useResultTable('filterable_items', DataStore.useQueries());
 
   // Filter items based on search query and type
   const filteredItems = useMemo(() => {

@@ -6,6 +6,7 @@ import { DataStoreProvider } from "@/library/stores/data/store";
 import { UserStoreProvider } from "@/library/stores/user/store";
 import React from 'react';
 import { ThemedText } from '@/components/general/themed_components';
+import { ThemedStack } from '@/components/general/themed_components';
 
 function CheckStoresLoaded({ children }: React.PropsWithChildren<{}>) {
   const loaded = allRequiredStoresLoaded();
@@ -37,14 +38,12 @@ export default function RootLayout(): ReactNode {
       <DataStoreProvider />
       <UserStoreProvider />
       <CheckStoresLoaded>
-        <Stack
-          screenOptions={{
-            headerShown: false
-          }}
-        >
-          <Stack.Screen name="(tabs)" />
-          <Stack.Screen name="items/[id]" />
-        </Stack>
+        <ThemedStack>
+          <Stack.Screen name="(tabs)" options={{headerShown: false}}/>
+          <Stack.Screen name="items/[id]" options={{
+                title: "Item Details",
+          }}/>
+        </ThemedStack>
       </CheckStoresLoaded>
     </>
   );

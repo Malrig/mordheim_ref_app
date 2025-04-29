@@ -6,6 +6,7 @@ import RichText from "../../../components/general/markdown_text";
 import { Item } from "../../../library/stores/data/objects/item";
 import { toggleFavouriteCallback } from "@/library/stores/user/utils/favourites";
 import { Expandable } from "@/components/general/expandable";
+import { router } from "expo-router";
 
 interface Props {
   item: { id: string }
@@ -24,6 +25,9 @@ export default function OtherItemListItem({ item }: Props) {
         <FontAwesome name={isFavourite ? "heart" : "heart-o"} />
       </Pressable>
       <ThemedText> {item_object.name}</ThemedText>
+      <Pressable onPress={() => router.push(`/items/${item.id}`)} style={styles.detailsButton}>
+        <FontAwesome name="info-circle" />
+      </Pressable>
     </View>
   );
 
@@ -51,5 +55,9 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 3,
+  },
+  detailsButton: {
+    marginLeft: 'auto',
+    padding: 8,
   }
 });

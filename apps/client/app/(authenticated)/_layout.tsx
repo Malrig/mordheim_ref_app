@@ -43,6 +43,9 @@ export default function RootLayout(): ReactNode {
           <Stack.Screen name="items/[id]" options={{
                 title: "Item Details",
           }}/>
+          <Stack.Screen name="skills/[id]" options={{
+                title: "Skill Details",
+          }}/>
         </ThemedStack>
       </CheckStoresLoaded>
     </>

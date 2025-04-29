@@ -10,28 +10,7 @@ import { Availability } from "@/library/stores/data/objects/availability";
 import { Restriction } from "@/library/stores/data/objects/restriction";
 import { Expandable } from "@/components/general/expandable";
 import { SpecialRules } from "@/components/data/special_rules";
-
-function RestrictionDetails({ restriction }: { restriction: Restriction }) {
-  return (
-    <ThemedView>
-      <ColonText before={restriction.restriction_type} after={restriction.restriction} />
-    </ThemedView>
-  );
-}
-
-function AvailabilityDetails({ availability }: { availability: Availability }) {
-  const restrictions = availability.useRestrictions();
-
-  return (
-    <ThemedView>
-      <ColonText before="Rarity" after={availability.rarity ? String(availability.rarity) : 'Common'} />
-      <FlatList
-        data={restrictions}
-        renderItem={({ item }) => <RestrictionDetails restriction={item} />}
-      />
-    </ThemedView>
-  );
-}
+import AvailabilityDetails from "@/components/data/availability_details";
 
 export function ItemDetail({ item }: { item: Item }) {
   const availabilities: Availability[] = item.useAvailabilities();

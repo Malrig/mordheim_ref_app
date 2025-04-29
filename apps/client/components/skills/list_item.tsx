@@ -8,6 +8,7 @@ import { Skill } from "../../library/stores/data/objects/skill";
 import { toggleFavouriteCallback } from "@/library/stores/user/utils/favourites";
 import { ThemedText } from "../general/themed_components";
 import { Expandable } from "../general/expandable";
+import { router } from "expo-router";
 
 type Props = {
   skill: Id
@@ -26,6 +27,9 @@ export default function SkillListItem({ skill }: Props) {
         <FontAwesome name={isFavourite ? "heart" : "heart-o"} />
       </Pressable>
       <ThemedText> {skill_object.name}</ThemedText>
+      <Pressable onPress={() => router.push(`/skills/${skill_object.id}`)} style={styles.detailsButton}>
+        <FontAwesome name="info-circle" />
+      </Pressable>
     </View>
   );
 
@@ -53,5 +57,9 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 3,
+  },
+  detailsButton: {
+    marginLeft: 'auto',
+    padding: 8,
   }
 });

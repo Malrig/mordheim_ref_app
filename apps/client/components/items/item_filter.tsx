@@ -20,7 +20,7 @@ interface SearchableItem {
 
 export function filterItems(items: SearchableItem[], searchQuery: string, selectedType: ItemType | null) {
   return items.filter(item => {
-    const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) || item.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = item.description.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesType = !selectedType || item.item_type == selectedType;
     return matchesSearch && matchesType;
   });

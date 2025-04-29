@@ -1,5 +1,6 @@
 import ItemFilter from "../../../components/items/item_filter";
-import { ItemType } from "@/library/types/enums";
+import { filterItems } from "../../../components/items/item_filter";
+import { ItemType, WeaponType } from "@/library/types/enums";
 import React, { useState, useMemo } from "react";
 import { StyleSheet } from "react-native";
 import { ThemedText, ThemedView } from '@/components/general/themed_components'
@@ -22,8 +23,9 @@ export default function BrowseItems() {
       return {
         id: row.id as string,
         name: row.name as string,
-        item_type: row.item_type as string,
-        weapon_type: row.weapon_type as string,
+        description: row.description as string,
+        item_type: row.item_type as ItemType,
+        weapon_type: row.weapon_type as WeaponType,
       }
     });
 
@@ -33,17 +35,7 @@ export default function BrowseItems() {
     }
 
     // Filter based on search query and type
-    return items.filter(item => {
-      const itemName = item.name as string || '';
-      const itemType = item.item_type as string || '';
-
-      const matchesSearch = searchQuery === '' ||
-        itemName.toLowerCase().includes(searchQuery.toLowerCase());
-
-      const matchesType = !searchedType || itemType === searchedType.toString();
-
-      return matchesSearch && matchesType;
-    });
+    return filterItems(items, searchQuery, searchedType);
   }, [resultTable, searchQuery, searchedType]);
 
   return (

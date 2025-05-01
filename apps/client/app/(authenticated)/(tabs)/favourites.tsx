@@ -1,8 +1,8 @@
 import { FlatList } from "react-native";
 import { Link } from 'expo-router';
-import SkillListItem from "../../../components/skills/list_item";
+import SkillListItem from "../../../features/datastore/components/skills/list_item";
 import React from "react";
-import { ThemedView, ThemedText } from "@/components/general/themed_components";
+import { ThemedView, ThemedText } from "@/shared/components/themed_components";
 
 // What does this page do?
 // - Displays all the information that people have chosen to appear here.

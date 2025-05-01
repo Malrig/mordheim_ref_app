@@ -1,7 +1,7 @@
 import { Slot } from 'expo-router';
 
 import { Provider } from 'tinybase/ui-react';
-import { AuthStoreProvider } from '../library/stores/auth/store';
+import { AuthStoreProvider } from '@/features/authentication/store/store';
 import { StrictMode } from 'react';
 
 export default function RootLayout() {

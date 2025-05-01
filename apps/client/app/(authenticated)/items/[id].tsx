@@ -1,16 +1,16 @@
 import { FlatList, StyleSheet } from "react-native";
 import { useLocalSearchParams } from 'expo-router';
-import { ItemType } from "@/library/types/enums";
-import { Item } from "@/library/stores/data/objects/item";
+import { ItemType } from "@/features/datastore/enums";
+import { Item } from "@/features/datastore/objects/item";
 import React from "react";
-import { ThemedText, ThemedView } from "@/components/general/themed_components";
-import ColonText from "@/components/general/colon_text";
-import MarkdownText from "@/components/general/markdown_text";
-import { Availability } from "@/library/stores/data/objects/availability";
-import { Restriction } from "@/library/stores/data/objects/restriction";
-import { Expandable } from "@/components/general/expandable";
-import { SpecialRules } from "@/components/data/special_rules";
-import AvailabilityDetails from "@/components/data/availability_details";
+import { ThemedText, ThemedView } from "@/shared/components/themed_components";
+import ColonText from "@/shared/components/colon_text";
+import MarkdownText from "@/shared/components/markdown_text";
+import { Availability } from "@/features/datastore/objects/availability";
+import { Restriction } from "@/features/datastore/objects/restriction";
+import { Expandable } from "@/shared/components/expandable";
+import { SpecialRules } from "@/features/datastore/components/special_rules";
+import AvailabilityDetails from "@/features/datastore/components/availability_details";
 
 export function ItemDetail({ item }: { item: Item }) {
   const availabilities: Availability[] = item.useAvailabilities();

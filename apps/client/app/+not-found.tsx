@@ -1,4 +1,4 @@
-import { ThemedView, ThemedText } from '@/components/general/themed_components';
+import { ThemedView, ThemedText } from '@/shared/components/themed_components';
 import { Link, Stack } from 'expo-router';
 import React from 'react';
 

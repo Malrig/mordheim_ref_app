@@ -1,13 +1,13 @@
 import { FlatList, StyleSheet } from "react-native";
-import { ThemedView, ThemedText } from "@/components/general/themed_components";
-import SkillListItem from "../../../components/skills/list_item"
+import { ThemedView, ThemedText } from "@/shared/components/themed_components";
+import SkillListItem from "../../../features/datastore/components/skills/list_item"
 import { Id } from "tinybase/with-schemas";
-import { DataStore } from "../../../library/stores/stores";
-import { Skill } from "@/library/stores/data/objects/skill";
-import { SkillGroup } from "@/library/stores/data/objects/skill_group";
+import { DataStore } from "../../../shared/stores/stores";
+import { Skill } from "@/features/datastore/objects/skill";
+import { SkillGroup } from "@/features/datastore/objects/skill_group";
 import { useMemo, useState } from "react";
-import SkillFilter, { filterSkills } from "@/components/skills/skill_filter";
-import SectionedSkillList from "@/components/skills/sectioned_skill_list";
+import SkillFilter, { filterSkills } from "@/features/datastore/components/skills/skill_filter";
+import SectionedSkillList from "@/features/datastore/components/skills/sectioned_skill_list";
 
 // What does this page do?
 // - Display all the skills we have in the campaign

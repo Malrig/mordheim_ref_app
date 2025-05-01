@@ -1,14 +1,14 @@
-import ItemFilter from "../../../components/items/item_filter";
-import { filterItems } from "../../../components/items/item_filter";
-import { ItemType, WeaponType } from "@/library/types/enums";
+import ItemFilter from "../../../features/datastore/components/items/item_filter";
+import { filterItems } from "../../../features/datastore/components/items/item_filter";
+import { ItemType, WeaponType } from "@/features/datastore/enums";
 import React, { useState, useMemo } from "react";
 import { StyleSheet } from "react-native";
-import { ThemedText, ThemedView } from '@/components/general/themed_components'
+import { ThemedText, ThemedView } from '@/shared/components/themed_components'
 
-import { DataStore } from "../../../library/stores/stores";
+import { DataStore } from "../../../shared/stores/stores";
 
-import SectionedItemList from "../../../components/items/sectioned_item_list";
-import { DataStoreQueries } from "@/library/stores/data/store";
+import SectionedItemList from "../../../features/datastore/components/items/sectioned_item_list";
+import { DataStoreQueries } from "@/features/datastore/store/store";
 
 export default function BrowseItems() {
   const [searchedType, setSearchedType] = useState<ItemType | null>(null);

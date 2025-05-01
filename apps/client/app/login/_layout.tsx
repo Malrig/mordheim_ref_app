@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { Slot } from 'expo-router';
-import { ThemedView } from '@/components/general/themed_components';
+import { ThemedView } from '@/shared/components/themed_components';
 
 export default function LoginLayout() {
   return (

@@ -1,13 +1,9 @@
 import { StyleSheet } from "react-native";
 import { useLocalSearchParams } from 'expo-router';
-import { Skill } from "@/library/stores/data/objects/skill";
+import { Skill } from "@/features/datastore/objects/skill";
 import React from "react";
-import { ThemedText, ThemedView } from "@/components/general/themed_components";
-import MarkdownText from "@/components/general/markdown_text";
-
-
-
-
+import { ThemedText, ThemedView } from "@/shared/components/themed_components";
+import MarkdownText from "@/shared/components/markdown_text";
 
 export function SkillDetail({ skill }: { skill: Skill }) {
   const skillGroup = skill.useSkillGroup();

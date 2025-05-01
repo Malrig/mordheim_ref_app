@@ -1,7 +1,7 @@
 import { Image } from "react-native";
 import { Tabs } from "expo-router";
 import React from "react";
-import { ThemedTabs } from "@/components/general/themed_components";
+import { ThemedTabs } from "@/shared/components/themed_components";
 const icons_path = "@/assets/images/icons/";
 
 const icons = {

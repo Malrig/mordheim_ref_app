@@ -1,11 +1,11 @@
-import { AppState } from 'react-native'
-import { jwtDecode } from 'jwt-decode'
-import 'react-native-url-polyfill/auto'
+import { AppState } from 'react-native';
+import { jwtDecode } from 'jwt-decode';
+import 'react-native-url-polyfill/auto';
 // import AsyncStorage from '@react-native-async-storage/async-storage'
-import { createClient, Session } from '@supabase/supabase-js'
+import { createClient, Session } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL || ""
-const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || ""
+const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL || '';
+const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || '';
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
@@ -26,7 +26,7 @@ export function getUserRoleAndPermissions(session: Session) {
   const jwt = jwtDecode<CustomJwtPayload>(session.access_token);
   const userRole: string = jwt.user_role;
   const permissions: Record<string, { permission_name: string }> = {};
-  jwt.permissions.forEach(permission => {
+  jwt.permissions.forEach((permission) => {
     permissions[permission] = { permission_name: permission };
   });
   return { userRole, permissions };
@@ -39,8 +39,8 @@ export function getUserRoleAndPermissions(session: Session) {
 // only be registered once.
 AppState.addEventListener('change', (state) => {
   if (state === 'active') {
-    supabase.auth.startAutoRefresh()
+    supabase.auth.startAutoRefresh();
   } else {
-    supabase.auth.stopAutoRefresh()
+    supabase.auth.stopAutoRefresh();
   }
-})
+});

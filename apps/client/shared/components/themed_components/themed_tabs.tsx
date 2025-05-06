@@ -7,10 +7,19 @@ import { ParamListBase } from '@react-navigation/routers';
 
 interface ThemedTabsProps {
   children: React.ReactNode;
-  screenOptions?: BottomTabNavigationOptions | ((props: {
-          route: import("@react-navigation/native").RouteProp<ParamListBase, string>;
-          navigation: import("@react-navigation/bottom-tabs").BottomTabNavigationProp<ParamListBase, string, undefined>;
-          theme: ReactNavigation.Theme;
+  screenOptions?:
+    | BottomTabNavigationOptions
+    | ((props: {
+        route: import('@react-navigation/native').RouteProp<
+          ParamListBase,
+          string
+        >;
+        navigation: import('@react-navigation/bottom-tabs').BottomTabNavigationProp<
+          ParamListBase,
+          string,
+          undefined
+        >;
+        theme: ReactNavigation.Theme;
       }) => BottomTabNavigationOptions); // Options for all tabs in the navigator
 }
 
@@ -41,10 +50,12 @@ export const ThemedTabs: React.FC<ThemedTabsProps> = ({
           fontWeight: '500',
         },
         sceneStyle: {
-          backgroundColor: backgroundColor
+          backgroundColor: backgroundColor,
         },
         headerRight: () => <LoginStatus />,
-        ...(typeof screenOptions === 'function' ? screenOptions({ route, navigation, theme }) : screenOptions),
+        ...(typeof screenOptions === 'function'
+          ? screenOptions({ route, navigation, theme })
+          : screenOptions),
       })}
     >
       {children}

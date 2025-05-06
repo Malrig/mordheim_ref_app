@@ -1,10 +1,14 @@
 import { Data, WebSocket } from 'ws';
-import { ConnectionInfo } from './WebSocketServerWrapper'
+import { ConnectionInfo } from './WebSocketServerWrapper';
 
 export class WebSocketWrapper extends WebSocket {
   public connectionInfo?: ConnectionInfo;
-  
-  constructor(address: string | URL | null, protocols?: string | string[], options?: any) {
+
+  constructor(
+    address: string | URL | null,
+    protocols?: string | string[],
+    options?: any
+  ) {
     super(address as string | URL, protocols, options);
   }
 

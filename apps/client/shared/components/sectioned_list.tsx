@@ -1,11 +1,18 @@
-import { StyleSheet, FlatList, SectionList, Pressable, ViewToken, SectionListRenderItem } from "react-native";
+import {
+  StyleSheet,
+  FlatList,
+  SectionList,
+  Pressable,
+  ViewToken,
+  SectionListRenderItem,
+} from 'react-native';
 import * as React from 'react';
-import { useState } from "react";
-import { ThemedText, ThemedView } from "./themed_components";
-import { useThemeColour } from "@/features/userstore/hooks/theme";
+import { useState } from 'react';
+import { ThemedText, ThemedView } from './themed_components';
+import { useThemeColour } from '@/features/userstore/hooks/theme';
 
 interface ObjectWithId {
-  id: string
+  id: string;
 }
 
 interface Section<ObjectType extends ObjectWithId> {
@@ -14,15 +21,18 @@ interface Section<ObjectType extends ObjectWithId> {
   sectionKey: string;
 }
 
-
 type SectionListProps<ObjectType extends ObjectWithId> = {
-  sections: Section<ObjectType>[],
-  renderItem: SectionListRenderItem<ObjectType, Section<ObjectType>>
-}
+  sections: Section<ObjectType>[];
+  renderItem: SectionListRenderItem<ObjectType, Section<ObjectType>>;
+};
 
-export function SectionedList<ObjectType extends ObjectWithId>({ sections, renderItem }: SectionListProps<ObjectType>) {
+export function SectionedList<ObjectType extends ObjectWithId>({
+  sections,
+  renderItem,
+}: SectionListProps<ObjectType>) {
   const [currentSection, setCurrentSection] = useState<string | null>(null);
-  const sectionListRef = React.useRef<SectionList<ObjectType, Section<ObjectType>>>(null);
+  const sectionListRef =
+    React.useRef<SectionList<ObjectType, Section<ObjectType>>>(null);
   const sectionSelectionRef = React.useRef<FlatList<Section<ObjectType>>>(null);
 
   const styles = StyleSheet.create({
@@ -41,13 +51,13 @@ export function SectionedList<ObjectType extends ObjectWithId>({ sections, rende
       paddingVertical: 8,
       marginRight: 8,
       borderRadius: 20,
-      backgroundColor: useThemeColour("tabIconDefault"),
+      backgroundColor: useThemeColour('tabIconDefault'),
     },
     selectedTypeItem: {
-      backgroundColor: useThemeColour("tabIconSelected"),
+      backgroundColor: useThemeColour('tabIconSelected'),
     },
     selectedTypeItemText: {
-      color: useThemeColour("primary"),
+      color: useThemeColour('primary'),
       fontWeight: 'bold',
     },
     sectionListContainer: {
@@ -59,48 +69,74 @@ export function SectionedList<ObjectType extends ObjectWithId>({ sections, rende
     },
   });
 
-  const onSectionSelect = React.useCallback((section: Section<ObjectType>) => {
-    setCurrentSection(section.sectionKey);
-    sectionListRef?.current?.scrollToLocation({
-      sectionIndex: sections.findIndex(s => s.sectionKey === section.sectionKey),
-      itemIndex: 1,
-      animated: true
-    });
-  }, [sections]);
+  const onSectionSelect = React.useCallback(
+    (section: Section<ObjectType>) => {
+      setCurrentSection(section.sectionKey);
+      sectionListRef?.current?.scrollToLocation({
+        sectionIndex: sections.findIndex(
+          (s) => s.sectionKey === section.sectionKey
+        ),
+        itemIndex: 1,
+        animated: true,
+      });
+    },
+    [sections]
+  );
 
-  const renderSectionSelectionHeading = ({ item: section }: { item: Section<ObjectType> }) => (
+  const renderSectionSelectionHeading = ({
+    item: section,
+  }: {
+    item: Section<ObjectType>;
+  }) => (
     <Pressable
       style={[
         styles.typeItem,
-        currentSection != null && currentSection == section.sectionKey && styles.selectedTypeItem
+        currentSection != null &&
+          currentSection == section.sectionKey &&
+          styles.selectedTypeItem,
       ]}
       onPress={() => onSectionSelect(section)}
     >
-      <ThemedText style={
-        ((currentSection != null && currentSection == section.sectionKey) ? { ...styles.selectedTypeItemText } : {})
-      }>
+      <ThemedText
+        style={
+          currentSection != null && currentSection == section.sectionKey
+            ? { ...styles.selectedTypeItemText }
+            : {}
+        }
+      >
         {section.title}
       </ThemedText>
     </Pressable>
   );
 
-  const renderSectionHeader = ({ section: { title } }: { section: Section<ObjectType> }) => (
+  const renderSectionHeader = ({
+    section: { title },
+  }: {
+    section: Section<ObjectType>;
+  }) => (
     <ThemedView backgroundColor="primary" style={styles.sectionHeader}>
       <ThemedText variant="subtitle">{title}</ThemedText>
     </ThemedView>
   );
 
-  const onViewableItemsChanged = ({ viewableItems, changed }: { viewableItems: ViewToken<ObjectType>[], changed: ViewToken<ObjectType>[] }) => {
+  const onViewableItemsChanged = ({
+    viewableItems,
+  }: {
+    viewableItems: ViewToken<ObjectType>[];
+    changed: ViewToken<ObjectType>[];
+  }) => {
     // Set the current section to the first viewable item
     if (viewableItems.length > 0) {
       setCurrentSection(viewableItems[0].section.sectionKey);
       sectionSelectionRef?.current?.scrollToIndex({
-        index: sections.findIndex(s => s.sectionKey === viewableItems[0].section.sectionKey),
+        index: sections.findIndex(
+          (s) => s.sectionKey === viewableItems[0].section.sectionKey
+        ),
         animated: true,
         viewPosition: 0.5,
       });
     }
-  }
+  };
 
   return (
     <ThemedView style={styles.container}>
@@ -129,4 +165,3 @@ export function SectionedList<ObjectType extends ObjectWithId>({ sections, rende
     </ThemedView>
   );
 }
-

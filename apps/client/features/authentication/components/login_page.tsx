@@ -1,26 +1,33 @@
-import React, { useState } from 'react'
-import { StyleSheet } from 'react-native'
-import { ThemedButton, ThemedTextInput, ThemedText, ThemedView } from '@/shared/components/themed_components'
-import { signInWithEmail, signUpWithEmail } from '../hooks/login'
-import { router } from 'expo-router'
+import React, { useState } from 'react';
+import { StyleSheet } from 'react-native';
+import {
+  ThemedButton,
+  ThemedTextInput,
+  ThemedText,
+  ThemedView,
+} from '@/shared/components/themed_components';
+import { signInWithEmail, signUpWithEmail } from '../hooks/login';
+import { router } from 'expo-router';
 
 export default function Auth() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSignIn = async () => {
-    setLoading(true)
-    const success = await signInWithEmail(email, password)
-    setLoading(false)
+    setLoading(true);
+    const success = await signInWithEmail(email, password);
+    setLoading(false);
     if (success) {
-      router.replace('/')
+      router.replace('/');
     }
-  }
+  };
 
   return (
     <ThemedView style={styles.container}>
-      <ThemedText variant="title" style={styles.title}>Welcome</ThemedText>
+      <ThemedText variant="title" style={styles.title}>
+        Welcome
+      </ThemedText>
       <ThemedView style={{ ...styles.verticallySpaced, ...styles.mt20 }}>
         <ThemedTextInput
           onChangeText={setEmail}
@@ -39,13 +46,21 @@ export default function Auth() {
         />
       </ThemedView>
       <ThemedView style={{ ...styles.verticallySpaced, ...styles.mt20 }}>
-        <ThemedButton title="Sign in" disabled={loading} onPress={handleSignIn} />
+        <ThemedButton
+          title="Sign in"
+          disabled={loading}
+          onPress={handleSignIn}
+        />
       </ThemedView>
       <ThemedView style={styles.verticallySpaced}>
-        <ThemedButton title="Sign up" disabled={loading} onPress={() => signUpWithEmail(email, password, setLoading)} />
+        <ThemedButton
+          title="Sign up"
+          disabled={loading}
+          onPress={() => signUpWithEmail(email, password, setLoading)}
+        />
       </ThemedView>
     </ThemedView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -66,4 +81,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 20,
   },
-})
+});

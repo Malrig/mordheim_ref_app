@@ -1,13 +1,13 @@
-import { FlatList, StyleSheet } from "react-native";
-import { ThemedView, ThemedText } from "@/shared/components/themed_components";
-import SkillListItem from "../../../features/datastore/components/skills/list_item"
-import { Id } from "tinybase/with-schemas";
-import { DataStore } from "../../../shared/stores/stores";
-import { Skill } from "@/features/datastore/objects/skill";
-import { SkillGroup } from "@/features/datastore/objects/skill_group";
-import { useMemo, useState } from "react";
-import SkillFilter, { filterSkills } from "@/features/datastore/components/skills/skill_filter";
-import SectionedSkillList from "@/features/datastore/components/skills/sectioned_skill_list";
+import React from 'react';
+import { StyleSheet } from 'react-native';
+import { ThemedView, ThemedText } from '@/shared/components/themed_components';
+import { DataStore } from '../../../shared/stores/stores';
+import { Skill } from '@/features/datastore/objects/skill';
+import { useMemo, useState } from 'react';
+import SkillFilter, {
+  filterSkills,
+} from '@/features/datastore/components/skills/skill_filter';
+import SectionedSkillList from '@/features/datastore/components/skills/sectioned_skill_list';
 
 // What does this page do?
 // - Display all the skills we have in the campaign
@@ -18,19 +18,18 @@ import SectionedSkillList from "@/features/datastore/components/skills/sectioned
 //   - So people may want to view skills that certain warbands have access to, certain heroes in warbands, potentially in the future link somehow to someones warband.
 
 export default function Skills() {
-  const [selectedSkillGroupId, onSkillGroupIdChange] = useState<string | null>(null);
+  const [selectedSkillGroupId, onSkillGroupIdChange] = useState<string | null>(
+    null
+  );
   const [searchQuery, setSearchQuery] = useState('');
 
-  const skills = Object.values(DataStore.storeUIHooks.useTable(
-    Skill.TABLE_NAME,
-    DataStore.store_id
-  )).map((row) => Skill.fromRow(row));
+  const skills = Object.values(
+    DataStore.storeUIHooks.useTable(Skill.TABLE_NAME, DataStore.store_id)
+  ).map((row) => Skill.fromRow(row));
 
   const filteredSkills = useMemo(() => {
     return filterSkills(skills, searchQuery, selectedSkillGroupId);
-  },
-  [skills, searchQuery, selectedSkillGroupId],
-);
+  }, [skills, searchQuery, selectedSkillGroupId]);
 
   return (
     <ThemedView style={styles.container}>

@@ -1,19 +1,22 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { ThemedButton, ThemedText } from './themed_components';
-import { useThemeColour } from '@/features/userstore/hooks/theme';
 import { signOut } from '@/features/authentication/hooks/login';
 import { AuthStore } from '@/shared/stores/stores';
 
-interface LoginStatus { }
-
-export const LoginStatus: React.FC<LoginStatus> = ({}) => {
-  const email = AuthStore.storeUIHooks.useValue("email", AuthStore.store_id) || "";
+export const LoginStatus: React.FC = ({}) => {
+  const email =
+    AuthStore.storeUIHooks.useValue('email', AuthStore.store_id) || '';
 
   return (
     <View style={[styles.container]}>
-        <ThemedText style={styles.email}>{email}</ThemedText>
-        <ThemedButton onPress={signOut} title="Sign Out" style={styles.signOutButton} textStyle={styles.signOutText} />
+      <ThemedText style={styles.email}>{email}</ThemedText>
+      <ThemedButton
+        onPress={signOut}
+        title="Sign Out"
+        style={styles.signOutButton}
+        textStyle={styles.signOutText}
+      />
     </View>
   );
 };

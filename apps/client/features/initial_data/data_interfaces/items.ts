@@ -1,31 +1,40 @@
-import { WeaponType, ItemType } from "@/features/datastore/enums"
-import { Metadata } from "./metadata"
-import { Availability } from "./availability"
+import { WeaponType, ItemType } from '@/features/datastore/enums';
+import { Metadata } from './metadata';
+import { Availability } from './availability';
 
 export interface SpecialRule {
-  id: string
-  name: string
-  description: string
+  id: string;
+  name: string;
+  description: string;
 }
 
 interface ItemInterface extends Metadata {
-  name: string
-  description: string
-  availability: Availability[]
-  price: string
-  item_type: ItemType
+  name: string;
+  description: string;
+  availability: Availability[];
+  price: string;
+  item_type: ItemType;
   // Fields specific to weapons
-  range: string | null
-  strength: string | null
-  special_rules: string[] | null // List of IDs of special rules they relate to.
-  weapon_type: WeaponType | null
+  range: string | null;
+  strength: string | null;
+  special_rules: string[] | null; // List of IDs of special rules they relate to.
+  weapon_type: WeaponType | null;
 }
 
 export type Item = ItemInterface;
 
-export type Weapon = Omit<ItemInterface, 'range' | 'strength' | 'special_rules' | 'weapon_type'> & Required<Pick<ItemInterface, 'range' | 'strength' | 'special_rules' | 'weapon_type'>>;
+export type Weapon = Omit<
+  ItemInterface,
+  'range' | 'strength' | 'special_rules' | 'weapon_type'
+> &
+  Required<
+    Pick<ItemInterface, 'range' | 'strength' | 'special_rules' | 'weapon_type'>
+  >;
 
-export type Armour = Omit<ItemInterface, 'range' | 'strength' | 'special_rules' | 'weapon_type' | 'item_type'> & {
+export type Armour = Omit<
+  ItemInterface,
+  'range' | 'strength' | 'special_rules' | 'weapon_type' | 'item_type'
+> & {
   range: null;
   strength: null;
   special_rules: null;
@@ -33,7 +42,10 @@ export type Armour = Omit<ItemInterface, 'range' | 'strength' | 'special_rules' 
   item_type: ItemType.Armour;
 };
 
-export type MiscItem = Omit<ItemInterface, 'range' | 'strength' | 'special_rules' | 'weapon_type' | 'item_type'> & {
+export type MiscItem = Omit<
+  ItemInterface,
+  'range' | 'strength' | 'special_rules' | 'weapon_type' | 'item_type'
+> & {
   range: null;
   strength: null;
   special_rules: null;
@@ -41,4 +53,4 @@ export type MiscItem = Omit<ItemInterface, 'range' | 'strength' | 'special_rules
   item_type: ItemType.MiscItem;
 };
 
-export type AnyItem = Armour | MiscItem | Weapon
+export type AnyItem = Armour | MiscItem | Weapon;

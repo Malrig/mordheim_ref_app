@@ -1,8 +1,8 @@
 const mordheim_gold = '#FFD700';
 
 export enum Theme {
-  Light = "light",
-  Dark = "dark",
+  Light = 'light',
+  Dark = 'dark',
 }
 
 export const Colours = {
@@ -30,4 +30,5 @@ export const Colours = {
   },
 };
 
-export type availableColours = keyof typeof Colours[Theme.Light] & keyof typeof Colours[Theme.Dark]
+export type availableColours = keyof (typeof Colours)[Theme.Light] &
+  keyof (typeof Colours)[Theme.Dark];

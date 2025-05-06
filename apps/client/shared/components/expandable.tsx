@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { StyleSheet, ViewStyle, TextStyle, StyleProp, TouchableOpacity } from 'react-native';
+import {
+  StyleSheet,
+  ViewStyle,
+  TextStyle,
+  StyleProp,
+  TouchableOpacity,
+} from 'react-native';
 import { ThemedView, ThemedText } from './themed_components';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useThemeColour } from '@/features/userstore/hooks/theme';
@@ -26,13 +32,21 @@ export const Expandable: React.FC<ExpandableProps> = ({
   const defaultContainerColour = useThemeColour('secondary');
 
   return (
-    <ThemedView style={[{ backgroundColor: defaultContainerColour }, styles.container, containerStyle]}>
+    <ThemedView
+      style={[
+        { backgroundColor: defaultContainerColour },
+        styles.container,
+        containerStyle,
+      ]}
+    >
       <TouchableOpacity
         style={styles.header}
         onPress={() => setIsExpanded(!isExpanded)}
       >
         {typeof title === 'string' ? (
-          <ThemedText variant="subtitle" style={titleStyle}>{title}</ThemedText>
+          <ThemedText variant="subtitle" style={titleStyle}>
+            {title}
+          </ThemedText>
         ) : (
           title
         )}
@@ -42,7 +56,13 @@ export const Expandable: React.FC<ExpandableProps> = ({
         />
       </TouchableOpacity>
       {isExpanded && (
-        <ThemedView style={[{ backgroundColor: defaultContainerColour }, styles.content, contentStyle]}>
+        <ThemedView
+          style={[
+            { backgroundColor: defaultContainerColour },
+            styles.content,
+            contentStyle,
+          ]}
+        >
           <Divider />
           {children}
         </ThemedView>

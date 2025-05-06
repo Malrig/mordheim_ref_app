@@ -1,32 +1,33 @@
-import ItemFilter from "../../../features/datastore/components/items/item_filter";
-import { filterItems } from "../../../features/datastore/components/items/item_filter";
-import { ItemType, WeaponType } from "@/features/datastore/enums";
-import React, { useState, useMemo } from "react";
-import { StyleSheet } from "react-native";
-import { ThemedText, ThemedView } from '@/shared/components/themed_components'
+import ItemFilter from '../../../features/datastore/components/items/item_filter';
+import { filterItems } from '../../../features/datastore/components/items/item_filter';
+import { ItemType, WeaponType } from '@/features/datastore/enums';
+import React, { useState, useMemo } from 'react';
+import { StyleSheet } from 'react-native';
+import { ThemedText, ThemedView } from '@/shared/components/themed_components';
 
-import { DataStore } from "../../../shared/stores/stores";
+import { DataStore } from '../../../shared/stores/stores';
 
-import SectionedItemList from "../../../features/datastore/components/items/sectioned_item_list";
-import { DataStoreQueries } from "@/features/datastore/store/store";
-
+import SectionedItemList from '../../../features/datastore/components/items/sectioned_item_list';
 export default function BrowseItems() {
   const [searchedType, setSearchedType] = useState<ItemType | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
   // Get the result table from the query
-  const resultTable = DataStore.storeUIHooks.useResultTable('filterable_items', DataStore.useQueries());
+  const resultTable = DataStore.storeUIHooks.useResultTable(
+    'filterable_items',
+    DataStore.useQueries()
+  );
 
   // Filter items based on search query and type
   const filteredItems = useMemo(() => {
-    const items = Object.values(resultTable).map(row => {
+    const items = Object.values(resultTable).map((row) => {
       return {
         id: row.id as string,
         name: row.name as string,
         description: row.description as string,
         item_type: row.item_type as ItemType,
         weapon_type: row.weapon_type as WeaponType,
-      }
+      };
     });
 
     // If no filters are applied, return all items
@@ -104,10 +105,10 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    alignItems: "center",
+    alignItems: 'center',
   },
   description_text: {
-    fontStyle: "italic",
+    fontStyle: 'italic',
     fontSize: 12,
-  }
+  },
 });

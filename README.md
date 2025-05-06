@@ -74,17 +74,21 @@ supabase up
 npx yarn workspace server build
 npx yarn dev-server
 npx yarn dev-client
+npx eas-cli@latest build --profile development
 ```
 
 ## SUpabase auth
 
 Installed the following:
+
 ```
 @supabase/supabase-js @react-native-async-storage/async-storage @rneui/themed react-native-url-polyfill
 ```
+
 May want to uninstall them later.
 
 TODO next time:
+
 - Make using multiple stores across the app easier (e.g. don't want to have to propagate a bunch of different IDs / call useStore all the time).
 - Populate the auth store from Supabase, do sensible things on logout, better login pages.
 - Support anonymous login.

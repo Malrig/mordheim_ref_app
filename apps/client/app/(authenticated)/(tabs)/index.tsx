@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import RichText from "../../../components/general/markdown_text";
+import RichText from "@/shared/components/markdown_text";
 
 export default function Index() {
   const text = `

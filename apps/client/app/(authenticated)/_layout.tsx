@@ -1,11 +1,12 @@
 import { Redirect, Stack } from 'expo-router';
 import { ReactNode } from "react";
-import { useIsLoggedIn } from "@/library/stores/auth/utils/login";
-import { allRequiredStoresLoaded } from '@/library/stores/stores';
-import { DataStoreProvider } from "@/library/stores/data/store";
-import { UserStoreProvider } from "@/library/stores/user/store";
+import { useIsLoggedIn } from "@/features/authentication/hooks/login";
+import { allRequiredStoresLoaded } from '@/shared/stores/stores';
+import { DataStoreProvider } from "@/features/datastore/store/store";
+import { UserStoreProvider } from "@/features/userstore/store/store";
 import React from 'react';
-import { ThemedText } from '@/components/general/themed_components';
+import { ThemedText } from '@/shared/components/themed_components';
+import { ThemedStack } from '@/shared/components/themed_components';
 
 function CheckStoresLoaded({ children }: React.PropsWithChildren<{}>) {
   const loaded = allRequiredStoresLoaded();
@@ -37,14 +38,15 @@ export default function RootLayout(): ReactNode {
       <DataStoreProvider />
       <UserStoreProvider />
       <CheckStoresLoaded>
-        <Stack
-          screenOptions={{
-            headerShown: false
-          }}
-        >
-          <Stack.Screen name="(tabs)" />
-          <Stack.Screen name="items/[id]" />
-        </Stack>
+        <ThemedStack>
+          <Stack.Screen name="(tabs)" options={{headerShown: false}}/>
+          <Stack.Screen name="items/[id]" options={{
+                title: "Item Details",
+          }}/>
+          <Stack.Screen name="skills/[id]" options={{
+                title: "Skill Details",
+          }}/>
+        </ThemedStack>
       </CheckStoresLoaded>
     </>
   );

@@ -1,10 +1,7 @@
 import { Image } from "react-native";
 import { Tabs } from "expo-router";
 import React from "react";
-import { useIsLoggedIn } from "@/library/stores/auth/utils/login";
-import { useThemeColour } from "@/library/stores/user/utils/theme";
-import { ThemedText } from "@/components/general/themed_components";
-import { Header } from "@/components/general/header";
+import { ThemedTabs } from "@/shared/components/themed_components";
 const icons_path = "@/assets/images/icons/";
 
 const icons = {
@@ -19,31 +16,9 @@ const icons = {
 }
 
 export default function RootLayout() {
-  const backgroundColor = useThemeColour('primary');
-  const textColor = useThemeColour('text');
-  const tabBarBackgroundColor = useThemeColour('tabBarBackground');
-  const tabIconSelected = useThemeColour('tabIconSelected');
-  const tabIconDefault = useThemeColour('tabIconDefault');
 
-  return <Tabs
-    screenOptions={({ route, navigation }) => ({
-      tabBarActiveTintColor: tabIconSelected,
-      tabBarInactiveTintColor: tabIconDefault,
-      headerStyle: {
-        backgroundColor: tabBarBackgroundColor,
-      },
-      headerTintColor: textColor,
-      tabBarStyle: {
-        backgroundColor: tabBarBackgroundColor,
-      },
-      tabBarLabelStyle: {
-        fontSize: 12,
-        fontWeight: '500',
-      },
-      sceneStyle: {
-        backgroundColor: backgroundColor
-      },
-      header: ({ route, options }) => <Header title={options.title || route.name} />,
+  return <ThemedTabs
+    screenOptions={({ route }) => ({
       tabBarIcon: ({ color, focused }: { color: string, focused: boolean }) => (
         <Image
           source={focused ? icons[`${route.name}_selected` as keyof typeof icons] : icons[`${route.name}_default` as keyof typeof icons]}
@@ -56,5 +31,5 @@ export default function RootLayout() {
     <Tabs.Screen name="skills" options={{ title: "Skills" }} />
     <Tabs.Screen name="items" options={{ title: "Items" }} />
     <Tabs.Screen name="favourites" options={{ title: "Favourites" }} />
-  </Tabs>;
+  </ThemedTabs>;
 }

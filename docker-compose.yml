@@ -8,6 +8,7 @@ services:
       - '8044:8044' # HTTP metrics port
     volumes:
       - ./apps/server/data:/app/data # Persist data directory
+      - ./apps/server/backups:/app/backups # Persist backups directory
     environment:
       - NODE_ENV=production
       - SUPABASE_URL=${SUPABASE_URL}

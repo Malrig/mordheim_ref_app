@@ -71,7 +71,8 @@ docker save mordheim-server -o mordheim-server.tgz
 
 ```
 supabase up
-npx yarn workspace server build
+npx yarn build-server
+docker save mordheim-server -o mordheim-server.tgz
 npx yarn dev-server
 npx yarn dev-client
 npx eas-cli@latest build --profile development

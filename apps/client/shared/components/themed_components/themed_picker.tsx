@@ -13,29 +13,27 @@ interface ThemedPickerProps {
 
 export const ThemedPicker: React.FC<ThemedPickerProps> & {
   Item: typeof Picker.Item;
-} = ({
-  selectedValue,
-  onValueChange,
-  style,
-  children,
-}) => {
-    const textColor = useThemeColour('text');
-    const backgroundColor = useThemeColour('background');
-    const borderColor = useThemeColour('grey');
+} = ({ selectedValue, onValueChange, style, children }) => {
+  const textColor = useThemeColour('text');
+  const backgroundColor = useThemeColour('background');
+  const borderColor = useThemeColour('grey');
 
-    return (
-      <ThemedView style={[styles.container, { borderColor }, style]}>
-        <Picker
-          selectedValue={selectedValue}
-          onValueChange={onValueChange}
-          style={[styles.picker, { color: textColor, backgroundColor: backgroundColor }]}
-          itemStyle={{ color: textColor }}
-        >
-          {children}
-        </Picker>
-      </ThemedView>
-    );
-  };
+  return (
+    <ThemedView style={[styles.container, { borderColor }, style]}>
+      <Picker
+        selectedValue={selectedValue}
+        onValueChange={onValueChange}
+        style={[
+          styles.picker,
+          { color: textColor, backgroundColor: backgroundColor },
+        ]}
+        itemStyle={{ color: textColor }}
+      >
+        {children}
+      </Picker>
+    </ThemedView>
+  );
+};
 
 ThemedPicker.Item = Picker.Item;
 

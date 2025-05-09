@@ -1,14 +1,32 @@
-import { createIndexes, createMergeableStore, createRelationships, createQueries, MergeableStore } from "tinybase/with-schemas"
-import { createObjectStoreIndexes, createObjectStoreRelationships, createObjectStoreQueries, TablesSchema, ValuesSchema, UserStoreType, UserQueriesType, UserIndexesType, UserRelationshipsType } from "./schema"
-import ReconnectingWebSocket from "reconnecting-websocket";
-import { createWsSynchronizer, WebSocketTypes } from "tinybase/synchronizers/synchronizer-ws-client/with-schemas";
-import { InitialData } from "./initial_data";
-import { createLocalPersister, LocalPersister } from "tinybase/persisters/persister-browser/with-schemas";
-import * as UiReact from "tinybase/ui-react/with-schemas";
+import {
+  createIndexes,
+  createMergeableStore,
+  createRelationships,
+  createQueries,
+} from 'tinybase/with-schemas';
+import {
+  createObjectStoreIndexes,
+  createObjectStoreRelationships,
+  createObjectStoreQueries,
+  TablesSchema,
+  ValuesSchema,
+  UserStoreType,
+  UserQueriesType,
+  UserIndexesType,
+  UserRelationshipsType,
+} from './schema';
+import ReconnectingWebSocket from 'reconnecting-websocket';
+import {
+  createWsSynchronizer,
+  WebSocketTypes,
+} from 'tinybase/synchronizers/synchronizer-ws-client/with-schemas';
+import { InitialData } from './initial_data';
+import { createLocalPersister } from 'tinybase/persisters/persister-browser/with-schemas';
+import * as UiReact from 'tinybase/ui-react/with-schemas';
 
-import { userStore as userStoreName } from "mordheim-common";
-import { AuthStore } from "@/features/authentication/store/interface";
-import { registerUserSpecificStore } from "@/features/authentication/hooks/user_specific_stores";
+import { userStore as userStoreName } from 'mordheim-common';
+import { AuthStore } from '@/features/authentication/store/interface';
+import { useRegisterUserSpecificStore } from '@/features/authentication/hooks/user_specific_stores';
 
 export const UserUiHooks = UiReact as UiReact.WithSchemas<
   [typeof TablesSchema, typeof ValuesSchema]
@@ -20,17 +38,20 @@ export const UserStoreProvider = () => {
   const wsUrl = process.env.EXPO_PUBLIC_WS_URL;
 
   const userStore: UserStoreType = UserUiHooks.useCreateMergeableStore(
-    () => createMergeableStore().setTablesSchema(TablesSchema).setValuesSchema(ValuesSchema) as UserStoreType
+    () =>
+      createMergeableStore()
+        .setTablesSchema(TablesSchema)
+        .setValuesSchema(ValuesSchema) as UserStoreType
   );
 
   UserUiHooks.useProvideStore(userStoreName(user_id), userStore);
 
-  const registerStore = registerUserSpecificStore()
+  const registerStore = useRegisterUserSpecificStore();
 
   UserUiHooks.useCreatePersister(
     userStore,
     (store) => {
-      if (user_id === undefined || user_id === "") {
+      if (user_id === undefined || user_id === '') {
         return undefined;
       }
       return createLocalPersister(store, userStoreName(user_id));
@@ -48,8 +69,12 @@ export const UserStoreProvider = () => {
     userStore,
     async (store) => {
       if (token && user_id) {
-        console.log("Recreating synchronizer");
-        const ws = new ReconnectingWebSocket(`${wsUrl}${userStoreName(user_id)}?token=${token}`, [], { debug: false });
+        console.log('Recreating synchronizer');
+        const ws = new ReconnectingWebSocket(
+          `${wsUrl}${userStoreName(user_id)}?token=${token}`,
+          [],
+          { debug: false }
+        );
         const synchronizer = await createWsSynchronizer(
           store,
           ws as unknown as WebSocketTypes,
@@ -63,8 +88,7 @@ export const UserStoreProvider = () => {
         });
 
         return synchronizer;
-      }
-      else {
+      } else {
         return undefined;
       }
     },
@@ -74,9 +98,9 @@ export const UserStoreProvider = () => {
   UserUiHooks.useCreateIndexes(
     userStore,
     (store) => {
-      return createObjectStoreIndexes(store)
+      return createObjectStoreIndexes(store);
     },
-    [user_id],
+    [user_id]
   );
   UserUiHooks.useCreateRelationships(userStore, (store) => {
     return createObjectStoreRelationships(store);
@@ -85,13 +109,12 @@ export const UserStoreProvider = () => {
     return createObjectStoreQueries(store);
   });
 
-
   return null;
-}
+};
 
 const authUseValue = AuthStore.storeUIHooks.useValue;
 
-export function isUserStoreLoading(): boolean {
+export function useIsUserStoreLoading(): boolean {
   const user_id = authUseValue('user_id', AuthStore.store_id);
   const store = UserUiHooks.useStore(userStoreName(user_id!));
   return store === undefined;
@@ -101,7 +124,6 @@ export function useUserStoreId(): string {
   return userStoreName(user_id!);
 }
 export function useUserStore(): UserStoreType {
-  const user_id = authUseValue('user_id', AuthStore.store_id);
   const store = UserUiHooks.useStore(useUserStoreId());
   return store as UserStoreType;
 }
@@ -109,11 +131,11 @@ export function UserStoreQueries(): UserQueriesType {
   const store = useUserStore();
   return createQueries(store!);
 }
-export function UserStoreIndexes(): UserIndexesType{
+export function UserStoreIndexes(): UserIndexesType {
   const store = useUserStore();
   return createIndexes(store!);
 }
-export function UserStoreRelationships(): UserRelationshipsType{
+export function UserStoreRelationships(): UserRelationshipsType {
   const store = useUserStore();
   return createRelationships(store!);
 }

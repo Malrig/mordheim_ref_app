@@ -7,7 +7,7 @@ export enum SourceStatus {
 
 // Define a TS type for the data we'll be using
 export interface Metadata {
-  id: string // If ID is not initialised then the object has not been submitted to the state yet.
-  source: string
-  source_type: SourceStatus
+  id: string; // If ID is not initialised then the object has not been submitted to the state yet.
+  source: string;
+  source_type: SourceStatus;
 }

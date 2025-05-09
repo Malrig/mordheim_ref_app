@@ -1,7 +1,8 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { ItemType, WeaponType } from '../enums';
 import { SpecialRule } from './special_rule';
 import { useIsFavourite } from '@/features/userstore/hooks/favourites';
-import { DataStore } from "@/shared/stores/stores";
+import { DataStore } from '@/shared/stores/stores';
 import { Availability, useAvailabilitiesForObject } from './availability';
 
 /**
@@ -23,7 +24,8 @@ export class Item {
    * Creates a new Item from a TinyBase row
    * @param row The row data from TinyBase
    */
-  constructor(id: string,
+  constructor(
+    id: string,
     name: string,
     description: string,
     price: string,
@@ -31,7 +33,7 @@ export class Item {
     range: string,
     strength: string,
     special_rules: string,
-    weapon_type: string,
+    weapon_type: string
   ) {
     this.id = id || '';
     this.name = name || '';
@@ -63,9 +65,7 @@ export class Item {
 
     const validTypes = Object.values(WeaponType);
     const weaponTypeAsEnum = this.weapon_type as unknown as WeaponType;
-    return validTypes.includes(weaponTypeAsEnum)
-      ? weaponTypeAsEnum
-      : null;
+    return validTypes.includes(weaponTypeAsEnum) ? weaponTypeAsEnum : null;
   }
 
   /**
@@ -81,7 +81,7 @@ export class Item {
   getSpecialRuleIds(): string[] {
     try {
       return JSON.parse(this.special_rules);
-    } catch (e) {
+    } catch {
       return [];
     }
   }
@@ -93,11 +93,14 @@ export class Item {
       DataStore.useRelationships()
     );
 
-    const metadata_info = metadata && DataStore.storeUIHooks.useRow(
-      'metadata',
-      metadata,
-      DataStore.store_id
-    ) || undefined;
+    const metadata_info =
+      (metadata &&
+        DataStore.storeUIHooks.useRow(
+          'metadata',
+          metadata,
+          DataStore.store_id
+        )) ||
+      undefined;
     return metadata_info;
   }
 
@@ -134,17 +137,13 @@ export class Item {
       row.range || '',
       row.strength || '',
       row.special_rules || '[]',
-      row.weapon_type || '',
+      row.weapon_type || ''
     );
   }
 
   static useInstance(id: string): Item {
     return Item.fromRow(
-      DataStore.storeUIHooks.useRow(
-        Item.TABLE_NAME,
-        id,
-        DataStore.store_id,
-      )
+      DataStore.storeUIHooks.useRow(Item.TABLE_NAME, id, DataStore.store_id)
     );
   }
 }

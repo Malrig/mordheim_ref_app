@@ -11,15 +11,17 @@ export default function TestPage() {
       <List.Subheader>My List Title</List.Subheader>;
       <List.Accordion
         title="Uncontrolled Accordion"
-        left={props => <List.Icon {...props} icon="folder" />}>
+        left={(props) => <List.Icon {...props} icon="folder" />}
+      >
         <List.Item title="First item" />
         <List.Item title="Second item" />
       </List.Accordion>
       <List.Accordion
         title="Controlled Accordion"
-        left={props => <List.Icon {...props} icon="folder" />}
+        left={(props) => <List.Icon {...props} icon="folder" />}
         expanded={expanded}
-        onPress={handlePress}>
+        onPress={handlePress}
+      >
         <List.Item title="First item" />
         <List.Item title="Second item" />
       </List.Accordion>

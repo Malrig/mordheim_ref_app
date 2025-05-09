@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useIsFavourite } from '@/features/userstore/hooks/favourites';
-import { DataStore } from "@/shared/stores/stores";
+import { DataStore } from '@/shared/stores/stores';
 import { SkillGroup } from './skill_group';
 
 /**
@@ -31,8 +32,19 @@ export class Skill {
    * @returns The metadata object or undefined if not found
    */
   useMetadata(): Record<string, any> | undefined {
-    const metadata = DataStore.storeUIHooks.useRemoteRowId('skillsMetadata', this.id, DataStore.useRelationships());
-    const metadata_info = metadata && DataStore.storeUIHooks.useRow('metadata', metadata, DataStore.store_id) || undefined;
+    const metadata = DataStore.storeUIHooks.useRemoteRowId(
+      'skillsMetadata',
+      this.id,
+      DataStore.useRelationships()
+    );
+    const metadata_info =
+      (metadata &&
+        DataStore.storeUIHooks.useRow(
+          'metadata',
+          metadata,
+          DataStore.store_id
+        )) ||
+      undefined;
     return metadata_info;
   }
 
@@ -59,7 +71,9 @@ export class Skill {
    * @returns A Skill instance
    */
   static useInstance(id: string): Skill {
-    return Skill.fromRow(DataStore.storeUIHooks.useRow(Skill.TABLE_NAME, id, DataStore.store_id));
+    return Skill.fromRow(
+      DataStore.storeUIHooks.useRow(Skill.TABLE_NAME, id, DataStore.store_id)
+    );
   }
 
   /**
@@ -72,7 +86,8 @@ export class Skill {
       this.id,
       DataStore.useRelationships()
     );
-    return skill_group_id && SkillGroup.useInstance(skill_group_id) || undefined;
+    return (
+      (skill_group_id && SkillGroup.useInstance(skill_group_id)) || undefined
+    );
   }
-
 }

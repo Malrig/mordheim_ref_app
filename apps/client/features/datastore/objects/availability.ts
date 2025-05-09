@@ -1,11 +1,14 @@
-import { DataStore } from "../store/interface";
-import { Restriction } from "./restriction";
+/* eslint-disable react-hooks/rules-of-hooks */
+import { DataStore } from '../store/interface';
+import { Restriction } from './restriction';
 
-
-export function useAvailabilitiesForObject(object_table: string, object_id: string): Availability[] {
+export function useAvailabilitiesForObject(
+  object_table: string,
+  object_id: string
+): Availability[] {
   const availabilities: Availability[] = [];
   const availabilityIds = DataStore.storeUIHooks.useSliceRowIds(
-    "availabilityByObjectTypeAndId",
+    'availabilityByObjectTypeAndId',
     `${object_table}_${object_id}`,
     DataStore.useIndexes()
   );
@@ -41,7 +44,7 @@ export class Availability {
     id: string,
     rarity: number | null,
     related_object_type: string,
-    object_id: string,
+    object_id: string
   ) {
     this.id = id || '';
     this.rarity = rarity || null;
@@ -84,7 +87,7 @@ export class Availability {
   useRestrictions(): Restriction[] {
     const restrictions: Restriction[] = [];
     const restrictionIds = DataStore.storeUIHooks.useLocalRowIds(
-      "restrictionsAvailability",
+      'restrictionsAvailability',
       this.id,
       DataStore.useRelationships()
     );

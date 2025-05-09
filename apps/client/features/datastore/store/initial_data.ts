@@ -1,12 +1,28 @@
-import { Content } from "tinybase/store/with-schemas";
-import { TablesSchema, ValuesSchema } from "./schema";
-import { Metadata, SourceStatus } from "@/features/initial_data/data_interfaces/metadata";
-import { initialArmourState, initialMiscItemState } from "@/features/initial_data/items";
-import { initialWeaponState, initialSpecialRuleState } from "@/features/initial_data/weapons";
-import { initialSkillGroups, initialSkillState } from "@/features/initial_data/skills";
-import { nanoid } from "nanoid";
+import { Content } from 'tinybase/store/with-schemas';
+import { TablesSchema, ValuesSchema } from './schema';
+import {
+  Metadata,
+  SourceStatus,
+} from '@/features/initial_data/data_interfaces/metadata';
+import {
+  initialArmourState,
+  initialMiscItemState,
+} from '@/features/initial_data/items';
+import {
+  initialWeaponState,
+  initialSpecialRuleState,
+} from '@/features/initial_data/weapons';
+import {
+  initialSkillGroups,
+  initialSkillState,
+} from '@/features/initial_data/skills';
+import { nanoid } from 'nanoid';
 
-const initialItems = [...initialArmourState, ...initialMiscItemState, ...initialWeaponState];
+const initialItems = [
+  ...initialArmourState,
+  ...initialMiscItemState,
+  ...initialWeaponState,
+];
 
 const initialItemEntries = initialItems.map((item) => {
   return {
@@ -18,7 +34,7 @@ const initialItemEntries = initialItems.map((item) => {
     range: item.range || '',
     strength: item.strength || '',
     special_rules: JSON.stringify(item.special_rules || []),
-    weapon_type: item.weapon_type || ''
+    weapon_type: item.weapon_type || '',
   };
 });
 const itemMetadataEntries = initialItems.map((item: Metadata) => {
@@ -30,18 +46,18 @@ const itemMetadataEntries = initialItems.map((item: Metadata) => {
 });
 const itemAvailabilityEntries = initialItems.flatMap((item) => {
   const availability = item.availability || [];
-  return availability.map((availability) => {
+  return availability.map((inner_availability) => {
     return {
-      id: availability.id,
-      rarity: availability.rarity,
-      related_object_type: "items",
+      id: inner_availability.id,
+      rarity: inner_availability.rarity,
+      related_object_type: 'items',
       object_id: item.id,
     };
   });
 });
 const itemRestrictionEntries = initialItems.flatMap((item) => {
-  const availability = item.availability || [];
-  return availability.flatMap((availability) => {
+  const availabilities = item.availability || [];
+  return availabilities.flatMap((availability) => {
     const restrictions = availability.restrictions || [];
     return restrictions.map((restriction) => {
       return {
@@ -67,7 +83,7 @@ const initialSkillEntries = initialSkillState.map((skill) => {
     id: skill.id,
     name: skill.name,
     description: skill.description,
-    group_id: skill.group_id
+    group_id: skill.group_id,
   };
 });
 const skillMetadataEntries = initialSkillState.map((skill: Metadata) => {
@@ -83,39 +99,49 @@ const skillGroupEntries = Object.values(initialSkillGroups).map((group) => {
     name: group.name,
   };
 });
-const skillGroupAvailabilityEntries = Object.values(initialSkillGroups).flatMap((group) => {
-  const availability = group.availability || [];
-  return availability.map((availability) => {
-    return {
-      id: availability.id,
-      rarity: availability.rarity,
-      related_object_type: "skill_groups",
-      object_id: group.id,
-    };
-  });
-});
-const skillGroupRestrictionEntries = Object.values(initialSkillGroups).flatMap((group) => {
-  const availability = group.availability || [];
-  return availability.flatMap((availability) => {
-    const restrictions = availability.restrictions || [];
-    return restrictions.map((restriction) => {
+const skillGroupAvailabilityEntries = Object.values(initialSkillGroups).flatMap(
+  (group) => {
+    const availabilities = group.availability || [];
+    return availabilities.map((availability) => {
       return {
-        id: nanoid(),
-        restriction_type: String(restriction.restriction_type),
-        restriction: String(restriction.restriction),
-        availability_id: availability.id,
+        id: availability.id,
+        rarity: availability.rarity,
+        related_object_type: 'skill_groups',
+        object_id: group.id,
       };
     });
-  });
-});
+  }
+);
+const skillGroupRestrictionEntries = Object.values(initialSkillGroups).flatMap(
+  (group) => {
+    const availabilities = group.availability || [];
+    return availabilities.flatMap((availability) => {
+      const restrictions = availability.restrictions || [];
+      return restrictions.map((restriction) => {
+        return {
+          id: nanoid(),
+          restriction_type: String(restriction.restriction_type),
+          restriction: String(restriction.restriction),
+          availability_id: availability.id,
+        };
+      });
+    });
+  }
+);
 
 const allMetadataEntries = [...itemMetadataEntries, ...skillMetadataEntries];
-const allAvailabilityEntries = [...itemAvailabilityEntries, ...skillGroupAvailabilityEntries];
-const allRestrictionEntries = [...itemRestrictionEntries, ...skillGroupRestrictionEntries];
+const allAvailabilityEntries = [
+  ...itemAvailabilityEntries,
+  ...skillGroupAvailabilityEntries,
+];
+const allRestrictionEntries = [
+  ...itemRestrictionEntries,
+  ...skillGroupRestrictionEntries,
+];
 
 // Validate all IDs are set
 const validateIds = (entries: any[], type: string) => {
-  entries.forEach(entry => {
+  entries.forEach((entry) => {
     if (!entry.id) {
       throw new Error(`Missing ID in ${type} entry: ${JSON.stringify(entry)}`);
     }
@@ -139,25 +165,26 @@ console.log(`Loaded ${initialSpecialRuleEntries.length} special rule entries`);
 
 const InitialTableData = {
   metadata: Object.fromEntries(
-    allMetadataEntries.map(entry => [entry.table_name_id, entry])
+    allMetadataEntries.map((entry) => [entry.table_name_id, entry])
   ),
-  items: Object.fromEntries(
-    initialItemEntries.map(item => [item.id, item])
-  ),
+  items: Object.fromEntries(initialItemEntries.map((item) => [item.id, item])),
   special_rules: Object.fromEntries(
-    initialSpecialRuleEntries.map(rule => [rule.id, rule])
+    initialSpecialRuleEntries.map((rule) => [rule.id, rule])
   ),
   skills: Object.fromEntries(
-    initialSkillEntries.map(skill => [skill.id, skill])
+    initialSkillEntries.map((skill) => [skill.id, skill])
   ),
   skill_groups: Object.fromEntries(
-    skillGroupEntries.map(group => [group.id, group])
+    skillGroupEntries.map((group) => [group.id, group])
   ),
   availabilities: Object.fromEntries(
-    allAvailabilityEntries.map(availability => [availability.id, availability])
+    allAvailabilityEntries.map((availability) => [
+      availability.id,
+      availability,
+    ])
   ),
   restrictions: Object.fromEntries(
-    allRestrictionEntries.map(restriction => [restriction.id, restriction])
+    allRestrictionEntries.map((restriction) => [restriction.id, restriction])
   ),
 } as const;
 
@@ -165,7 +192,5 @@ const InitialValueData = {
   // isThemeDark: localStorage.getItem("theme") === "dark",
 };
 
-export const InitialData: Content<[typeof TablesSchema, typeof ValuesSchema]> = [
-  InitialTableData,
-  InitialValueData
-];
+export const InitialData: Content<[typeof TablesSchema, typeof ValuesSchema]> =
+  [InitialTableData, InitialValueData];

@@ -15,6 +15,25 @@
     "dev-server-restart": "docker compose down && docker compose up -d",
     "dev-server": "docker compose up -d",
     "dev-client": "yarn workspace client expo start",
-    "stop": "supabase stop && docker compose down"
+    "stop": "supabase stop && docker compose down",
+    "lint:eslint": "eslint \"**/*.{ts,tsx}\" --max-warnings=0",
+    "lint:tsc": "yarn workspaces run lint:tsc",
+    "lint": "run-p lint:*",
+    "audit-security": "audit-ci --config ./audit-ci.json",
+    "test": "jest --verbose"
+  },
+  "devDependencies": {
+    "@eslint/compat": "^1.2.9",
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.26.0",
+    "eslint": "^9.26.0",
+    "eslint-config-prettier": "^10.1.2",
+    "eslint-plugin-prettier": "^5.4.0",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "globals": "^16.0.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^3.5.3",
+    "typescript-eslint": "^8.32.0"
   }
 }

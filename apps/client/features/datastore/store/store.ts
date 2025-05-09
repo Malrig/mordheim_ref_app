@@ -1,14 +1,32 @@
-import { createIndexes, createMergeableStore, createRelationships, createQueries, MergeableStore } from "tinybase/with-schemas"
-import { createObjectStoreIndexes, createObjectStoreRelationships, createObjectStoreQueries, TablesSchema, ValuesSchema, DataStoreType, DataQueriesType, DataIndexesType, DataRelationshipsType } from "./schema"
-import ReconnectingWebSocket from "reconnecting-websocket";
-import { createWsSynchronizer, WebSocketTypes } from "tinybase/synchronizers/synchronizer-ws-client/with-schemas";
-import { InitialData } from "./initial_data";
-import { createLocalPersister } from "tinybase/persisters/persister-browser/with-schemas";
+import {
+  createIndexes,
+  createMergeableStore,
+  createRelationships,
+  createQueries,
+} from 'tinybase/with-schemas';
+import {
+  createObjectStoreIndexes,
+  createObjectStoreRelationships,
+  createObjectStoreQueries,
+  TablesSchema,
+  ValuesSchema,
+  DataStoreType,
+  DataQueriesType,
+  DataIndexesType,
+  DataRelationshipsType,
+} from './schema';
+import ReconnectingWebSocket from 'reconnecting-websocket';
+import {
+  createWsSynchronizer,
+  WebSocketTypes,
+} from 'tinybase/synchronizers/synchronizer-ws-client/with-schemas';
+import { InitialData } from './initial_data';
+import { createLocalPersister } from 'tinybase/persisters/persister-browser/with-schemas';
 
-export { DATA_STORE as STORE_NAME } from "mordheim-common";
-import { DATA_STORE as STORE_NAME } from "mordheim-common";
-import { AuthStore } from "@/features/authentication/store/interface";
-import * as UiReact from "tinybase/ui-react/with-schemas";
+export { DATA_STORE as STORE_NAME } from 'mordheim-common';
+import { DATA_STORE as STORE_NAME } from 'mordheim-common';
+import { AuthStore } from '@/features/authentication/store/interface';
+import * as UiReact from 'tinybase/ui-react/with-schemas';
 
 export const DataUiHooks = UiReact as UiReact.WithSchemas<
   [typeof TablesSchema, typeof ValuesSchema]
@@ -16,7 +34,10 @@ export const DataUiHooks = UiReact as UiReact.WithSchemas<
 
 export const DataStoreProvider = () => {
   const dataStore: DataStoreType = DataUiHooks.useCreateMergeableStore(
-    () => createMergeableStore().setTablesSchema(TablesSchema).setValuesSchema(ValuesSchema) as DataStoreType
+    () =>
+      createMergeableStore()
+        .setTablesSchema(TablesSchema)
+        .setValuesSchema(ValuesSchema) as DataStoreType
   );
   DataUiHooks.useProvideStore(STORE_NAME, dataStore);
 
@@ -33,14 +54,21 @@ export const DataStoreProvider = () => {
     }
   );
 
-  const token = AuthStore.storeUIHooks.useValue('access_token', AuthStore.store_id);
+  const token = AuthStore.storeUIHooks.useValue(
+    'access_token',
+    AuthStore.store_id
+  );
 
   DataUiHooks.useCreateSynchronizer(
     dataStore,
     async (store) => {
       if (token) {
-        console.log("Recreating synchronizer");
-        const ws = new ReconnectingWebSocket(`${wsUrl}${STORE_NAME}?token=${token}`, [], { debug: false });
+        console.log('Recreating synchronizer');
+        const ws = new ReconnectingWebSocket(
+          `${wsUrl}${STORE_NAME}?token=${token}`,
+          [],
+          { debug: false }
+        );
         const synchronizer = await createWsSynchronizer(
           store,
           ws as unknown as WebSocketTypes,
@@ -54,8 +82,7 @@ export const DataStoreProvider = () => {
         });
 
         return synchronizer;
-      }
-      else {
+      } else {
         return undefined;
       }
     },
@@ -63,7 +90,7 @@ export const DataStoreProvider = () => {
   );
 
   DataUiHooks.useCreateIndexes(dataStore, (store) => {
-    return createObjectStoreIndexes(store)
+    return createObjectStoreIndexes(store);
   });
   DataUiHooks.useCreateRelationships(dataStore, (store) => {
     return createObjectStoreRelationships(store);
@@ -72,11 +99,10 @@ export const DataStoreProvider = () => {
     return createObjectStoreQueries(store);
   });
 
-
   return null;
-}
+};
 
-export function isDataStoreLoading(): boolean {
+export function useIsDataStoreLoading(): boolean {
   const store = DataUiHooks.useStore(STORE_NAME);
   return store === undefined;
 }

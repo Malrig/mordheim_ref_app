@@ -19,7 +19,6 @@ export const ThemedTextInput: React.FC<ThemedTextInputProps> = ({
   onChangeText,
   placeholder,
   style,
-  textStyle,
   secureTextEntry = false,
   multiline = false,
   numberOfLines,

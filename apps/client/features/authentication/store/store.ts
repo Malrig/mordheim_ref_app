@@ -1,18 +1,39 @@
-import { createIndexes, createRelationships, createQueries, createStore } from "tinybase/with-schemas"
-import { createObjectStoreIndexes, createObjectStoreRelationships, createObjectStoreQueries, TablesSchema, ValuesSchema, AuthStoreType, AuthQueriesType, AuthIndexesType, AuthRelationshipsType } from "./schema"
-import { createLocalPersister } from "tinybase/persisters/persister-browser/with-schemas";
-import { InitialData } from "./initial_data";
-import * as UiReact from "tinybase/ui-react/with-schemas";
-import { supabase } from "@/features/authentication/hooks/supabase";
-import { userLoggedOutCallback, userSignedInCallback } from "../hooks/login";
-export const STORE_NAME = "auth-store";
+import {
+  createIndexes,
+  createRelationships,
+  createQueries,
+  createStore,
+} from 'tinybase/with-schemas';
+import {
+  createObjectStoreIndexes,
+  createObjectStoreRelationships,
+  createObjectStoreQueries,
+  TablesSchema,
+  ValuesSchema,
+  AuthStoreType,
+  AuthQueriesType,
+  AuthIndexesType,
+  AuthRelationshipsType,
+} from './schema';
+import { createLocalPersister } from 'tinybase/persisters/persister-browser/with-schemas';
+import { InitialData } from './initial_data';
+import * as UiReact from 'tinybase/ui-react/with-schemas';
+import { supabase } from '@/features/authentication/hooks/supabase';
+import {
+  useUserLoggedOutCallback,
+  useUserSignedInCallback,
+} from '../hooks/login';
+export const STORE_NAME = 'auth-store';
 export const AuthUiHooks = UiReact as UiReact.WithSchemas<
   [typeof TablesSchema, typeof ValuesSchema]
 >;
 
 export const AuthStoreProvider = () => {
   const authStore: AuthStoreType = AuthUiHooks.useCreateStore(
-    () => createStore().setTablesSchema(TablesSchema).setValuesSchema(ValuesSchema) as AuthStoreType
+    () =>
+      createStore()
+        .setTablesSchema(TablesSchema)
+        .setValuesSchema(ValuesSchema) as AuthStoreType
   );
   AuthUiHooks.useProvideStore(STORE_NAME, authStore);
 
@@ -29,7 +50,7 @@ export const AuthStoreProvider = () => {
   );
 
   AuthUiHooks.useCreateIndexes(authStore, (store) => {
-    return createObjectStoreIndexes(store)
+    return createObjectStoreIndexes(store);
   });
   AuthUiHooks.useCreateRelationships(authStore, (store) => {
     return createObjectStoreRelationships(store);
@@ -38,26 +59,27 @@ export const AuthStoreProvider = () => {
     return createObjectStoreQueries(store);
   });
 
-  const logout_cb = userLoggedOutCallback()
-  const login_cb = userSignedInCallback()
+  const logout_cb = useUserLoggedOutCallback();
+  const login_cb = useUserSignedInCallback();
 
   supabase.auth.onAuthStateChange((event, session) => {
-    console.log(`Auth change event: ${event}, session: ${session}`)
+    console.log(`Auth change event: ${event}, session: ${session}`);
 
-    if (event == "SIGNED_OUT" || !session) {
-      console.log("SIGNED_OUT event")
+    if (event == 'SIGNED_OUT' || !session) {
+      console.log('SIGNED_OUT event');
       logout_cb();
-    }
-    else if (["SIGNED_IN", "TOKEN_REFRESHED", "INITIAL_SESSION"].includes(event)) {
-      console.log("Logged in event")
-      login_cb(session)
+    } else if (
+      ['SIGNED_IN', 'TOKEN_REFRESHED', 'INITIAL_SESSION'].includes(event)
+    ) {
+      console.log('Logged in event');
+      login_cb(session);
     }
   });
 
   return null;
-}
+};
 
-export function isAuthStoreLoading(): boolean {
+export function useIsAuthStoreLoading(): boolean {
   const store = AuthUiHooks.useStore(STORE_NAME);
   return store === undefined;
 }

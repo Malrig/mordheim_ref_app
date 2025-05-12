@@ -1,10 +1,7 @@
 import { createServer, IncomingMessage } from 'http';
 import { createWsServer } from 'tinybase/synchronizers/synchronizer-ws-server';
 import { WebSocket } from 'ws';
-import {
-  existsSync,
-  mkdirSync,
-} from 'fs';
+import { existsSync, mkdirSync } from 'fs';
 import { WebSocketServerWrapper } from './WebSocketServerWrapper';
 import { createMergeableStore } from 'tinybase';
 import { createFilePersister } from 'tinybase/persisters/persister-file';

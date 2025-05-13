@@ -67,9 +67,10 @@ npx expo export --platform web
 docker build -t mordheim_app .
 docker save mordheim_app -o mordheim_app_image.tgz
 docker save mordheim-server -o mordheim-server.tgz
+npx expo-doctor@latest
 ```
 
-```
+```bash
 supabase up
 npx yarn build-server
 docker save mordheim-server -o mordheim-server.tgz

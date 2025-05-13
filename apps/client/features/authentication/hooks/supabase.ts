@@ -1,5 +1,5 @@
 import { AppState } from 'react-native';
-import { jwtDecode } from 'jwt-decode';
+import JWT from 'expo-jwt';
 import 'react-native-url-polyfill/auto';
 // import AsyncStorage from '@react-native-async-storage/async-storage'
 import { createClient, Session } from '@supabase/supabase-js';
@@ -23,7 +23,9 @@ interface CustomJwtPayload {
 }
 
 export function getUserRoleAndPermissions(session: Session) {
-  const jwt = jwtDecode<CustomJwtPayload>(session.access_token);
+  const jwt = JWT.decode<CustomJwtPayload>(session.access_token, null, {
+    timeSkew: 30, // Sometimes clocks are slightly off so allow for a 30 second window
+  });
   const userRole: string = jwt.user_role;
   const permissions: Record<string, { permission_name: string }> = {};
   jwt.permissions.forEach((permission) => {

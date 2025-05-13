@@ -85,6 +85,7 @@ export default defineConfig([
       'import/prefer-default-export': 'off',
       'react/prop-types': 'off',
       '@typescript-eslint/no-use-before-define': 'off',
+      'prettier/prettier': ['warn', { endOfLine: 'auto' }],
     },
   },
   globalIgnores(['*/**/dist/']),

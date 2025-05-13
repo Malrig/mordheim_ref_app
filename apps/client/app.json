@@ -2,6 +2,7 @@
   "expo": {
     "name": "mordheim_exp",
     "slug": "mordheim_exp",
+    "owner": "malrig",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",

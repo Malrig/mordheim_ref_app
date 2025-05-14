@@ -3,6 +3,7 @@ import {
   createRelationships,
   createQueries,
   createStore,
+  MergeableStore,
 } from 'tinybase/with-schemas';
 import {
   createObjectStoreIndexes,
@@ -15,7 +16,6 @@ import {
   AuthIndexesType,
   AuthRelationshipsType,
 } from './schema';
-import { createLocalPersister } from 'tinybase/persisters/persister-browser/with-schemas';
 import { InitialData } from './initial_data';
 import * as UiReact from 'tinybase/ui-react/with-schemas';
 import { supabase } from '@/features/authentication/hooks/supabase';
@@ -23,6 +23,8 @@ import {
   useUserLoggedOutCallback,
   useUserSignedInCallback,
 } from '../hooks/login';
+import { createClientPersister } from '@/shared/stores/create_persister';
+
 export const STORE_NAME = 'auth-store';
 export const AuthUiHooks = UiReact as UiReact.WithSchemas<
   [typeof TablesSchema, typeof ValuesSchema]
@@ -40,7 +42,10 @@ export const AuthStoreProvider = () => {
   AuthUiHooks.useCreatePersister(
     authStore,
     (store) => {
-      return createLocalPersister(store, STORE_NAME);
+      return createClientPersister(
+        store as MergeableStore<[typeof TablesSchema, typeof ValuesSchema]>,
+        STORE_NAME
+      );
     },
     [],
     async (persister) => {

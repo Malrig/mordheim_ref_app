@@ -3,6 +3,7 @@ import {
   createMergeableStore,
   createRelationships,
   createQueries,
+  MergeableStore,
 } from 'tinybase/with-schemas';
 import {
   createObjectStoreIndexes,
@@ -21,12 +22,12 @@ import {
   WebSocketTypes,
 } from 'tinybase/synchronizers/synchronizer-ws-client/with-schemas';
 import { InitialData } from './initial_data';
-import { createLocalPersister } from 'tinybase/persisters/persister-browser/with-schemas';
 
 export { DATA_STORE as STORE_NAME } from 'mordheim-common';
 import { DATA_STORE as STORE_NAME } from 'mordheim-common';
 import { AuthStore } from '@/features/authentication/store/interface';
 import * as UiReact from 'tinybase/ui-react/with-schemas';
+import { createClientPersister } from '@/shared/stores/create_persister';
 
 export const DataUiHooks = UiReact as UiReact.WithSchemas<
   [typeof TablesSchema, typeof ValuesSchema]
@@ -45,7 +46,10 @@ export const DataStoreProvider = () => {
   DataUiHooks.useCreatePersister(
     dataStore,
     (store) => {
-      return createLocalPersister(store, STORE_NAME);
+      return createClientPersister(
+        store as MergeableStore<[typeof TablesSchema, typeof ValuesSchema]>,
+        STORE_NAME
+      );
     },
     [],
     async (persister) => {
@@ -86,7 +90,10 @@ export const DataStoreProvider = () => {
         return undefined;
       }
     },
-    [token]
+    [token],
+    async (synchronizer) => {
+      synchronizer.destroy();
+    }
   );
 
   DataUiHooks.useCreateIndexes(dataStore, (store) => {

@@ -3,6 +3,7 @@ import {
   createMergeableStore,
   createRelationships,
   createQueries,
+  MergeableStore,
 } from 'tinybase/with-schemas';
 import {
   createObjectStoreIndexes,
@@ -21,12 +22,12 @@ import {
   WebSocketTypes,
 } from 'tinybase/synchronizers/synchronizer-ws-client/with-schemas';
 import { InitialData } from './initial_data';
-import { createLocalPersister } from 'tinybase/persisters/persister-browser/with-schemas';
 import * as UiReact from 'tinybase/ui-react/with-schemas';
 
 import { userStore as userStoreName } from 'mordheim-common';
 import { AuthStore } from '@/features/authentication/store/interface';
 import { useRegisterUserSpecificStore } from '@/features/authentication/hooks/user_specific_stores';
+import { createClientPersister } from '@/shared/stores/create_persister';
 
 export const UserUiHooks = UiReact as UiReact.WithSchemas<
   [typeof TablesSchema, typeof ValuesSchema]
@@ -54,7 +55,10 @@ export const UserStoreProvider = () => {
       if (user_id === undefined || user_id === '') {
         return undefined;
       }
-      return createLocalPersister(store, userStoreName(user_id));
+      return createClientPersister(
+        store as MergeableStore<[typeof TablesSchema, typeof ValuesSchema]>,
+        userStoreName(user_id)
+      );
     },
     [user_id],
     async (persister) => {
@@ -69,7 +73,7 @@ export const UserStoreProvider = () => {
     userStore,
     async (store) => {
       if (token && user_id) {
-        console.log('Recreating synchronizer');
+        console.log(`Recreating synchronizer with ${token} ${user_id}`);
         const ws = new ReconnectingWebSocket(
           `${wsUrl}${userStoreName(user_id)}?token=${token}`,
           [],
@@ -92,7 +96,11 @@ export const UserStoreProvider = () => {
         return undefined;
       }
     },
-    [token, user_id]
+    [token, user_id],
+    async (synchronizer) => {
+      console.log('Destroying user store synchronizer');
+      synchronizer.destroy();
+    }
   );
 
   UserUiHooks.useCreateIndexes(

@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
 import {
-  StyleSheet,
-  ViewStyle,
-  TextStyle,
   StyleProp,
+  TextStyle,
   TouchableOpacity,
+  ViewStyle,
 } from 'react-native';
-import { ThemedView, ThemedText } from './themed_components';
+import { YStack, XStack, Separator } from 'tamagui';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useThemeColour } from '@/features/userstore/hooks/theme';
-import { Divider } from 'react-native-paper';
+import { ThemedText } from './themed_components';
 
 interface ExpandableProps {
   title: string | React.ReactNode;
@@ -29,61 +27,33 @@ export const Expandable: React.FC<ExpandableProps> = ({
   initialExpanded = false,
 }) => {
   const [isExpanded, setIsExpanded] = useState(initialExpanded);
-  const defaultContainerColour = useThemeColour('secondary');
 
   return (
-    <ThemedView
-      style={[
-        { backgroundColor: defaultContainerColour },
-        styles.container,
-        containerStyle,
-      ]}
-    >
+    <YStack borderRadius="$4" {...(containerStyle as any)}>
       <TouchableOpacity
-        style={styles.header}
+        // style={styles.header}
         onPress={() => setIsExpanded(!isExpanded)}
       >
-        {typeof title === 'string' ? (
-          <ThemedText variant="subtitle" style={titleStyle}>
-            {title}
-          </ThemedText>
-        ) : (
-          title
-        )}
-        <MaterialIcons
-          name={isExpanded ? 'expand-less' : 'expand-more'}
-          size={24}
-        />
+        <XStack justifyContent="space-between" alignItems="center" padding="$2">
+          {typeof title === 'string' ? (
+            <ThemedText variant="subtitle" style={titleStyle}>
+              {title}
+            </ThemedText>
+          ) : (
+            title
+          )}
+          <MaterialIcons
+            name={isExpanded ? 'expand-less' : 'expand-more'}
+            size={24}
+          />
+        </XStack>
       </TouchableOpacity>
       {isExpanded && (
-        <ThemedView
-          style={[
-            { backgroundColor: defaultContainerColour },
-            styles.content,
-            contentStyle,
-          ]}
-        >
-          <Divider />
+        <YStack paddingHorizontal="$3" {...(contentStyle as any)}>
+          <Separator />
           {children}
-        </ThemedView>
+        </YStack>
       )}
-    </ThemedView>
+    </YStack>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    borderRadius: 8,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 5,
-  },
-  content: {
-    paddingLeft: 12,
-    paddingRight: 12,
-  },
-});

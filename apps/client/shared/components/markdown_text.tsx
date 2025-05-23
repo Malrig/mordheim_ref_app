@@ -3,7 +3,7 @@ import * as React from 'react';
 import Markdown, {
   RenderRules,
 } from '@ronradtke/react-native-markdown-display';
-import { useThemeColour } from '@/features/userstore/hooks/theme';
+// import { useThemeColour } from '@/features/userstore/hooks/theme';
 import { ThemedView } from './themed_components';
 // import { Divider, List } from "react-native-paper";
 
@@ -25,7 +25,7 @@ const rules: RenderRules = {
 const MarkdownWrapper: React.FC<any> = ({ children }) => {
   const styles = StyleSheet.create({
     body: {
-      color: useThemeColour('text'),
+      // color: useThemeColour('text'),
       // fontSize: 10
     },
   });

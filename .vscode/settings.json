@@ -13,6 +13,7 @@
     "persistor",
     "Pressable",
     "supabase",
+    "tamagui",
     "thunks",
     "tinybase",
     "Warband"

@@ -1,13 +1,6 @@
 import React from 'react';
-import {
-  TouchableOpacity,
-  Text,
-  StyleSheet,
-  ViewStyle,
-  TextStyle,
-  StyleProp,
-} from 'react-native';
-import { useThemeColour } from '@/features/userstore/hooks/theme';
+import { Button, Text } from 'tamagui';
+import { StyleProp, TextStyle, ViewStyle } from 'react-native';
 
 interface ThemedButtonProps {
   title: string;
@@ -24,37 +17,15 @@ export const ThemedButton: React.FC<ThemedButtonProps> = ({
   textStyle,
   disabled = false,
 }) => {
-  const backgroundColor = useThemeColour('secondary');
-  const textColor = useThemeColour('text');
-  const disabledColor = useThemeColour('grey');
-
   return (
-    <TouchableOpacity
-      style={[
-        styles.button,
-        { backgroundColor: disabled ? disabledColor : backgroundColor },
-        style,
-      ]}
+    <Button
       onPress={onPress}
       disabled={disabled}
+      opacity={disabled ? 0.5 : 1}
+      size="$4"
+      {...(style as any)}
     >
-      <Text style={[styles.text, { color: textColor }, textStyle]}>
-        {title}
-      </Text>
-    </TouchableOpacity>
+      <Text {...(textStyle as any)}>{title}</Text>
+    </Button>
   );
 };
-
-const styles = StyleSheet.create({
-  button: {
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  text: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
-});

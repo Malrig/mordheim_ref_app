@@ -6,6 +6,10 @@ import { getUserRoleAndPermissions } from '@/features/authentication/hooks/supab
 import { supabase } from '@/features/authentication/hooks/supabase';
 import { Alert } from 'react-native';
 
+const showAlert = (message: string) => {
+  Alert.alert('Alert', message);
+};
+
 export function useIsLoggedIn(): { loading: boolean; isLoggedIn: boolean } {
   const authStore = AuthStore.useStore();
   const userId = AuthStore.storeUIHooks.useValue('user_id', authStore);
@@ -18,48 +22,52 @@ export function useIsLoggedIn(): { loading: boolean; isLoggedIn: boolean } {
   };
 }
 
-export async function signInWithEmail(
-  email: string,
-  password: string,
-  setLoading?: (loading: boolean) => void
-) {
-  setLoading?.(true);
+export async function signInWithEmail(email: string, password: string) {
   const { error } = await supabase.auth.signInWithPassword({
     email: email,
     password: password,
   });
 
   if (error) {
-    Alert.alert(error.message);
-    setLoading?.(false);
-    return false;
+    return { success: false, error: error.message };
   }
-  setLoading?.(false);
-  return true;
+  return { success: true };
 }
 
 export async function signOut() {
   const { error } = await supabase.auth.signOut();
-  if (error) Alert.alert(error.message);
+  if (error) showAlert(error.message);
 }
 
 export async function signUpWithEmail(
   email: string,
-  password: string,
-  setLoading: (loading: boolean) => void
-) {
-  setLoading(true);
-  const {
-    data: { session },
-    error,
-  } = await supabase.auth.signUp({
+  password: string
+): Promise<{
+  success: boolean;
+  error?: string;
+  requiresEmailConfirmation?: boolean;
+}> {
+  const { data, error } = await supabase.auth.signUp({
     email: email,
     password: password,
+    options: {
+      emailRedirectTo: window.location.origin,
+    },
   });
 
-  if (error) Alert.alert(error.message);
-  if (!session) Alert.alert('Please check your inbox for email verification!');
-  setLoading(false);
+  if (error) {
+    return { success: false, error: error.message };
+  }
+
+  // Check if email confirmation is required
+  if (data.user && !data.user.confirmed_at) {
+    return {
+      success: true,
+      requiresEmailConfirmation: true,
+    };
+  }
+
+  return { success: true, requiresEmailConfirmation: false };
 }
 
 export const useUserLoggedOutCallback = () => {

@@ -33,7 +33,6 @@ export default function Skills() {
 
   return (
     <ThemedView style={styles.container}>
-      <ThemedText>TODO: Allow searching / filtering of skills.</ThemedText>
       <SkillFilter
         searchQuery={searchQuery}
         onSearchQueryChange={setSearchQuery}

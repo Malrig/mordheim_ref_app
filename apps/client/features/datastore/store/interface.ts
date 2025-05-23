@@ -10,8 +10,6 @@ import {
   useIsDataStoreLoading,
 } from './store';
 
-export const test = DataUiHooks;
-
 export const DataStore: StoreInterface<
   [typeof TablesSchema, typeof ValuesSchema]
 > = {
@@ -22,5 +20,5 @@ export const DataStore: StoreInterface<
   useQueries: DataStoreQueries,
   useIndexes: DataStoreIndexes,
   useRelationships: DataStoreRelationships,
-  storeUIHooks: test,
+  storeUIHooks: DataUiHooks,
 };

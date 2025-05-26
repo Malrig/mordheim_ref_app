@@ -1,5 +1,4 @@
 import React from 'react';
-import { FlatList } from 'react-native';
 import { Ids } from 'tinybase/with-schemas';
 import { SpecialRule } from '@/features/datastore/objects/special_rule';
 import { ThemedView, ThemedText } from '@/shared/components/themed_components';
@@ -22,7 +21,15 @@ export const SpecialRules: React.FC<ThemedButtonProps> = ({ specialRules }) => {
   return (
     <ThemedView style={{ flex: 1 }}>
       <ThemedText variant="subtitle">Special Rules:</ThemedText>
-      <FlatList
+      {safeSpecialRules.map((rule) => (
+        <ColonText
+          key={rule.id}
+          before={rule.name}
+          after={rule.description}
+          variant="1-2-4"
+        />
+      ))}
+      {/* <FlatList
         data={safeSpecialRules}
         renderItem={({ item: rule }) => (
           <>
@@ -33,7 +40,7 @@ export const SpecialRules: React.FC<ThemedButtonProps> = ({ specialRules }) => {
             />
           </>
         )}
-      />
+      /> */}
     </ThemedView>
   );
 };

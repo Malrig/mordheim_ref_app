@@ -2,9 +2,15 @@ import { StyleSheet } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { Skill } from '@/features/datastore/objects/skill';
 import React from 'react';
-import { ThemedText, ThemedView } from '@/shared/components/themed_components';
+import {
+  ThemedText,
+  ThemedView,
+  ThemedButton,
+} from '@/shared/components/themed_components';
 import MarkdownText from '@/shared/components/markdown_text';
-import { Dialog, Button, YStack, ScrollView, Unspaced } from 'tamagui';
+import { ScrollView } from 'react-native';
+import { Dialog } from 'tamagui';
+import { YStack } from '@/shared/components/stacks';
 import { SkillForm } from '@/features/datastore/components/skills/skill_form';
 
 export function SkillDetail({ skill }: { skill: Skill }) {
@@ -13,7 +19,7 @@ export function SkillDetail({ skill }: { skill: Skill }) {
 
   return (
     <ScrollView>
-      <YStack gap="$3" padding="$4">
+      <YStack style={{ gap: 12, padding: 16 }}>
         <ThemedText variant="title">
           {skill.name}
           {skillGroup ? ` - ${skillGroup.name}` : ''}
@@ -22,7 +28,7 @@ export function SkillDetail({ skill }: { skill: Skill }) {
 
         <Dialog modal>
           <Dialog.Trigger asChild>
-            <Button>Edit</Button>
+            <ThemedButton>Edit</ThemedButton>
           </Dialog.Trigger>
 
           {/* <Adapt when="maxMd" platform="touch">
@@ -54,7 +60,6 @@ export function SkillDetail({ skill }: { skill: Skill }) {
               bordered
               key="content"
               padding="$4"
-              gap="$4"
               elevate
               width={400}
               maxWidth="95%"
@@ -74,13 +79,14 @@ export function SkillDetail({ skill }: { skill: Skill }) {
                 }}
                 isEditing={true}
               />
-              <Unspaced>
-                <Dialog.Close asChild>
-                  <Button position="absolute" right="$3" size="$2" circular>
-                    ✕
-                  </Button>
-                </Dialog.Close>
-              </Unspaced>
+              <Dialog.Close asChild>
+                <ThemedButton
+                  style={{ position: 'absolute', right: 0, top: 0 }}
+                  size="small"
+                >
+                  ✕
+                </ThemedButton>
+              </Dialog.Close>
             </Dialog.Content>
           </Dialog.Portal>
         </Dialog>

@@ -1,46 +1,45 @@
 import React from 'react';
-import { Text } from 'tamagui';
-import { StyleProp, TextStyle } from 'react-native';
+import { Text, StyleSheet, TextStyle, StyleProp } from 'react-native';
+import { useThemeColour } from '@/features/userstore/hooks/theme';
 
 interface ThemedTextProps {
   children: React.ReactNode;
-  variant?: 'body' | 'title' | 'subtitle' | 'important';
   style?: StyleProp<TextStyle>;
+  variant?: 'body' | 'title' | 'subtitle' | 'important';
 }
 
 export const ThemedText: React.FC<ThemedTextProps> = ({
   children,
-  variant = 'body',
   style,
+  variant = 'body',
 }) => {
-  const getSize = () => {
-    switch (variant) {
-      case 'title':
-        return '$8';
-      case 'subtitle':
-        return '$6';
-      case 'important':
-        return '$5';
-      default:
-        return '$4';
-    }
-  };
-
-  const getWeight = () => {
-    switch (variant) {
-      case 'title':
-        return '700';
-      case 'subtitle':
-      case 'important':
-        return '600';
-      default:
-        return '400';
-    }
-  };
+  const textColor = useThemeColour('text');
 
   return (
-    <Text size={getSize()} fontWeight={getWeight()} {...(style as any)}>
+    <Text style={[styles[variant], { color: textColor }, style]}>
       {children}
     </Text>
   );
 };
+
+const styles = StyleSheet.create({
+  body: {
+    fontSize: 16,
+    lineHeight: 16,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    lineHeight: 32,
+  },
+  subtitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    lineHeight: 26,
+  },
+  important: {
+    fontSize: 16,
+    fontWeight: '600',
+    lineHeight: 24,
+  },
+});

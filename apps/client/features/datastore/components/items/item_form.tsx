@@ -1,16 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Form,
-  Input,
-  Button,
-  YStack,
-  Label,
-  Select,
-  ScrollView,
-} from 'tamagui';
+import React, { useState } from 'react';
+import { ScrollView, View } from 'react-native';
 import { ItemFormData, useUpsertItemCallback } from '../../hooks/items';
 import { ItemType, WeaponType } from '../../enums';
 import { SpecialRuleFormPart } from './special_rule_form_part';
+import { YStack } from '@/shared/components/stacks';
+import {
+  ThemedButton,
+  ThemedText,
+  ThemedTextInput,
+} from '@/shared/components/themed_components';
 
 interface ItemFormProps {
   initialData?: ItemFormData;
@@ -19,6 +17,7 @@ interface ItemFormProps {
 
 export const ItemForm = ({ initialData, isEditing = false }: ItemFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState<ItemFormData>(
     initialData || {
       id: null,
@@ -26,10 +25,10 @@ export const ItemForm = ({ initialData, isEditing = false }: ItemFormProps) => {
       description: '',
       price: '',
       item_type: ItemType.MiscItem,
+      weapon_type: null,
       range: '',
       strength: '',
       special_rules: [],
-      weapon_type: null,
       metadata: {
         source: '',
         source_type: '',
@@ -40,7 +39,9 @@ export const ItemForm = ({ initialData, isEditing = false }: ItemFormProps) => {
   const upsertItemCallback = useUpsertItemCallback();
 
   const handleSubmit = () => {
+    setError(null);
     setIsSubmitting(true);
+
     upsertItemCallback(formData);
     setIsSubmitting(false);
   };
@@ -52,137 +53,96 @@ export const ItemForm = ({ initialData, isEditing = false }: ItemFormProps) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  // Reset weapon-specific fields when item type changes
-  useEffect(() => {
-    if (formData.item_type !== ItemType.Weapon) {
-      setFormData((prev) => ({
-        ...prev,
-        range: '',
-        strength: '',
-        special_rules: [],
-        weapon_type: null,
-      }));
-    }
-  }, [formData.item_type]);
-
   return (
     <ScrollView>
-      <Form onSubmit={handleSubmit}>
-        <YStack gap="$3" width="100%">
+      <View style={{ width: '100%', padding: 16 }}>
+        <YStack style={{ gap: 12 }}>
           <YStack>
-            <Label>Name</Label>
-            <Input
+            <ThemedText>Name</ThemedText>
+            <ThemedTextInput
               value={formData.name}
               onChangeText={(text) => updateFormField('name', text)}
               placeholder="Enter item name"
               autoCapitalize="none"
-              disabled={isSubmitting}
+              editable={!isSubmitting}
             />
           </YStack>
 
           <YStack>
-            <Label>Description</Label>
-            <Input
+            <ThemedText>Description</ThemedText>
+            <ThemedTextInput
               value={formData.description}
               onChangeText={(text) => updateFormField('description', text)}
               placeholder="Enter item description"
               multiline
               numberOfLines={4}
               autoCapitalize="none"
-              disabled={isSubmitting}
+              editable={!isSubmitting}
             />
           </YStack>
 
           <YStack>
-            <Label>Price</Label>
-            <Input
+            <ThemedText>Price</ThemedText>
+            <ThemedTextInput
               value={formData.price}
               onChangeText={(text) => updateFormField('price', text)}
               placeholder="Enter item price"
               autoCapitalize="none"
-              disabled={isSubmitting}
+              editable={!isSubmitting}
             />
           </YStack>
 
           <YStack>
-            <Label>Item Type</Label>
-            <Select
+            <ThemedText>Item Type</ThemedText>
+            <ThemedTextInput
               value={formData.item_type}
-              onValueChange={(value) =>
-                updateFormField('item_type', value as ItemType)
-              }
-              native={true}
-            >
-              <Select.Trigger>
-                <Select.Value placeholder="Select an item type" />
-              </Select.Trigger>
-              <Select.Content>
-                <Select.ScrollUpButton />
-                <Select.Viewport>
-                  <Select.Group>
-                    <Select.Label>Item Type</Select.Label>
-                    {Object.values(ItemType).map((type, i) => (
-                      <Select.Item value={type} key={type} index={i}>
-                        <Select.ItemText>{type}</Select.ItemText>
-                      </Select.Item>
-                    ))}
-                  </Select.Group>
-                </Select.Viewport>
-                <Select.ScrollDownButton />
-              </Select.Content>
-            </Select>
+              onPressIn={() => {
+                // TODO: Implement a proper select/picker component
+                // For now, this is a placeholder
+                const types = Object.values(ItemType);
+                alert('Select an item type: ' + types.join(', '));
+              }}
+              placeholder="Select an item type"
+              editable={false}
+            />
           </YStack>
 
           {formData.item_type === ItemType.Weapon && (
             <>
               <YStack>
-                <Label>Weapon Type</Label>
-                <Select
+                <ThemedText>Weapon Type</ThemedText>
+                <ThemedTextInput
                   value={formData.weapon_type || ''}
-                  onValueChange={(value) =>
-                    updateFormField('weapon_type', value as WeaponType)
-                  }
-                  native={true}
-                >
-                  <Select.Trigger>
-                    <Select.Value placeholder="Select a weapon type" />
-                  </Select.Trigger>
-                  <Select.Content>
-                    <Select.ScrollUpButton />
-                    <Select.Viewport>
-                      <Select.Group>
-                        <Select.Label>Weapon Type</Select.Label>
-                        {Object.values(WeaponType).map((type, i) => (
-                          <Select.Item value={type} key={type} index={i}>
-                            <Select.ItemText>{type}</Select.ItemText>
-                          </Select.Item>
-                        ))}
-                      </Select.Group>
-                    </Select.Viewport>
-                    <Select.ScrollDownButton />
-                  </Select.Content>
-                </Select>
-              </YStack>
-
-              <YStack>
-                <Label>Range</Label>
-                <Input
-                  value={formData.range}
-                  onChangeText={(text) => updateFormField('range', text)}
-                  placeholder="Enter weapon range"
-                  autoCapitalize="none"
-                  disabled={isSubmitting}
+                  onPressIn={() => {
+                    // TODO: Implement a proper select/picker component
+                    // For now, this is a placeholder
+                    const types = Object.values(WeaponType);
+                    alert('Select a weapon type: ' + types.join(', '));
+                  }}
+                  placeholder="Select a weapon type"
+                  editable={false}
                 />
               </YStack>
 
               <YStack>
-                <Label>Strength</Label>
-                <Input
+                <ThemedText>Range</ThemedText>
+                <ThemedTextInput
+                  value={formData.range}
+                  onChangeText={(text) => updateFormField('range', text)}
+                  placeholder="Enter weapon range"
+                  autoCapitalize="none"
+                  editable={!isSubmitting}
+                />
+              </YStack>
+
+              <YStack>
+                <ThemedText>Strength</ThemedText>
+                <ThemedTextInput
                   value={formData.strength}
                   onChangeText={(text) => updateFormField('strength', text)}
                   placeholder="Enter weapon strength"
                   autoCapitalize="none"
-                  disabled={isSubmitting}
+                  editable={!isSubmitting}
                 />
               </YStack>
 
@@ -194,19 +154,27 @@ export const ItemForm = ({ initialData, isEditing = false }: ItemFormProps) => {
             </>
           )}
 
-          <Form.Trigger asChild>
-            <Button pressStyle={{ opacity: 0.8 }} disabled={isSubmitting}>
-              {isSubmitting
-                ? isEditing
-                  ? 'Saving...'
-                  : 'Creating...'
-                : isEditing
-                  ? 'Save Item'
-                  : 'Create Item'}
-            </Button>
-          </Form.Trigger>
+          {error && (
+            <ThemedText style={{ color: 'red', textAlign: 'center' }}>
+              {error}
+            </ThemedText>
+          )}
+
+          <ThemedButton
+            onPress={handleSubmit}
+            disabled={isSubmitting}
+            size="large"
+          >
+            {isSubmitting
+              ? isEditing
+                ? 'Saving...'
+                : 'Creating...'
+              : isEditing
+                ? 'Save Item'
+                : 'Create Item'}
+          </ThemedButton>
         </YStack>
-      </Form>
+      </View>
     </ScrollView>
   );
 };

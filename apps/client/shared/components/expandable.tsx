@@ -5,9 +5,10 @@ import {
   TouchableOpacity,
   ViewStyle,
 } from 'react-native';
-import { YStack, XStack, Separator } from 'tamagui';
 import { MaterialIcons } from '@expo/vector-icons';
 import { ThemedText } from './themed_components';
+import { XStack, YStack } from './stacks';
+import Divider from './divider';
 
 interface ExpandableProps {
   title: string | React.ReactNode;
@@ -29,12 +30,15 @@ export const Expandable: React.FC<ExpandableProps> = ({
   const [isExpanded, setIsExpanded] = useState(initialExpanded);
 
   return (
-    <YStack borderRadius="$4" {...(containerStyle as any)}>
-      <TouchableOpacity
-        // style={styles.header}
-        onPress={() => setIsExpanded(!isExpanded)}
-      >
-        <XStack justifyContent="space-between" alignItems="center" padding="$2">
+    <YStack style={[{ borderRadius: 8 }, containerStyle]}>
+      <TouchableOpacity onPress={() => setIsExpanded(!isExpanded)}>
+        <XStack
+          style={{
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: 8,
+          }}
+        >
           {typeof title === 'string' ? (
             <ThemedText variant="subtitle" style={titleStyle}>
               {title}
@@ -49,8 +53,8 @@ export const Expandable: React.FC<ExpandableProps> = ({
         </XStack>
       </TouchableOpacity>
       {isExpanded && (
-        <YStack paddingHorizontal="$3" {...(contentStyle as any)}>
-          <Separator />
+        <YStack style={[{ paddingHorizontal: 12 }, contentStyle]}>
+          <Divider />
           {children}
         </YStack>
       )}

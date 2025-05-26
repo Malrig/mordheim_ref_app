@@ -9,6 +9,7 @@ export interface SkillFormData {
   name: string;
   description: string;
   group_id: string;
+  // No need to include the metadata ID as it's generated from the table name and object id
   metadata: Omit<MetadataFormData, 'table_name_id'>;
 }
 

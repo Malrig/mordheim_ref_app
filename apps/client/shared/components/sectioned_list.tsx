@@ -114,7 +114,7 @@ export function SectionedList<ObjectType extends ObjectWithId>({
   }: {
     section: Section<ObjectType>;
   }) => (
-    <ThemedView backgroundColor="primary" style={styles.sectionHeader}>
+    <ThemedView style={styles.sectionHeader}>
       <ThemedText variant="subtitle">{title}</ThemedText>
     </ThemedView>
   );

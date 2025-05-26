@@ -15,7 +15,7 @@ export const ThemedPicker: React.FC<ThemedPickerProps> & {
   Item: typeof Picker.Item;
 } = ({ selectedValue, onValueChange, style, children }) => {
   const textColor = useThemeColour('text');
-  const backgroundColor = useThemeColour('background');
+  const backgroundColor = useThemeColour('primary');
   const borderColor = useThemeColour('grey');
 
   return (

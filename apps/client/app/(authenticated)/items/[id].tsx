@@ -3,14 +3,20 @@ import { useLocalSearchParams } from 'expo-router';
 import { ItemType } from '@/features/datastore/enums';
 import { Item } from '@/features/datastore/objects/item';
 import React from 'react';
-import { ThemedText, ThemedView } from '@/shared/components/themed_components';
+import {
+  ThemedText,
+  ThemedView,
+  ThemedButton,
+} from '@/shared/components/themed_components';
 import ColonText from '@/shared/components/colon_text';
 import MarkdownText from '@/shared/components/markdown_text';
 import { Availability } from '@/features/datastore/objects/availability';
 import { Expandable } from '@/shared/components/expandable';
 import { SpecialRules } from '@/features/datastore/components/special_rules';
 import AvailabilityDetails from '@/features/datastore/components/availability_details';
-import { Dialog, Button, YStack, ScrollView, Unspaced } from 'tamagui';
+import { YStack } from '@/shared/components/stacks';
+import { ScrollView } from 'react-native';
+import { Dialog } from 'tamagui';
 import { ItemForm } from '@/features/datastore/components/items/item_form';
 
 export function ItemDetail({ item: item_to_show }: { item: Item }) {
@@ -19,7 +25,7 @@ export function ItemDetail({ item: item_to_show }: { item: Item }) {
 
   return (
     <ScrollView>
-      <YStack gap="$3">
+      <YStack>
         <ThemedText variant="title">
           {item_to_show.name} -{' '}
           {item_to_show.item_type === ItemType.Weapon
@@ -43,7 +49,7 @@ export function ItemDetail({ item: item_to_show }: { item: Item }) {
 
         <Dialog modal>
           <Dialog.Trigger asChild>
-            <Button>Edit</Button>
+            <ThemedButton>Edit</ThemedButton>
           </Dialog.Trigger>
 
           <Dialog.Portal>
@@ -61,7 +67,6 @@ export function ItemDetail({ item: item_to_show }: { item: Item }) {
             <Dialog.Content
               bordered
               key="content"
-              gap="$4"
               elevate
               width={400}
               maxWidth="95%"
@@ -86,13 +91,14 @@ export function ItemDetail({ item: item_to_show }: { item: Item }) {
                 }}
                 isEditing={true}
               />
-              <Unspaced>
-                <Dialog.Close asChild>
-                  <Button position="absolute" right="$3" size="$2" circular>
-                    ✕
-                  </Button>
-                </Dialog.Close>
-              </Unspaced>
+              <Dialog.Close asChild>
+                <ThemedButton
+                  style={{ position: 'absolute', right: 0, top: 0 }}
+                  size="small"
+                >
+                  ✕
+                </ThemedButton>
+              </Dialog.Close>
             </Dialog.Content>
           </Dialog.Portal>
         </Dialog>

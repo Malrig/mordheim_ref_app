@@ -1,26 +1,24 @@
 import React from 'react';
-import { View } from 'tamagui';
-import { StyleProp, ViewStyle } from 'react-native';
+import { View, ViewStyle, StyleProp } from 'react-native';
+import { useThemeColour } from '@/features/userstore/hooks/theme';
 
-interface ThemedViewProps {
+export interface ThemedViewProps {
   children: React.ReactNode;
   style?: StyleProp<ViewStyle>;
-  backgroundColor?: 'primary' | 'secondary';
+  backgroundColor?:
+    | 'transparent'
+    | 'background'
+    | 'primary'
+    | 'secondary'
+    | 'tertiary';
 }
 
 export const ThemedView: React.FC<ThemedViewProps> = ({
   children,
   style,
-  backgroundColor = 'primary',
+  backgroundColor = 'transparent',
 }) => {
-  return (
-    <View
-      backgroundColor={
-        backgroundColor === 'primary' ? '$background' : '$backgroundHover'
-      }
-      {...(style as any)}
-    >
-      {children}
-    </View>
-  );
+  const bgColor = useThemeColour(backgroundColor);
+
+  return <View style={[{ backgroundColor: bgColor }, style]}>{children}</View>;
 };

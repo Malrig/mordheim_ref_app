@@ -1,11 +1,13 @@
 import React from 'react';
-import { YStack, Text, Dialog, Button } from 'tamagui';
+import { Dialog } from 'tamagui';
 import { LoginForm } from '@/features/authentication/components/login_form';
 import { SignUpForm } from '@/features/authentication/components/signup_form';
 import {
   signInWithEmail,
   signUpWithEmail,
 } from '@/features/authentication/hooks/login';
+import { YStack } from '@/shared/components/stacks';
+import { ThemedText, ThemedButton } from '@/shared/components/themed_components';
 
 export default function Login() {
   const handleLogin = async (data: { email: string; password: string }) => {
@@ -30,25 +32,23 @@ export default function Login() {
 
   return (
     <YStack
-      flex={1}
-      justifyContent="center"
-      alignItems="center"
-      padding="$4"
-      backgroundColor="$background"
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 16,
+      }}
+      backgroundColor="background"
     >
-      <Text fontSize="$8" fontWeight="bold">
-        Welcome Back
-      </Text>
-      <Text fontSize="$4" opacity={0.8}>
-        Sign in to your account
-      </Text>
+      <ThemedText variant="title">Welcome Back</ThemedText>
+      <ThemedText variant="subtitle">Sign in to your account</ThemedText>
       <LoginForm onSubmit={handleLogin} />
 
       <Dialog modal>
         <Dialog.Trigger asChild>
-          <Button variant="outlined">
+          <ThemedButton variant="outline">
             Don&apos;t have an account? Sign Up
-          </Button>
+          </ThemedButton>
         </Dialog.Trigger>
 
         <Dialog.Portal>
@@ -59,7 +59,6 @@ export default function Login() {
             elevate
             key="content"
             padding="$4"
-            gap="$4"
             width={400}
           >
             <Dialog.Title>Create Account</Dialog.Title>

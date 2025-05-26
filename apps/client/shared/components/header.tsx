@@ -11,12 +11,9 @@ export const LoginStatus: React.FC = ({}) => {
   return (
     <View style={[styles.container]}>
       <ThemedText style={styles.email}>{email}</ThemedText>
-      <ThemedButton
-        onPress={signOut}
-        title="Sign Out"
-        style={styles.signOutButton}
-        textStyle={styles.signOutText}
-      />
+      <ThemedButton onPress={signOut} size="small">
+        Sign Out
+      </ThemedButton>
     </View>
   );
 };
@@ -30,14 +27,5 @@ const styles = StyleSheet.create({
   },
   email: {
     opacity: 0.7,
-  },
-  signOutButton: {
-    marginLeft: 10,
-    paddingVertical: 2,
-    paddingHorizontal: 5,
-    borderRadius: 8,
-  },
-  signOutText: {
-    fontSize: 14,
   },
 });

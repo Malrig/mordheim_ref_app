@@ -1,17 +1,15 @@
 import React from 'react';
-import { TextInput, StyleSheet, TextStyle, StyleProp } from 'react-native';
+import {
+  TextInput,
+  StyleSheet,
+  TextStyle,
+  StyleProp,
+  TextInputProps,
+} from 'react-native';
 import { useThemeColour } from '@/features/userstore/hooks/theme';
 
-interface ThemedTextInputProps {
-  value: string;
-  onChangeText: (text: string) => void;
-  placeholder?: string;
+interface ThemedTextInputProps extends TextInputProps {
   style?: StyleProp<TextStyle>;
-  textStyle?: StyleProp<TextStyle>;
-  secureTextEntry?: boolean;
-  multiline?: boolean;
-  numberOfLines?: number;
-  autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
 }
 
 export const ThemedTextInput: React.FC<ThemedTextInputProps> = ({
@@ -19,18 +17,16 @@ export const ThemedTextInput: React.FC<ThemedTextInputProps> = ({
   onChangeText,
   placeholder,
   style,
-  secureTextEntry = false,
-  multiline = false,
-  numberOfLines,
-  autoCapitalize = 'none',
+  ...props
 }) => {
-  const backgroundColor = useThemeColour('background');
+  const backgroundColor = useThemeColour('primary');
   const textColor = useThemeColour('text');
   const borderColor = useThemeColour('grey');
   const placeholderColor = useThemeColour('grey');
 
   return (
     <TextInput
+      {...props}
       style={[
         styles.input,
         {
@@ -43,11 +39,7 @@ export const ThemedTextInput: React.FC<ThemedTextInputProps> = ({
       value={value}
       onChangeText={onChangeText}
       placeholder={placeholder}
-      secureTextEntry={secureTextEntry}
       placeholderTextColor={placeholderColor}
-      multiline={multiline}
-      numberOfLines={numberOfLines}
-      autoCapitalize={autoCapitalize}
     />
   );
 };

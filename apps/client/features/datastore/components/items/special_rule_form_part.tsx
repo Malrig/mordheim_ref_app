@@ -1,5 +1,10 @@
 import React from 'react';
-import { YStack, Label, Select, Button, XStack } from 'tamagui';
+import { XStack, YStack } from '@/shared/components/stacks';
+import {
+  ThemedButton,
+  ThemedText,
+  ThemedTextInput,
+} from '@/shared/components/themed_components';
 import { DataStore } from '../../store/interface';
 import { SpecialRule } from '../../objects/special_rule';
 import { FontAwesome } from '@expo/vector-icons';
@@ -14,83 +19,67 @@ interface SpecialRuleFormPartProps {
   disabled?: boolean;
 }
 
-export const SpecialRuleFormPart: React.FC<SpecialRuleFormPartProps> = ({
+export const SpecialRuleFormPart = ({
   specialRuleIds,
   updateFormField,
   disabled = false,
-}) => {
+}: SpecialRuleFormPartProps) => {
   const special_rules = Object.values(
     DataStore.storeUIHooks.useTable(SpecialRule.TABLE_NAME, DataStore.store_id)
   );
 
-  const addSpecialRule = () => {
-    updateFormField('special_rules', [...specialRuleIds, '']);
+  const handleAddSpecialRule = () => {
+    // TODO: Implement a proper select/picker component
+    // For now, this is a placeholder
+    const availableRules = special_rules
+      .filter((rule) => !specialRuleIds.includes(rule.id!))
+      .map((rule) => rule.name);
+    alert('Select a special rule: ' + availableRules.join(', '));
   };
 
-  const removeSpecialRule = (index: number) => {
-    const newRules = [...specialRuleIds];
-    newRules.splice(index, 1);
-    updateFormField('special_rules', newRules);
-  };
-
-  const updateSpecialRule = (index: number, value: string) => {
-    const newRules = [...specialRuleIds];
-    newRules[index] = value;
-    updateFormField('special_rules', newRules);
+  const handleRemoveSpecialRule = (ruleId: string) => {
+    updateFormField(
+      'special_rules',
+      specialRuleIds.filter((id) => id !== ruleId)
+    );
   };
 
   return (
-    <YStack gap="$2">
-      <XStack alignItems="center" justifyContent="space-between">
-        <Label>Special Rules</Label>
-        <Button
-          icon={<FontAwesome name="plus" />}
-          onPress={addSpecialRule}
+    <YStack>
+      <ThemedText>Special Rules</ThemedText>
+      <YStack style={{ gap: 8 }}>
+        {specialRuleIds.map((ruleId) => {
+          const rule = special_rules.find((r) => r.id === ruleId);
+          if (!rule) return null;
+
+          return (
+            <XStack key={ruleId} style={{ alignItems: 'center' }}>
+              <ThemedTextInput
+                value={rule.name}
+                editable={false}
+                style={{ flex: 1 }}
+              />
+              <ThemedButton
+                onPress={() => handleRemoveSpecialRule(ruleId)}
+                disabled={disabled}
+                variant="outline"
+                size="small"
+                style={{ marginLeft: 8 }}
+              >
+                <FontAwesome name="trash" size={16} />
+              </ThemedButton>
+            </XStack>
+          );
+        })}
+        <ThemedButton
+          onPress={handleAddSpecialRule}
           disabled={disabled}
-          size="$2"
+          variant="outline"
+          size="small"
         >
-          Add Rule
-        </Button>
-      </XStack>
-      {specialRuleIds.map((ruleId, index) => (
-        <XStack key={index} gap="$2" alignItems="center">
-          <YStack flex={1}>
-            <Select
-              value={ruleId}
-              onValueChange={(value) => updateSpecialRule(index, value)}
-              native={true}
-            >
-              <Select.Trigger>
-                <Select.Value placeholder="Select a special rule" />
-              </Select.Trigger>
-              <Select.Content>
-                <Select.ScrollUpButton />
-                <Select.Viewport>
-                  <Select.Group>
-                    <Select.Label>Special Rules</Select.Label>
-                    {special_rules.map(
-                      (rule, i) =>
-                        rule.id && (
-                          <Select.Item value={rule.id} key={rule.id} index={i}>
-                            <Select.ItemText>{rule.name}</Select.ItemText>
-                          </Select.Item>
-                        )
-                    )}
-                  </Select.Group>
-                </Select.Viewport>
-                <Select.ScrollDownButton />
-              </Select.Content>
-            </Select>
-          </YStack>
-          <Button
-            icon={<FontAwesome name="minus" />}
-            onPress={() => removeSpecialRule(index)}
-            disabled={disabled}
-            size="$2"
-            theme="red"
-          />
-        </XStack>
-      ))}
+          Add Special Rule
+        </ThemedButton>
+      </YStack>
     </YStack>
   );
 };

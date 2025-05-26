@@ -5,3 +5,4 @@ export { ThemedView, ThemedViewProps } from './themed_view';
 export { ThemedPicker } from './themed_picker';
 export { ThemedStack } from './themed_stack';
 export { ThemedTabs } from './themed_tabs';
+export { ThemedModal } from './themed_modal';

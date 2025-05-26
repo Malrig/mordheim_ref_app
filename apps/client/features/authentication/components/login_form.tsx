@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
 import { XStack, YStack } from '@/shared/components/stacks';
 import {
   ThemedButton,
@@ -44,58 +43,48 @@ export const LoginForm = ({ onSubmit }: LoginFormProps) => {
   };
 
   return (
-    <View style={{ width: '100%' }}>
-      <YStack style={{ gap: 12 }}>
-        <YStack>
-          <ThemedText>Email</ThemedText>
-          <ThemedTextInput
-            value={formData.email}
-            onChangeText={(text) => updateFormField('email', text)}
-            placeholder="Enter your email"
-            autoCapitalize="none"
-            keyboardType="email-address"
-            editable={!isSubmitting}
-          />
-        </YStack>
+    <YStack style={{ width: '100%' }}>
+      <ThemedText>Email</ThemedText>
+      <ThemedTextInput
+        value={formData.email}
+        onChangeText={(text) => updateFormField('email', text)}
+        placeholder="Enter your email"
+        autoCapitalize="none"
+        keyboardType="email-address"
+        editable={!isSubmitting}
+        style={{ width: '100%' }}
+      />
 
-        <YStack>
-          <ThemedText>Password</ThemedText>
-          <XStack style={{ alignItems: 'center' }}>
-            <ThemedTextInput
-              value={formData.password}
-              onChangeText={(text) => updateFormField('password', text)}
-              placeholder="Enter your password"
-              secureTextEntry={!showPassword}
-              autoCapitalize="none"
-              editable={!isSubmitting}
-              style={{ flex: 1 }}
-            />
-            <ThemedButton
-              onPress={() => setShowPassword(!showPassword)}
-              disabled={isSubmitting}
-              variant="outline"
-              size="small"
-              style={{ marginLeft: 8 }}
-            >
-              {showPassword ? 'Hide' : 'Show'}
-            </ThemedButton>
-          </XStack>
-        </YStack>
-
-        {error && (
-          <ThemedText style={{ color: 'red', textAlign: 'center' }}>
-            {error}
-          </ThemedText>
-        )}
-
+      <ThemedText>Password</ThemedText>
+      <XStack style={{ alignItems: 'center', width: '100%' }}>
+        <ThemedTextInput
+          value={formData.password}
+          onChangeText={(text) => updateFormField('password', text)}
+          placeholder="Enter your password"
+          secureTextEntry={!showPassword}
+          autoCapitalize="none"
+          editable={!isSubmitting}
+        />
         <ThemedButton
-          onPress={handleSubmit}
+          onPress={() => setShowPassword(!showPassword)}
           disabled={isSubmitting}
-          size="large"
+          variant="outline"
+          size="small"
+          style={{ marginLeft: 8 }}
         >
-          {isSubmitting ? 'Signing In...' : 'Sign In'}
+          {showPassword ? 'Hide' : 'Show'}
         </ThemedButton>
-      </YStack>
-    </View>
+      </XStack>
+
+      {error && (
+        <ThemedText style={{ color: 'red', textAlign: 'center' }}>
+          {error}
+        </ThemedText>
+      )}
+
+      <ThemedButton onPress={handleSubmit} disabled={isSubmitting} size="large">
+        {isSubmitting ? 'Signing In...' : 'Sign In'}
+      </ThemedButton>
+    </YStack>
   );
 };

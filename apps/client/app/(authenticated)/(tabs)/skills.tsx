@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { ThemedView, ThemedText } from '@/shared/components/themed_components';
+import { ThemedView } from '@/shared/components/themed_components';
 import { DataStore } from '../../../shared/stores/stores';
 import { Skill } from '@/features/datastore/objects/skill';
 import { useMemo, useState } from 'react';

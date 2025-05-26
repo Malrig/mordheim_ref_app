@@ -2,11 +2,12 @@ import { StyleSheet } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { ItemType } from '@/features/datastore/enums';
 import { Item } from '@/features/datastore/objects/item';
-import React from 'react';
+import React, { useState } from 'react';
 import {
   ThemedText,
   ThemedView,
   ThemedButton,
+  ThemedModal,
 } from '@/shared/components/themed_components';
 import ColonText from '@/shared/components/colon_text';
 import MarkdownText from '@/shared/components/markdown_text';
@@ -16,12 +17,12 @@ import { SpecialRules } from '@/features/datastore/components/special_rules';
 import AvailabilityDetails from '@/features/datastore/components/availability_details';
 import { YStack } from '@/shared/components/stacks';
 import { ScrollView } from 'react-native';
-import { Dialog } from 'tamagui';
 import { ItemForm } from '@/features/datastore/components/items/item_form';
 
 export function ItemDetail({ item: item_to_show }: { item: Item }) {
   const availabilities: Availability[] = item_to_show.useAvailabilities();
   const metadata = item_to_show.useMetadata();
+  const [modalVisible, setModalVisible] = useState(false);
 
   return (
     <ScrollView>
@@ -47,61 +48,32 @@ export function ItemDetail({ item: item_to_show }: { item: Item }) {
           </ThemedView>
         )}
 
-        <Dialog modal>
-          <Dialog.Trigger asChild>
-            <ThemedButton>Edit</ThemedButton>
-          </Dialog.Trigger>
+        <ThemedButton onPress={() => setModalVisible(true)}>Edit</ThemedButton>
 
-          <Dialog.Portal>
-            <Dialog.Overlay
-              key="overlay"
-              opacity={0.5}
-              onPress={(e) => {
-                e.preventDefault();
-                (e.target as any)?.dispatchEvent?.(
-                  new Event('dismiss', { bubbles: true })
-                );
-              }}
-            />
-
-            <Dialog.Content
-              bordered
-              key="content"
-              elevate
-              width={400}
-              maxWidth="95%"
-              maxHeight="95%"
-            >
-              <Dialog.Title>Edit Item</Dialog.Title>
-              <ItemForm
-                initialData={{
-                  id: item_to_show.id,
-                  name: item_to_show.name,
-                  description: item_to_show.description,
-                  price: item_to_show.price,
-                  item_type: item_to_show.getItemType(),
-                  range: item_to_show.range,
-                  strength: item_to_show.strength,
-                  special_rules: item_to_show.getSpecialRuleIds(),
-                  weapon_type: item_to_show.getWeaponType(),
-                  metadata: {
-                    source: metadata?.source || '',
-                    source_type: metadata?.source_type || '',
-                  },
-                }}
-                isEditing={true}
-              />
-              <Dialog.Close asChild>
-                <ThemedButton
-                  style={{ position: 'absolute', right: 0, top: 0 }}
-                  size="small"
-                >
-                  ✕
-                </ThemedButton>
-              </Dialog.Close>
-            </Dialog.Content>
-          </Dialog.Portal>
-        </Dialog>
+        <ThemedModal
+          visible={modalVisible}
+          onClose={() => setModalVisible(false)}
+          title="Edit Item"
+        >
+          <ItemForm
+            initialData={{
+              id: item_to_show.id,
+              name: item_to_show.name,
+              description: item_to_show.description,
+              price: item_to_show.price,
+              item_type: item_to_show.getItemType(),
+              range: item_to_show.range,
+              strength: item_to_show.strength,
+              special_rules: item_to_show.getSpecialRuleIds(),
+              weapon_type: item_to_show.getWeaponType(),
+              metadata: {
+                source: metadata?.source || '',
+                source_type: metadata?.source_type || '',
+              },
+            }}
+            isEditing={true}
+          />
+        </ThemedModal>
       </YStack>
     </ScrollView>
   );

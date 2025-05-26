@@ -27,7 +27,7 @@ export const ThemedButton: React.FC<ThemedButtonProps> = ({
   const backgroundColor = useThemeColour(
     variant === 'outline' ? 'transparent' : variant
   );
-  const textColor = useThemeColour(variant === 'outline' ? 'primary' : 'text');
+  const textColor = useThemeColour('text');
   const borderColor = useThemeColour('secondary');
 
   const getSize = () => {

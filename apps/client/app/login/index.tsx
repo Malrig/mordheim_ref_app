@@ -1,5 +1,4 @@
-import React from 'react';
-import { Dialog } from 'tamagui';
+import React, { useState } from 'react';
 import { LoginForm } from '@/features/authentication/components/login_form';
 import { SignUpForm } from '@/features/authentication/components/signup_form';
 import {
@@ -7,9 +6,15 @@ import {
   signUpWithEmail,
 } from '@/features/authentication/hooks/login';
 import { YStack } from '@/shared/components/stacks';
-import { ThemedText, ThemedButton } from '@/shared/components/themed_components';
+import {
+  ThemedText,
+  ThemedButton,
+  ThemedModal,
+} from '@/shared/components/themed_components';
 
 export default function Login() {
+  const [signUpModalVisible, setSignUpModalVisible] = useState(false);
+
   const handleLogin = async (data: { email: string; password: string }) => {
     const result = await signInWithEmail(data.email, data.password);
     return result;
@@ -37,35 +42,28 @@ export default function Login() {
         justifyContent: 'center',
         alignItems: 'center',
         padding: 16,
+        width: 325,
       }}
-      backgroundColor="background"
     >
       <ThemedText variant="title">Welcome Back</ThemedText>
       <ThemedText variant="subtitle">Sign in to your account</ThemedText>
       <LoginForm onSubmit={handleLogin} />
 
-      <Dialog modal>
-        <Dialog.Trigger asChild>
-          <ThemedButton variant="outline">
-            Don&apos;t have an account? Sign Up
-          </ThemedButton>
-        </Dialog.Trigger>
+      <ThemedButton
+        variant="outline"
+        onPress={() => setSignUpModalVisible(true)}
+        size="large"
+      >
+        Don&apos;t have an account? Sign Up
+      </ThemedButton>
 
-        <Dialog.Portal>
-          <Dialog.Overlay key="overlay" opacity={0.5} />
-
-          <Dialog.Content
-            bordered
-            elevate
-            key="content"
-            padding="$4"
-            width={400}
-          >
-            <Dialog.Title>Create Account</Dialog.Title>
-            <SignUpForm onSubmit={handleSignUp} />
-          </Dialog.Content>
-        </Dialog.Portal>
-      </Dialog>
+      <ThemedModal
+        visible={signUpModalVisible}
+        onClose={() => setSignUpModalVisible(false)}
+        title="Create Account"
+      >
+        <SignUpForm onSubmit={handleSignUp} />
+      </ThemedModal>
     </YStack>
   );
 }

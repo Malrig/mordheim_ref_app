@@ -17,7 +17,7 @@ export default function LoginLayout() {
   }
 
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView style={styles.container} backgroundColor="primary">
       <Slot />
     </ThemedView>
   );

@@ -1,4 +1,5 @@
-import { DataStore } from "@/shared/stores/stores";
+/* eslint-disable react-hooks/rules-of-hooks */
+import { DataStore } from '@/shared/stores/stores';
 
 /**
  * Represents a special rule in the TinyBase store
@@ -26,8 +27,19 @@ export class SpecialRule {
    * @returns The metadata object or undefined if not found
    */
   useMetadata(): Record<string, any> | undefined {
-    const metadata = DataStore.storeUIHooks.useRemoteRowId('specialRulesMetadata', this.id, DataStore.useRelationships());
-    const metadata_info = metadata && DataStore.storeUIHooks.useRow('metadata', metadata, DataStore.store_id) || undefined;
+    const metadata = DataStore.storeUIHooks.useRemoteRowId(
+      'specialRulesMetadata',
+      this.id,
+      DataStore.useRelationships()
+    );
+    const metadata_info =
+      (metadata &&
+        DataStore.storeUIHooks.useRow(
+          'metadata',
+          metadata,
+          DataStore.store_id
+        )) ||
+      undefined;
     return metadata_info;
   }
 
@@ -36,11 +48,7 @@ export class SpecialRule {
    * @param row The row data from TinyBase
    */
   static fromRow(row: Record<string, any>): SpecialRule {
-    return new SpecialRule(
-      row.id || '',
-      row.name || '',
-      row.description || ''
-    );
+    return new SpecialRule(row.id || '', row.name || '', row.description || '');
   }
 
   /**
@@ -49,6 +57,12 @@ export class SpecialRule {
    * @returns A SpecialRule instance
    */
   static useInstance(id: string): SpecialRule {
-    return SpecialRule.fromRow(DataStore.storeUIHooks.useRow(SpecialRule.TABLE_NAME, id, DataStore.store_id));
+    return SpecialRule.fromRow(
+      DataStore.storeUIHooks.useRow(
+        SpecialRule.TABLE_NAME,
+        id,
+        DataStore.store_id
+      )
+    );
   }
 }

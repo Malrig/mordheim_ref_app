@@ -1,4 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const { getDefaultConfig } = require('expo/metro-config');
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const path = require('path');
 
 // Find the project and workspace directories
@@ -7,6 +9,9 @@ const projectRoot = __dirname;
 const monorepoRoot = path.resolve(projectRoot, '../..');
 
 const config = getDefaultConfig(projectRoot);
+
+// Temporary fix for Node.js module resolution issue
+config.resolver.unstable_enablePackageExports = false
 
 // 1. Watch all files within the monorepo
 config.watchFolders = [monorepoRoot];

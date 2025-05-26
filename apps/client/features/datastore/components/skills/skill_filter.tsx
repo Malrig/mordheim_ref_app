@@ -1,16 +1,21 @@
-import { StyleSheet } from "react-native";
-import { ItemType, WeaponType } from "../../enums";
-import { ThemedTextInput, ThemedText, ThemedView, ThemedPicker } from "@/shared/components/themed_components";
-import { Expandable } from "@/shared/components/expandable";
-import { DataStore } from "@/shared/stores/stores";
-import { SkillGroup } from "@/features/datastore/objects/skill_group";
+import React from 'react';
+import { StyleSheet } from 'react-native';
+import { ItemType } from '../../enums';
+import {
+  ThemedTextInput,
+  ThemedText,
+  ThemedPicker,
+} from '@/shared/components/themed_components';
+import { Expandable } from '@/shared/components/expandable';
+import { DataStore } from '@/shared/stores/stores';
+import { SkillGroup } from '@/features/datastore/objects/skill_group';
 
 type Props = {
   searchQuery: string;
   onSearchQueryChange: (query: string) => void;
   selectedSkillGroupId: string | null;
   onSkillGroupIdChange: (type: ItemType | null) => void;
-}
+};
 
 interface SearchableSkill {
   id: string;
@@ -19,10 +24,17 @@ interface SearchableSkill {
   group_id: string;
 }
 
-export function filterSkills(items: SearchableSkill[], searchQuery: string, selectedSkillGroup: string | null) {
-  return items.filter(item => {
-    const matchesSearch = item.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesType = !selectedSkillGroup || item.group_id == selectedSkillGroup;
+export function filterSkills(
+  items: SearchableSkill[],
+  searchQuery: string,
+  selectedSkillGroup: string | null
+) {
+  return items.filter((item) => {
+    const matchesSearch = item.description
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    const matchesType =
+      !selectedSkillGroup || item.group_id == selectedSkillGroup;
     return matchesSearch && matchesType;
   });
 }
@@ -33,17 +45,20 @@ export default function SkillFilter({
   selectedSkillGroupId: selectedType,
   onSkillGroupIdChange: onTypeChange,
 }: Props) {
-  const skill_groups = Object.values(DataStore.storeUIHooks.useTable(
-    SkillGroup.TABLE_NAME,
-    DataStore.store_id
-  ));
+  const skill_groups = Object.values(
+    DataStore.storeUIHooks.useTable(SkillGroup.TABLE_NAME, DataStore.store_id)
+  );
 
   if (!skill_groups) {
     return <ThemedText>Loading skill groups...</ThemedText>;
   }
 
   return (
-    <Expandable title="Filter" containerStyle={styles.container} initialExpanded={true}>
+    <Expandable
+      title="Filter"
+      containerStyle={styles.container}
+      initialExpanded={true}
+    >
       <ThemedTextInput
         style={styles.searchInput}
         placeholder="Search skills..."
@@ -62,10 +77,19 @@ export default function SkillFilter({
         }}
         style={styles.picker}
       >
-        <ThemedPicker.Item label="All Groups" value=""/>
-        {skill_groups.map(group => <ThemedPicker.Item label={group.name} value={group.id}/>)}
+        <ThemedPicker.Item label="All Groups" value="" />
+        {skill_groups.map((group) => (
+          <ThemedPicker.Item
+            label={group.name}
+            value={group.id}
+            key={group.id}
+          />
+        ))}
       </ThemedPicker>
-      <ThemedText>TODO: Include filtering on: tags, availability, source, price, rarity, etc.</ThemedText>
+      <ThemedText>
+        TODO: Include filtering on: tags, availability, source, price, rarity,
+        etc.
+      </ThemedText>
     </Expandable>
   );
 }

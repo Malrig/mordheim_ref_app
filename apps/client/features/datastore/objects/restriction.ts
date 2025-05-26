@@ -1,4 +1,4 @@
-import { DataStore } from "../store/interface";
+import { DataStore } from '../store/interface';
 
 /**
  * Represents an availability in the TinyBase store
@@ -21,7 +21,7 @@ export class Restriction {
     id: string,
     restriction_type: string,
     restriction: string,
-    availability_id: string,
+    availability_id: string
   ) {
     this.id = id || '';
     this.restriction_type = restriction_type || '';

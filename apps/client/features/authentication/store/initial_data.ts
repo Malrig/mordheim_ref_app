@@ -1,16 +1,14 @@
-import { Content } from "tinybase/store/with-schemas";
-import { TablesSchema, ValuesSchema } from "./schema";
+import { Content } from 'tinybase/store/with-schemas';
+import { TablesSchema, ValuesSchema } from './schema';
 
-const InitialTableData = { } as const;
+const InitialTableData = {} as const;
 
 const InitialValueData = {
-  email: "",
-  access_token: "",
-  user_role: "",
-  user_id: "",
+  email: '',
+  access_token: '',
+  user_role: '',
+  user_id: '',
 };
 
-export const InitialData: Content<[typeof TablesSchema, typeof ValuesSchema]> = [
-  InitialTableData,
-  InitialValueData,
-];
+export const InitialData: Content<[typeof TablesSchema, typeof ValuesSchema]> =
+  [InitialTableData, InitialValueData];

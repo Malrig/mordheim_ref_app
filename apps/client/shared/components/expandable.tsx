@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
-import { StyleSheet, ViewStyle, TextStyle, StyleProp, TouchableOpacity } from 'react-native';
-import { ThemedView, ThemedText } from './themed_components';
+import {
+  StyleProp,
+  TextStyle,
+  TouchableOpacity,
+  ViewStyle,
+} from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useThemeColour } from '@/features/userstore/hooks/theme';
-import { Divider } from 'react-native-paper';
+import { ThemedText } from './themed_components';
+import { XStack, YStack } from './stacks';
+import Divider from './divider';
 
 interface ExpandableProps {
   title: string | React.ReactNode;
@@ -23,47 +28,36 @@ export const Expandable: React.FC<ExpandableProps> = ({
   initialExpanded = false,
 }) => {
   const [isExpanded, setIsExpanded] = useState(initialExpanded);
-  const defaultContainerColour = useThemeColour('secondary');
 
   return (
-    <ThemedView style={[{ backgroundColor: defaultContainerColour }, styles.container, containerStyle]}>
-      <TouchableOpacity
-        style={styles.header}
-        onPress={() => setIsExpanded(!isExpanded)}
-      >
-        {typeof title === 'string' ? (
-          <ThemedText variant="subtitle" style={titleStyle}>{title}</ThemedText>
-        ) : (
-          title
-        )}
-        <MaterialIcons
-          name={isExpanded ? 'expand-less' : 'expand-more'}
-          size={24}
-        />
+    <YStack style={[{ borderRadius: 8 }, containerStyle]}>
+      <TouchableOpacity onPress={() => setIsExpanded(!isExpanded)}>
+        <XStack
+          style={{
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: 8,
+          }}
+        >
+          {typeof title === 'string' ? (
+            <ThemedText variant="subtitle" style={titleStyle}>
+              {title}
+            </ThemedText>
+          ) : (
+            title
+          )}
+          <MaterialIcons
+            name={isExpanded ? 'expand-less' : 'expand-more'}
+            size={24}
+          />
+        </XStack>
       </TouchableOpacity>
       {isExpanded && (
-        <ThemedView style={[{ backgroundColor: defaultContainerColour }, styles.content, contentStyle]}>
+        <YStack style={[{ paddingHorizontal: 12 }, contentStyle]}>
           <Divider />
           {children}
-        </ThemedView>
+        </YStack>
       )}
-    </ThemedView>
+    </YStack>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    borderRadius: 8,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 5,
-  },
-  content: {
-    paddingLeft: 12,
-    paddingRight: 12,
-  },
-});

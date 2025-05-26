@@ -67,34 +67,33 @@ npx expo export --platform web
 docker build -t mordheim_app .
 docker save mordheim_app -o mordheim_app_image.tgz
 docker save mordheim-server -o mordheim-server.tgz
+npx expo-doctor@latest
 ```
 
-```
+```bash
 supabase up
-npx yarn workspace server build
+npx yarn build-server
+docker save mordheim-server -o mordheim-server.tgz
 npx yarn dev-server
 npx yarn dev-client
+npx eas-cli@latest build --profile development
 ```
 
 ## SUpabase auth
 
 Installed the following:
+
 ```
 @supabase/supabase-js @react-native-async-storage/async-storage @rneui/themed react-native-url-polyfill
 ```
+
 May want to uninstall them later.
 
 TODO next time:
-- Make using multiple stores across the app easier (e.g. don't want to have to propagate a bunch of different IDs / call useStore all the time).
-- Populate the auth store from Supabase, do sensible things on logout, better login pages.
-- Support anonymous login.
-- Need to think about a users "connection state", there's several different possibilities we need to handle. These should be almost exactly the same for "full" and "anonymous" users:
-  - User is logged in, able to authenticate with Supabase, and connected to the server.
-  - User is logged in, unable to authenticate with Supabase or connect to the server.
-  - User is logged in, able to authenticate with Supabase but can't connect to the server.
-  - User is logged in, unable to authenticate with Supabase but can connect to the server.
-    - This shouldn't happen as connecting to the server requires a valid token from Supabase.
-  - User is not logged in.
+
+- There's issues with Selects on Android.
+- The items details page on Android is complaining about nested lists.
+- Sort out Special Rules. Need to decided where they get edited.
 
 ## Ideas
 

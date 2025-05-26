@@ -4,19 +4,21 @@ services:
   server:
     image: mordheim-server:dev
     ports:
-      - "8043:8043" # WebSocket port
-      - "8044:8044" # HTTP metrics port
+      - '8043:8043' # WebSocket port
+      - '8044:8044' # HTTP metrics port
     volumes:
       - ./apps/server/data:/app/data # Persist data directory
+      - ./apps/server/backups:/app/backups # Persist backups directory
     environment:
       - NODE_ENV=production
       - SUPABASE_URL=${SUPABASE_URL}
       - SUPABASE_SERVICE_KEY=${SUPABASE_SERVICE_KEY}
     restart: unless-stopped
     healthcheck:
-      test: [ "CMD", "wget", "--spider", "-q", "http://localhost:8044/healthcheck" ]
+      test:
+        ['CMD', 'wget', '--spider', '-q', 'http://localhost:8044/healthcheck']
       interval: 30s
       timeout: 10s
       retries: 3
     extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - 'host.docker.internal:host-gateway'

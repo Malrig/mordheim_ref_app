@@ -1,11 +1,23 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { Slot } from 'expo-router';
-import { ThemedView } from '@/shared/components/themed_components';
+import { Redirect, Slot } from 'expo-router';
+import { ThemedText, ThemedView } from '@/shared/components/themed_components';
+import { useIsLoggedIn } from '@/features/authentication/hooks/login';
 
 export default function LoginLayout() {
+  const { loading: loading, isLoggedIn } = useIsLoggedIn();
+
+  if (loading) {
+    return <ThemedText>Loading...</ThemedText>;
+  }
+
+  if (isLoggedIn) {
+    console.log('Already logged in, redirecting to home page');
+    return <Redirect href="/" />;
+  }
+
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView style={styles.container} backgroundColor="primary">
       <Slot />
     </ThemedView>
   );

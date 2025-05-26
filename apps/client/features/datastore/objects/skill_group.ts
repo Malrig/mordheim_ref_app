@@ -1,5 +1,6 @@
-import { DataStore } from "@/shared/stores/stores";
-import { Availability, useAvailabilitiesForObject } from "./availability";
+/* eslint-disable react-hooks/rules-of-hooks */
+import { DataStore } from '@/shared/stores/stores';
+import { Availability, useAvailabilitiesForObject } from './availability';
 
 /**
  * Represents an availability in the TinyBase store
@@ -16,10 +17,7 @@ export class SkillGroup {
    * @param restriction The restriction
    * @param availability_id The ID of the availability
    */
-  constructor(
-    id: string,
-    name: string,
-  ) {
+  constructor(id: string, name: string) {
     this.id = id || '';
     this.name = name || '';
   }
@@ -29,10 +27,7 @@ export class SkillGroup {
    * @param row The row data from TinyBase
    */
   static fromRow(row: Record<string, any>): SkillGroup {
-    return new SkillGroup(
-      row.id || '',
-      row.name || ''
-    );
+    return new SkillGroup(row.id || '', row.name || '');
   }
 
   /**
@@ -51,9 +46,6 @@ export class SkillGroup {
   }
 
   useAvailabilities(): Availability[] {
-    return useAvailabilitiesForObject(
-      SkillGroup.TABLE_NAME,
-      this.id
-    );
+    return useAvailabilitiesForObject(SkillGroup.TABLE_NAME, this.id);
   }
 }
